@@ -1,0 +1,57 @@
+// shop page
+
+.shop-banner {
+    height: 26rem;
+
+    h3 {
+        font-size: 5.75em;
+
+        small {
+            font-size: .265em;
+            left: -1em;
+        }
+    }
+
+    .banner-layer {
+        top: 50%;
+        left: 6.7%;
+        right: 7%;
+        transform: translateY(-50%);
+    }
+
+    .banner-title {
+        font-size: 2.5625em;
+    }
+
+    .btn-xl {
+        margin: 3px 0 0 -1px;
+    }
+}
+
+.breadcrumb-nav {
+    border: 0;
+}
+
+.product-default .product-details {
+    padding: 2rem;
+}
+
+@include mq( md, max ) {
+    .shop-banner {
+        h3 {
+            font-size: 4.75em;
+        }
+
+        .banner-title {
+            font-size: 1.5em;
+        }
+    }
+}
+
+@include mq( 375px, max ) {
+    .shop-banner {
+        h3 {
+            font-size: 3.75em;
+        }
+    }
+}
