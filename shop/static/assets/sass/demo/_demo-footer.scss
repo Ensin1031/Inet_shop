@@ -1,0 +1,76 @@
+// custom settings
+
+.footer-desc {
+    margin-bottom: 3.8rem;
+}
+
+.footer-question {
+    max-width: 50rem;
+
+    h6 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 2.2rem;
+        line-height: 1.5;
+    }
+}
+
+.footer .logo {
+    margin-top: -1px;
+}
+
+.footer .social-icons {
+    position: relative;
+    margin-top: 1.9rem;
+    margin-left: 1.1rem;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: -2.3rem;
+        height: 100%;
+        width: 1px;
+        background-color: #e7e7e7;
+    }
+
+    .social-icon + .social-icon {
+        margin-left: 4px;
+    }
+}
+
+.social-icons .social-icon:hover, .social-icons .social-icon:focus {
+    opacity: 1;
+}
+
+@include mq( xl, max ) {
+    .footer-question h3 {
+        font-size: 1.9rem;
+    }
+
+    .footer .social-icons::before {
+        left: -1.3rem;
+    }
+}
+
+@include mq( lg, max ) {
+    .footer .social-icons::before {
+        left: -3.3rem;
+    }
+}
+
+@include mq( 425px, max ) {
+    .footer .social-icons::before {
+        left: -2rem;
+    }
+}
+
+@include mq( 375px, max ) {
+    .footer-question {
+        .col-5, .col-7 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+}

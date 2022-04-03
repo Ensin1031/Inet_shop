@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'main_app.apps.MainAppConfig',
     'pers_area.apps.PersAreaConfig',
     'shopping.apps.ShoppingConfig',
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
 ]
 
 ROOT_URLCONF = 'shop.urls'
@@ -130,6 +133,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # указываем путь к папке, где хранятся все статические файлы
+
+STATICFILES_DIRS = [                           # переменная со списком путей с дополнительными папками со статикой
+    os.path.join(BASE_DIR, 'shop/static'),
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -139,3 +148,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')    # указываем корне�
 
 MEDIA_URL = '/media/'   # нужен для построения пути при загрузке файлов
 
+INTERNAL_IPS = ["127.0.0.1"]
