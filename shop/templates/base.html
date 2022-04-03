@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ hello }}</title>
+</head>
+<body>
+
+{% include 'inc/_header.html' %}
+
+{{ hello }}
+<p>
+    <a href="{% url 'home' %}">переход на Главную</a>
+</p>
+<p>
+    <a href="{% url 'pers_area' %}">переход в Личный кабинет</a>
+</p>
+<p>
+    <a href="{% url 'shopping' %}">переход в Shop</a>
+</p>
+{% block content %}Здесь будет контент страницы{% endblock %}
+
+{% include 'inc/_footer.html' %}
+</body>
+</html>
