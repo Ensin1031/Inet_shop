@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'mptt',
     'main_app.apps.MainAppConfig',
     'pers_area.apps.PersAreaConfig',
     'shopping.apps.ShoppingConfig',
