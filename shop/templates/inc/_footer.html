@@ -1,12 +1,12 @@
 {% load static %}
-<footer class="footer font2 appear-animate" data-animation-delay="300" data-animation-duration="1200">
-	<div class="instagram-section">
-		<!-- TODO поменять -->
-		<h2 class="section-title text-center">Наш Instagram (запрещен в РФ)</h2>
-		<!-- TODO @ -->
-		<h6 class="section-subtitle text-center font-weight-normal">@CompetitorAli</h6>
 
-		<div class="owl-carousel owl-theme" data-owl-options="{
+<footer class="footer font2 appear-animate" data-animation-delay="300" data-animation-duration="1200">
+    <div class="instagram-section">
+        <h2 class="section-title text-center">Мы в Instagram</h2>
+        {# change CompetitorAli #}
+        <h6 class="section-subtitle text-center font-weight-normal">@CompetitorAli</h6>
+
+        <div class="owl-carousel owl-theme" data-owl-options="{
 		            'loop': false,
 		            'nav': false,
 		            'dots': false,
@@ -33,103 +33,90 @@
 		                }
 		            }
 		        }">
-		            <img src="{% static 'assets/images/instagrams/instagram-1.jpg' %}" alt="instagram">
-		            <img src="{% static 'assets/images/instagrams/instagram-2.jpg' %}" alt="instagram">
-		            <img src="{% static 'assets/images/instagrams/instagram-3.jpg' %}" alt="instagram">
-		            <img src="{% static 'assets/images/instagrams/instagram-4.jpg' %}" alt="instagram">
-		            <img src="{% static 'assets/images/instagrams/instagram-5.jpg' %}" alt="instagram">
-		            <img src="{% static 'assets/images/instagrams/instagram-6.jpg' %}" alt="instagram">
-		            <img src="{% static 'assets/images/instagrams/instagram-7.jpg' %}" alt="instagram">
-		            <img src="{% static 'assets/images/instagrams/instagram-8.jpg' %}" alt="instagram">
-		            <img src="{% static 'assets/images/instagrams/instagram-9.jpg' %}" alt="instagram">
-		        </div>
-		    </div><!-- End .instagram-section -->
+            <img src="{% static 'assets/images/instagrams/instagram-1.jpg' %}" alt="instagram">
+            <img src="{% static 'assets/images/instagrams/instagram-2.jpg' %}" alt="instagram">
+            <img src="{% static 'assets/images/instagrams/instagram-3.jpg' %}" alt="instagram">
+            <img src="{% static 'assets/images/instagrams/instagram-4.jpg' %}" alt="instagram">
+            <img src="{% static 'assets/images/instagrams/instagram-5.jpg' %}" alt="instagram">
+            <img src="{% static 'assets/images/instagrams/instagram-6.jpg' %}" alt="instagram">
+            <img src="{% static 'assets/images/instagrams/instagram-7.jpg' %}" alt="instagram">
+            <img src="{% static 'assets/images/instagrams/instagram-8.jpg' %}" alt="instagram">
+            <img src="{% static 'assets/images/instagrams/instagram-9.jpg' %}" alt="instagram">
+        </div>
+    </div>
 
-		    <div class="container">
-		        <div class="footer-middle">
-		            <div class="row">
-		                <div class="col-lg-5 m-b-4">
-<!--		                    <img src="{% static 'assets/images/footer-logo.png' %}" alt="Logo" class="m-b-3 logo">-->
-							<!-- TODO logo -->
-		                    <p class="footer-desc">Поддерживаем отчественный IT <br>Работаем на благо человечества :)</p>
+    <div class="container">
+        <div class="footer-middle">
+            <div class="row">
+                <div class="col-lg-5 m-b-4">
+                    {# change #}
+                    <p class="footer-desc">Красота в глазах смотрящего <br>В наших глазах все - совершенство</p>
 
-		                    <div class="row ls-0 footer-question">
-		                        <div class="col-5">
-		                            <h6 class="mb-0">По всем вопросам</h6>
-		                            <h3>+7 (4212) 11 22 33</h3>
-		                        </div>
+                    <div class="row ls-0 footer-question">
+                        <div class="col-5">
+                            <h6 class="mb-0">Остались вопросы?</h6>
+                            <h4>+7 (4212) 11 22 33</h4>
+                        </div>
 
-		                        <div class="col-7">
-		                            <div class="social-icons">
-		                                <a href="#" class="social-icon social-facebook icon-facebook" target="_blank" title="Facebook"></a>
-		                                <a href="#" class="social-icon social-twitter icon-twitter" target="_blank" title="Twitter"></a>
-		                                <a href="#" class="social-icon social-instagram icon-instagram" target="_blank" title="Instagram"></a>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div><!-- End .col-lg-5 -->
+                        <div class="col-7">
+                            <div class="social-icons">
+                                <a href="#" class="social-icon social-facebook icon-facebook" target="_blank"
+                                   title="Facebook"></a>
+                                <a href="#" class="social-icon social-twitter icon-twitter" target="_blank"
+                                   title="Twitter"></a>
+                                <a href="#" class="social-icon social-instagram icon-instagram" target="_blank"
+                                   title="Instagram"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		                <div class="col-lg-2 col-sm-4 m-b-4">
-		                    <div class="widget">
-		                        <h4 class="widget-title">Мой аккаунт</h4>
+                <div class="col-lg-2 col-sm-4 m-b-4">
+                    <div class="widget">
+                        <h4 class="widget-title">Мой аккаунт</h4>
 
-		                        <ul class="links">
-									<!-- TODO корректировка -->
-		                            <li><a href="my-account.html">Личный кабинет</a></li>
-		                            <li><a href="#">Мои заказы</a></li>
-		                            <li><a href="#">Способы оплаты</a></li>
-		                            <li><a href="#">Доставка</a></li>
-		                            <li><a href="#">FAQs</a></li>
-		                            <li><a href="#">Поддержка</a></li>
-		                            <li><a href="#">Конфиденциальность</a></li>
-		                        </ul>
-		                    </div><!-- End .widget -->
-		                </div><!-- End .col-lg-2 -->
+                        <ul class="links">
+                            {# линки лк заказы #}
+                            <li><a href="#">Личный кабинет</a></li>
+                            <li><a href="#">Мои заказы</a></li>
+                            <li><a href="{% url 'payments' %}">Способы оплаты</a></li>
+                            <li><a href="{% url 'delivery' %}">Доставка</a></li>
+                            <li><a href="{% url 'faqs' %}">FAQs</a></li>
+                            <li><a href="{% url 'support' %}">Поддержка</a></li>
+                            <li><a href="{% url 'privacy' %}">Конфиденциальность</a></li>
+                        </ul>
+                    </div>
+                </div>
 
-		                <div class="col-lg-2 col-sm-4 m-b-4">
-		                    <div class="widget">
-		                        <h4 class="widget-title">Про нас</h4>
+                <div class="col-lg-2 col-sm-4 m-b-4">
+                    <div class="widget">
+                        <h4 class="widget-title">О нас</h4>
 
-		                        <ul class="links">
-									<!-- TODO корректировка -->
-		                            <li><a href="#">Гарантии</a></li>
-		                            <li><a href="#">Условия и положения</a></li>
-		                            <li><a href="#">Возврат</a></li>
-		                            <li><a href="#">Интеллектуальная собственность</a></li>
-		                            <li><a href="#">Карта сайта</a></li>
-		                        </ul>
-		                    </div><!-- End .widget -->
-		                </div><!-- End .col-lg-2 -->
+                        <ul class="links">
+                            <li><a href="{% url 'warranty' %}">Гарантии</a></li>
+                            <li><a href="{% url 'conditions' %}">Условия и положения</a></li>
+                            <li><a href="{% url 'return' %}">Возврат</a></li>
+                            <li><a href="{% url 'intellproperty' %}">Интеллектуальная собственность</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!--		                <div class="col-lg-3 col-sm-4 m-b-4">-->
-<!--		                    <div class="widget">-->
-<!--		                        <h4 class="widget-title">Features</h4>-->
+    <div class="bg-dark">
+        <div class="container">
+            <div class="footer-bottom d-flex justify-content-between align-items-center flex-wrap">
+                <div class="footer-left">
+                    {# change Главный конкурент АлиЭкспресса #}
+                    <p class="footer-copyright py-3 pr-4 mb-0">&copy; Главный конкурент АлиЭкспресса, 2022. Все права
+                        защищены.</p>
+                </div>
 
-<!--		                        <ul class="links">-->
-<!--		                            <li><a href="#">Super Fast Wordpress Theme</a></li>-->
-<!--		                            <li><a href="#">1st Fully working Ajax Theme</a></li>-->
-<!--		                            <li><a href="#">36 Unique Shop Layouts</a></li>-->
-<!--		                            <li><a href="#">Powerful Admin Panel</a></li>-->
-<!--		                            <li><a href="#">Mobile &amp; Retina Optimized</a></li>-->
-<!--		                        </ul>-->
-<!--		                    </div>&lt;!&ndash; End .widget &ndash;&gt;-->
-<!--		                </div>&lt;!&ndash; End .col-lg-3 &ndash;&gt;-->
-		            </div><!-- End .row -->
-		        </div><!-- End .footer-middle -->
-		    </div><!-- End. container -->
-
-		    <div class="bg-dark">
-		        <div class="container">
-		            <div class="footer-bottom d-flex justify-content-between align-items-center flex-wrap">
-		                <div class="footer-left">
-							<!-- TODO корректировка -->
-		                    <p class="footer-copyright py-3 pr-4 mb-0">&copy; Главный конккурент АлиЭкспресса, 2022. All Rights Reserved.</p>
-		                </div><!-- End .footer-left -->
-
-		                <div class="footer-right">
-		                    <img src="{% static 'assets/images/payments.png' %}" alt="payment">
-		                </div><!-- End .footer-right -->
-		            </div><!-- End .footer-bottom -->
-		        </div><!-- End .container -->
-		    </div><!-- End .bg-dark -->
-		</footer><!-- End .footer -->
+                <div class="footer-right">
+                    <img src="{% static 'assets/images/payments.png' %}" alt="payment">
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
