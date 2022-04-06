@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
+from  django.contrib.auth.models import User
 
 
 class BrandNameDB(models.Model):
@@ -46,11 +47,25 @@ class CategoryDB(MPTTModel):
 
 class ReviewsDB(models.Model):
     '''Model of Reviews for godds'''
+    UGLI = '1'
+    NO_GOOD = '2'
+    NORMAL = '3'
+    GOOD = '4'
+    GREAT = '5'
+    RATINGS_CHOICES = (
+        (UGLI, 'Ужасно'),
+        (NO_GOOD, 'Плохо'),
+        (NORMAL, 'Нормально'),
+        (GOOD, 'Хорошо'),
+        (GREAT, 'Отлично'),
+    )
     title = models.CharField(max_length=150, verbose_name='Название отзыва')
+    user_name = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='review_user_name', verbose_name='Имя пользователя')
     description = models.TextField(blank=True, verbose_name='Текст отзыва')
     date_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания отзыва')
     good = models.ForeignKey('GoodsDB', on_delete=models.CASCADE, related_name='review_for_good', null=True,
                              verbose_name='К какому товару привязан отзыв')
+    rating = models.CharField(max_length=1, choices=RATINGS_CHOICES, default=NORMAL, verbose_name='Рейтинг товара')
     slug = models.SlugField(max_length=150, unique=True, verbose_name='URL отзыва')
 
     def __str__(self):
