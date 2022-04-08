@@ -10,6 +10,8 @@ python-decouple = "==3.6"
 pillow = "==9.0.1"
 django-debug-toolbar = "==3.2.4"
 django-mptt = "==0.13.4"
+django-autoslug = "==1.9.8"
+django-uuslug = "==2.0.0"
 
 [dev-packages]
 

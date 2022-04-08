@@ -20,8 +20,7 @@ class CategoryAdmin(DraggableMPTTAdmin):
     '''Show categories model in admins'''
     list_display = ('tree_actions', 'indented_title', 'slug', 'get_photo')
     list_display_links = ('indented_title',)
-    prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('get_photo',)
+    readonly_fields = ('get_photo', 'slug',)
     list_per_page = 10
 
     def get_photo(self, obj):
@@ -37,8 +36,7 @@ class GalleryAdmin(admin.ModelAdmin):
     '''Show images model in admins'''
     list_display = ('photo', 'get_photo', 'slug', 'product')
     list_display_links = ('photo', 'slug',)
-    prepopulated_fields = {'slug': ('photo',)}
-    readonly_fields = ('get_photo',)
+    readonly_fields = ('get_photo', 'slug',)
     list_per_page = 10
 
     def get_photo(self, obj):
@@ -52,10 +50,10 @@ class GalleryAdmin(admin.ModelAdmin):
 @admin.register(ReviewsDB)
 class ReviewsAdmin(admin.ModelAdmin):
     '''Show the reviews in admins'''
-    list_display = ('title', 'good', 'slug', 'date_at',)
-    list_display_links = ('title', 'slug', 'date_at',)
-    prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('date_at',)
+    list_display = ('review_title', 'good', 'rating', 'slug', 'date_at_review', 'user_name',)
+    list_display_links = ('review_title', 'slug', 'date_at_review',)
+    readonly_fields = ('date_at_review', 'slug',)
+    list_editable = ('rating', 'user_name',)
     list_per_page = 10
 
 
@@ -64,7 +62,6 @@ class BrandNameAdmin(admin.ModelAdmin):
     '''Show manufacturers model in admins'''
     list_display = ('title', 'slug')
     list_display_links = ('title', 'slug',)
-    prepopulated_fields = {'slug': ('title',)}
     list_per_page = 10
 
 
@@ -72,16 +69,13 @@ class BrandNameAdmin(admin.ModelAdmin):
 class GoodsAdmin(admin.ModelAdmin):
     '''Show goods model in admins'''
     inlines = (GalleryInLine, ReviewInLine)
-    inlines[0].prepopulated_fields = {'slug': ('photo',)}
-    inlines[1].prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', 'brand', 'price', 'presence', 'category', 'date_at', 'n_views', 'slug', )
     list_display_links = ('title',)    # поля ссылки
     search_fields = ('title', 'price')      # поля под поиск
     list_editable = ('presence', 'category',)   # поля, редактируемые из основного списка
     list_filter = ('brand', 'price', 'presence', 'category',)   # поля под поиск
-    readonly_fields = ('date_at', 'n_views',)   # поля только под чтение
+    readonly_fields = ('date_at', 'n_views', 'slug',)   # поля только под чтение
     list_per_page = 10  # пагинация, записей на странице
-    prepopulated_fields = {'slug': ('title',)}  # автозаполнение slug
     fieldsets = (
         ('О товаре', {
             'fields': ('title', 'brand', 'description', )
