@@ -18,13 +18,17 @@ def show_band():
     for good in goods:
         show_photo[good] = good.images_for_goods.first()
         show_new_price[good] = int(int(good.price) * 0.75)
-        show_rating[good] = 0
-
-        for value in good.review_for_good.filter(good=good):
-            show_rating[good] += int(value.review_rating)
 
         zn = good.review_for_good.filter(good=good).aggregate(Count('review_rating'))
-        show_rating[good] = int(show_rating[good] / zn['review_rating__count'])
+        if zn['review_rating__count'] > 0:
+            show_rating[good] = 0
+
+            for value in good.review_for_good.filter(good=good):
+                show_rating[good] += int(value.review_rating)
+
+            show_rating[good] = int(show_rating[good] / zn['review_rating__count'])
+        else:
+            show_rating[good] = 0
 
     count = {
         'goods': goods,

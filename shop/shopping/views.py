@@ -24,14 +24,16 @@ class ShowGood(LoginRequiredMixin, CreateView, DetailView):
         context['reviews'] = ReviewsDB.objects.filter(good=context['object'])
         context['new_price'] = int(context['object'].price * 0.75)
 
-        sum_rating = 0
-        for value in context['reviews']:
-            sum_rating += int(value.review_rating)
-
-        context['finish_rating'] = int(sum_rating / len(context['reviews']))
+        len_rating = len(context['reviews'])
+        if len_rating > 0:
+            sum_rating = 0
+            for value in context['reviews']:
+                sum_rating += int(value.review_rating)
+            context['finish_rating'] = int(sum_rating / len_rating)
+        else:
+            context['finish_rating'] = 0
 
         return context
-
 
 
 class ShowAllGoods(ListView):
@@ -48,6 +50,10 @@ class ShowAllGoods(ListView):
     def get_queryset(self):
         '''используем, чтобы вывести только те товары, которые помечены, как наличные в магазине'''
         return GoodsDB.objects.filter(presence=True)
+
+
+
+
 
 
 def shopping(request):
