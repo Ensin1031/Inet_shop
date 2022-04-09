@@ -50,10 +50,10 @@ class GalleryAdmin(admin.ModelAdmin):
 @admin.register(ReviewsDB)
 class ReviewsAdmin(admin.ModelAdmin):
     '''Show the reviews in admins'''
-    list_display = ('review_title', 'good', 'rating', 'slug', 'date_at_review', 'user_name',)
+    list_display = ('review_title', 'good', 'review_rating', 'slug', 'date_at_review', 'user_name',)
     list_display_links = ('review_title', 'slug', 'date_at_review',)
     readonly_fields = ('date_at_review', 'slug',)
-    list_editable = ('rating', 'user_name',)
+    list_editable = ('review_rating', 'user_name',)
     list_per_page = 10
 
 

@@ -4,7 +4,6 @@ from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.auth.models import User
 from uuslug import uuslug
 from autoslug import AutoSlugField
-from datetime import datetime
 
 
 def instance_slug(instance):
@@ -82,17 +81,20 @@ class ReviewsDB(models.Model):
     )
     review_title = models.CharField(max_length=150, verbose_name='Название отзыва')
     user_name = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='review_user_name', verbose_name='Имя пользователя')
-    text = models.TextField(blank=True, verbose_name='Текст отзыва')
+    review_text = models.TextField(max_length=500, blank=True, verbose_name='Текст отзыва',)
     date_at_review = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания отзыва')
     good = models.ForeignKey('GoodsDB', on_delete=models.CASCADE, related_name='review_for_good', null=True,
                              verbose_name='К какому товару привязан отзыв')
-    rating = models.CharField(max_length=3, choices=RATINGS_CHOICES, default=NORMAL, verbose_name='Рейтинг товара')
+    review_rating = models.CharField(max_length=3, choices=RATINGS_CHOICES, default=NORMAL, verbose_name='Рейтинг товара')
     slug = AutoSlugField(max_length=150, db_index=True, unique=True, verbose_name='URL Отзыва',
                          populate_from=instance_slug, slugify=slugify_value)
 
     def save(self, *args, **kwargs):
         self.slug = uuslug(self.review_title, instance=self)
         super(ReviewsDB, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('good', kwargs={'slug': self.good.slug})
 
     def __str__(self):
         return str(self.review_title)
@@ -112,7 +114,7 @@ class GalleryDB(models.Model):
                          populate_from=instance_slug, slugify=slugify_value)
 
     def save(self, *args, **kwargs):
-        self.slug = uuslug(self.photo, instance=self)
+        self.slug = uuslug(str(self.photo), instance=self)
         super(GalleryDB, self).save(*args, **kwargs)
 
     def get_absolute_url(self):

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}}
 {% load static %}
+{% load shopping_tags %}
+
 
 {% block title %}
 {{ good_item.title }} :: {{ block.super }}
@@ -11,9 +13,10 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-<!--                # TODO-->
-                <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
-                <li class="breadcrumb-item active" aria-current="page">Product</li>
+                <!--                # TODO наладить бредкрамп-->
+                <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="{% url 'shopping' %}">Магазин</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ good_item.title }}</li>
             </ol>
         </div>
     </nav>
@@ -21,22 +24,18 @@
     <div class="container">
         <div class="product-single-container product-single-default">
             <div class="row">
+
+                {% if photos %}
                 <div class="col-md-5 product-single-gallery">
                     <div class="product-slider-container">
                         <div class="product-single-carousel owl-carousel owl-theme">
 
-                            {% if photos %}
                             {% for photo in photos %}
-
                             <div class="product-item">
                                 <img class="product-single-image" src="{{ photo.photo.url }}"
                                      data-zoom-image="{{ photo.photo.url }}"/>
                             </div>
-
                             {% endfor %}
-                            {% else %}
-                            Фото товара отсутствует
-                            {% endif %}
 
                         </div>
                         <!-- End .product-single-carousel -->
@@ -44,26 +43,30 @@
 									<i class="icon-plus"></i>
 								</span>
                     </div>
+
+                    {% if photos.count > 1 %}
                     <div class="prod-thumbnail owl-dots" id='carousel-custom-dots'>
 
-                        {% if photos %}
                         {% for photo in photos %}
-
                         <div class="owl-dot">
                             <img src="{{ photo.photo.url }}"/>
                         </div>
-
                         {% endfor %}
-                        {% endif %}
+
                     </div>
+                    {% endif %}
+
                 </div><!-- End .product-single-gallery -->
+                {% else %}
+                Фото товара отсутствует
+                {% endif %}
 
                 <div class="col-md-7 product-single-details">
                     <h1 class="product-title">{{ good_item.title }}</h1>
 
                     <div class="ratings-container">
                         <div class="product-ratings">
-                            <span class="ratings" style="width:60%"></span><!-- End .ratings -->
+                            <span class="ratings" style="width:{{ finish_rating }}%"></span><!-- End .ratings -->
                         </div><!-- End .product-ratings -->
 
                         <a href="#rev" class="rating-link">( Отзывы: {{ reviews | length }} )</a>
@@ -79,7 +82,6 @@
                     <div class="product-desc">
                         <p>
                             {{ good_item.description | truncatechars:200 | safe }}
-<!--                            <a href="#text">(читать полностью)</a>-->
                         </p>
                     </div><!-- End .product-desc -->
 
@@ -90,6 +92,7 @@
                             <input class="horizontal-quantity form-control" type="text">
                         </div><!-- End .product-single-qty -->
 
+                        <!--                        TODO поменять ссылку на страницу покупки-->
                         <a href="#" class="btn btn-dark add-cart icon-shopping-cart" title="Add to Cart">Купить</a>
                     </div><!-- End .product-action -->
 
@@ -102,7 +105,8 @@
         <div class="product-single-tabs">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" name="text" id="product-tab-desc" data-toggle="tab" href="#product-desc-content"
+                    <a class="nav-link active" name="text" id="product-tab-desc" data-toggle="tab"
+                       href="#product-desc-content"
                        role="tab" aria-controls="product-desc-content" aria-selected="true">Описание</a>
                 </li>
                 <li class="nav-item">
@@ -134,17 +138,23 @@
                                         <div class="comment-box">
                                             <div class="ratings-container">
                                                 <div class="product-ratings">
-                                                    <span class="ratings" style="width:{{ item.rating }}%"></span><!-- End .ratings -->
+                                                    <span class="ratings"
+                                                          style="width:{{ item.review_rating }}%"></span>
+                                                    <!-- End .ratings -->
                                                 </div><!-- End .product-ratings -->
                                             </div><!-- End .ratings-container -->
 
                                             <div class="comment-info mb-1">
-                                                <h4 class="avatar-name">{{ item.user_name }}</h4> - <span class="comment-date">{{ item.date_at | date:"d E Y  H:i" }}</span>
+                                                <h4 class="avatar-name">Автор: {{ item.user_name }}</h4> - <span class="comment-date">{{ item.date_at_review | date:"d E Y  H:i" }}</span>
+                                            </div><!-- End .comment-info -->
+
+                                            <div class="comment-info mb-1">
+                                                <h3 class="avatar-name">Заголовок: {{ item.review_title }}</h3>
                                             </div><!-- End .comment-info -->
 
                                             <div class="comment-text">
                                                 <p>
-                                                    {{ item.text | truncatewords_html:25 | safe }}
+                                                    {{ item.review_text | truncatewords_html:25 | safe }}
                                                 </p>
                                             </div><!-- End .comment-text -->
                                         </div><!-- End .comment-box -->
@@ -157,54 +167,21 @@
                             <div class="col-xl-5">
                                 <div class="add-product-review">
                                     <h3 class="review-title">Добавьте свой отзыв:</h3>
-<!--                                    <form action="{{ add_review }}" class="comment-form m-0" method="get">-->
-                                    <form action="{% url 'add_review' good_item.slug %}" class="comment-form m-0" method="get">
+                                    {% if request.user.is_authenticated %}
+                                    <form action="{{ good_item.get_absolute_url }}" class="comment-form m-0"
+                                          method="post">
+
                                         {% csrf_token %}
 
-<!--                                        <div class="form-group required-field">-->
-<!--                                            <label for="contact-message">Что у Вас на уме?</label>-->
-<!--                                            <textarea cols="30" rows="1" id="contact-message" class="form-control" name="contact-message"-->
-<!--                                                      required></textarea>-->
-<!--                                        </div>-->
+                                        {{ form.as_p }}
 
-<!--                                        {{ form.as_p }}-->
-<!--                                    {% if request.user.is_authenticated %}-->
-<!--                                    Добро пожаловать, {{ user.username }} | <a href="#">Выход</a>-->
-<!--                                    {% else %}-->
-<!--                                    <a href="#">Регистрация</a> | <a href="#">Авторизация</a>-->
-<!--                                    {% endif %}-->
-
-                                        <div class="row">
-                                            <div class="col-md-6 col-xl-12">
-                                                <div class="form-group">
-                                                    <label>Название отзыва:</label>
-                                                    <input type="text" class="form-control form-control-sm" name="review_title" required>
-                                                    <input type="text" name="review_object" value="{{ good_item.slug }}" style="display: none;">
-                                                </div><!-- End .form-group -->
-                                            </div>
-                                        </div>
-
-                                        <div class="rating-form">
-                                            <label for="rating">Ваш рейтинг:</label>
-
-                                            <select name="review_rating" id="rating" required="">
-<!--                                                <option value="">Rate…</option>-->
-                                                <option value="100">Отлично</option>
-                                                <option value="80">Хорошо</option>
-                                                <option value="60">Нормально</option>
-                                                <option value="40">Плохо</option>
-                                                <option value="20">Ужасно</option>
-                                            </select>
-                                        </div>
-                                        <br>
-                                        <div class="form-group">
-                                            <label>Текст отзыва:</label>
-                                            <textarea cols="5" rows="6" class="form-control form-control-sm" name="review_text"></textarea>
-                                        </div><!-- End .form-group -->
-
-<!--                                        <button type="submit" class="btn btn-dark ls-n-15">Отправить</button>-->
                                         <input type="submit" class="btn btn-dark ls-n-15" value="Отправить">
                                     </form>
+                                    {% else %}
+                                    <p>Вы не авторизованны.</p>
+                                    <p>Если Вы хотите оставить свой отзыв на товар:</p>
+                                    <a href="#">Зарегистрируйтесь</a> | <a href="#">Авторизуйтесь</a>
+                                    {% endif %}
                                 </div><!-- End .add-product-review -->
                             </div>
                         </div>
@@ -213,251 +190,8 @@
             </div><!-- End .tab-content -->
         </div><!-- End .product-single-tabs -->
 
-        <div class="products-section pt-0">
-            <h2 class="section-title">Related Products</h2>
+        {% show_band %}
 
-            <div class="products-slider owl-carousel owl-theme dots-top">
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-14.jpg">
-                        </a>
-                        <div class="label-group">
-                            <span class="product-label label-sale">-20%</span>
-                        </div>
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-shopping-cart"></i></button>
-                        </div>
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                    </figure>
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">category</a>
-                            </div>
-                        </div>
-                        <h3 class="product-title">
-                            <a href="product.html">Product Short Name</a>
-                        </h3>
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width:100%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .ratings-container -->
-                        <div class="price-box">
-                            <span class="old-price">$59.00</span>
-                            <span class="product-price">$49.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div>
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-13.jpg">
-                        </a>
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-shopping-cart"></i></button>
-                        </div>
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                    </figure>
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">category</a>
-                            </div>
-                        </div>
-                        <h3 class="product-title">
-                            <a href="product.html">Product Short Name</a>
-                        </h3>
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width:100%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .ratings-container -->
-                        <div class="price-box">
-                            <span class="old-price">$59.00</span>
-                            <span class="product-price">$49.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div>
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-12.jpg">
-                        </a>
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-shopping-cart"></i></button>
-                        </div>
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                    </figure>
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">category</a>
-                            </div>
-                        </div>
-                        <h3 class="product-title">
-                            <a href="product.html">Product Short Name</a>
-                        </h3>
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width:100%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .ratings-container -->
-                        <div class="price-box">
-                            <span class="old-price">$59.00</span>
-                            <span class="product-price">$49.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div>
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-11.jpg">
-                        </a>
-                        <div class="label-group">
-                            <span class="product-label label-hot">HOT</span>
-                        </div>
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-shopping-cart"></i></button>
-                        </div>
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                    </figure>
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">category</a>
-                            </div>
-                        </div>
-                        <h3 class="product-title">
-                            <a href="product.html">Product Short Name</a>
-                        </h3>
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width:100%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .ratings-container -->
-                        <div class="price-box">
-                            <span class="old-price">$59.00</span>
-                            <span class="product-price">$49.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div>
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-10.jpg">
-                        </a>
-                        <div class="label-group">
-                            <span class="product-label label-hot">HOT</span>
-                        </div>
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-shopping-cart"></i></button>
-                        </div>
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                    </figure>
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">category</a>
-                            </div>
-                        </div>
-                        <h3 class="product-title">
-                            <a href="product.html">Product Short Name</a>
-                        </h3>
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width:100%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .ratings-container -->
-                        <div class="price-box">
-                            <span class="old-price">$59.00</span>
-                            <span class="product-price">$49.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div>
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-9.jpg">
-                        </a>
-                        <div class="label-group">
-                            <span class="product-label label-sale">-30%</span>
-                        </div>
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-shopping-cart"></i></button>
-                        </div>
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                    </figure>
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">category</a>
-                            </div>
-                        </div>
-                        <h3 class="product-title">
-                            <a href="product.html">Product Short Name</a>
-                        </h3>
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width:100%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .ratings-container -->
-                        <div class="price-box">
-                            <span class="old-price">$59.00</span>
-                            <span class="product-price">$49.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div>
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-8.jpg">
-                        </a>
-                        <div class="label-group">
-                            <span class="product-label label-sale">-20%</span>
-                        </div>
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-shopping-cart"></i></button>
-                        </div>
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Quick View</a>
-                    </figure>
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">category</a>
-                            </div>
-                        </div>
-                        <h3 class="product-title">
-                            <a href="product.html">Product Short Name</a>
-                        </h3>
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width:100%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .ratings-container -->
-                        <div class="price-box">
-                            <span class="old-price">$59.00</span>
-                            <span class="product-price">$49.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div>
-            </div><!-- End .products-slider -->
-        </div><!-- End .products-section -->
     </div><!-- End .container -->
 </main><!-- End .main -->
 

@@ -1,73 +1,41 @@
-from django.contrib.messages.context_processors import messages
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
-from django.contrib import admin
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import AddReviewForm
 
 
-class ShowGood(DetailView):
+class ShowGood(LoginRequiredMixin, CreateView, DetailView):
+    '''Single product page class'''
     model = GoodsDB
     template_name = 'shopping/show_good.html'
     context_object_name = 'good_item'
+    form_class = AddReviewForm
 
-    @staticmethod
-    def add_review(request):
-        if request.user.is_authenticated:
-            review_title = request.GET.get('review_title')
-            user_name = request.user
-            text = request.GET.get('review_text')
-            good = object
-            rating = request.GET.get('review_rating')
-
-            data = {'review_title': review_title, 'user_name': user_name, 'text': text, 'good': good, 'rating': rating}
-            ReviewsDB.objects.create(**data)
-        return redirect('good', object)
+    def form_valid(self, form):
+        form.instance.user_name = self.request.user
+        form.instance.good = GoodsDB.objects.filter(slug=self.kwargs.get('slug')).first()
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['photos'] = GalleryDB.objects.filter(product=context['object'])
         context['reviews'] = ReviewsDB.objects.filter(good=context['object'])
         context['new_price'] = int(context['object'].price * 0.75)
-        # context['add_review'] = self.add_review(self.request)
-        # for i in context:
-        #     print(i)
-        # print(context['view'])
-        # if self.request:
-        #     print(self.request)
-        #     self.add_review()
-        return context
 
+        sum_rating = 0
+        for value in context['reviews']:
+            sum_rating += int(value.review_rating)
 
-class CreateReview(DetailView):
-    model = GoodsDB
-    template_name = 'shopping/show_good.html'
-    context_object_name = 'good_item'
-
-    def get_context_data(self, **kwargs):
-        context = super(CreateReview, self).get_context_data(**kwargs)
-        context['photos'] = GalleryDB.objects.filter(product=context['object'])
-        context['reviews'] = ReviewsDB.objects.filter(good=context['object'])
-        context['new_price'] = int(context['object'].price * 0.75)
-
-        if self.request.user.is_authenticated:
-            review_title = self.request.GET.get('review_title')
-            user_name = self.request.user
-            text = self.request.GET.get('review_text')
-            good = self.object
-            rating = self.request.GET.get('review_rating')
-
-            data = {'review_title': review_title, 'user_name': user_name, 'text': text, 'good': good, 'rating': rating}
-            ReviewsDB.objects.create(**data)
+        context['finish_rating'] = int(sum_rating / len(context['reviews']))
 
         return context
+
 
 
 class ShowAllGoods(ListView):
+    '''Full list class of goods'''
     model = GoodsDB
     template_name = 'shopping/shopping.html'
     context_object_name = 'goods'
