@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'mptt',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
     'main_app.apps.MainAppConfig',
     'pers_area.apps.PersAreaConfig',
     'shopping.apps.ShoppingConfig',
@@ -55,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'shop.urls'
@@ -151,3 +153,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')    # указываем корне�
 MEDIA_URL = '/media/'   # нужен для построения пути при загрузке файлов
 
 INTERNAL_IPS = ["127.0.0.1"]
+
+SITE_ID = 1
