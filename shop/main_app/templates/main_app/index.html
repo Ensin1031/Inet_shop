@@ -1,13 +1,16 @@
 {% extends 'base.html' %}}
 {% load static %}
+{% load index_tags %}
 
 {% block title %}
 {{ title }} :: {{ block.super }}
 {% endblock %}
 {% block content %}
+
 <main class="main">
     <section class="section-1 pt-0">
         <div class="home-slider slide-animate owl-carousel owl-theme show-nav-hover">
+            {# условия акции 1#}
             <div class="home-banner bg-img banner-left"
                  style="background-image: url({% static 'assets/images/slider/slide-1.jpg' %});">
                 <div class="container position-relative">
@@ -24,14 +27,15 @@
                         <h5 class="text-uppercase d-inline-block mb-0 ls-n-20 pr-1 pt-2 appear-animate"
                             data-animation-delay="1600" data-animation-duration="1200" data-animation-name="fadeIn">от
                             <span><strong>299 р.</strong></span></h5>
-                        {# url "товары со скидкой" #}
-                        <a href="#" class="btn btn-dark btn-xl btn-icon-right appear-animate" role="button"
-                           data-animation-delay="2200" data-animation-duration="1200" data-animation-name="fadeIn">КУПИ
-                            СЕЙЧАС <i class="fas fa-long-arrow-alt-right"></i></a>
-                    </div><!-- End .div-content -->
-                </div><!-- End .container -->
-            </div><!-- End .div-1 -->
 
+                        <a href="{% url 'promotion_1' %}" class="btn btn-dark btn-xl btn-icon-right appear-animate"
+                           role="button" data-animation-delay="2200" data-animation-duration="1200"
+                           data-animation-name="fadeIn">КУПИ СЕЙЧАС <i class="fas fa-long-arrow-alt-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            {# условия акции 2 + image #}
             <div class="home-banner bg-img"
                  style="background-image: url({% static 'assets/images/slider/slide-2.jpg' %});">
                 <div class="container position-relative">
@@ -46,440 +50,21 @@
                             data-animation-delay="800" data-animation-name="fadeIn">
 
                         <h5 class="text-uppercase d-inline-block mb-0 ls-n-20 pr-1 pt-2 appear-animate"
-                            data-animation-duration="1200" data-animation-delay="800" data-animation-name="fadeIn">must <span><strong>HAVE</strong></span></h5>
-                        {# url "товары до 399" #}
-                        <a href="category.html" class="btn btn-dark btn-xl btn-icon-right appear-animate" role="button"
+                            data-animation-duration="1200" data-animation-delay="800" data-animation-name="fadeIn">must
+                            <span><strong>HAVE</strong></span></h5>
+
+                        <a href="{% url 'promotion_2' %}" class="btn btn-dark btn-xl btn-icon-right appear-animate"
+                           role="button"
                            data-animation-delay="2200" data-animation-duration="1200" data-animation-name="fadeIn">Купи
                             сейчас <i class="fas fa-long-arrow-alt-right"></i></a>
-                    </div><!-- End .div-content -->
-                </div><!-- End .container -->
-            </div><!-- End .div-1 -->
-        </div><!-- End .home-slider -->
-    </section><!-- End .section-1 -->
-    {# избранные товары #}
-    <section class="section-2 product-collection container">
-        <div class="row m-0">
-            <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
-                 data-animation-delay="400">
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="{% static 'assets/images/products/home/product-1.jpg' %}" alt="product"
-                                 width="400" height="400"/>
-                        </a>
-
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-bag"></i></button>
-                        </div>
-
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Посмотреть</a>
-                    </figure>
-
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">FACE</a>,
-                                <a href="category.html" class="product-category">LIPS</a>
-                            </div>
-
-                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                        </div>
-
-                        <h2 class="product-title">
-                            <a href="product.html">Aerin Rose Oil</a>
-                        </h2>
-
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width: 100%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .product-container -->
-
-                        <div class="price-box">
-                            <span class="product-price">$39.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div><!-- End .product-default -->
-            </div>
-
-            <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
-                 data-animation-delay="400">
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="{% static 'assets/images/products/home/product-2.jpg' %}" alt="product"
-                                 width="400" height="400"/>
-                        </a>
-
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-bag"></i></button>
-                        </div>
-
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Посмотреть</a>
-                    </figure>
-
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">BRUSHES</a>,
-                                <a href="category.html" class="product-category">TOOLS</a>
-                            </div>
-
-                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                        </div>
-
-                        <h2 class="product-title">
-                            <a href="product.html">Beauty products</a>
-                        </h2>
-
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width: 0%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .product-container -->
-
-                        <div class="price-box">
-                            <span class="product-price">$99.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div><!-- End .product-default -->
-            </div>
-
-            <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
-                 data-animation-delay="400">
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="{% static 'assets/images/products/home/product-3.jpg' %}" alt="product"
-                                 width="400" height="400"/>
-                            <img src="{% static 'assets/images/products/home/product-3-2.jpg' %}" alt="product"
-                                 width="400" height="400"/>
-                        </a>
-
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-bag"></i></button>
-                        </div>
-
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Посмотреть</a>
-                    </figure>
-
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">APPLY</a>,
-                                <a href="category.html" class="product-category">TOOLS</a>
-                            </div>
-
-                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                        </div>
-
-                        <h2 class="product-title">
-                            <a href="product.html">Beauty Wash</a>
-                        </h2>
-
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width: 0%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .product-container -->
-
-                        <div class="price-box">
-                            <span class="product-price">$101.00 - $111.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div><!-- End .product-default -->
-            </div>
-
-            <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
-                 data-animation-delay="400">
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="{% static 'assets/images/products/home/product-4.jpg' %}" alt="product"
-                                 width="400" height="400"/>
-                        </a>
-
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-bag"></i></button>
-                        </div>
-
-                        <div class="label-group">
-                            <span class="product-label label-sale">-13%</span>
-                        </div>
-
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Посмотреть</a>
-                    </figure>
-
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">EYEBROW</a>,
-                                <a href="category.html" class="product-category">SKIN CARE</a>
-                            </div>
-
-                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                        </div>
-
-                        <h2 class="product-title">
-                            <a href="product.html">Blue High Hill</a>
-                        </h2>
-
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width: 0%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .product-container -->
-
-                        <div class="price-box">
-                            <span class="old-price">$299.00</span>
-                            <span class="product-price">$259.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div><!-- End .product-default -->
-            </div>
-
-            <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
-                 data-animation-delay="400">
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="{% static 'assets/images/products/home/product-5.jpg' %}" alt="product"
-                                 width="400" height="400"/>
-                        </a>
-
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-bag"></i></button>
-                        </div>
-
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Посмотреть</a>
-                    </figure>
-
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">BRUSHES</a>,
-                                <a href="category.html" class="product-category">NECK</a>
-                            </div>
-
-                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                        </div>
-
-                        <h2 class="product-title">
-                            <a href="product.html">Cosmetic Bag</a>
-                        </h2>
-
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width: 0%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .product-container -->
-
-                        <div class="price-box">
-                            <span class="product-price">$99.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div><!-- End .product-default -->
-            </div>
-
-            <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
-                 data-animation-delay="400">
-                <div class="product-default inner-quickview inner-icon">
-                    <figure>
-                        <a href="product.html">
-                            <img src="{% static 'assets/images/products/home/product-6.jpg' %}" alt="product"
-                                 width="400" height="400"/>
-                            <img src="{% static 'assets/images/products/home/product-6-2.jpg' %}" alt="product"
-                                 width="400" height="400"/>
-                        </a>
-
-                        <div class="btn-icon-group">
-                            <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                    class="icon-bag"></i></button>
-                        </div>
-
-                        <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View">Посмотреть</a>
-                    </figure>
-
-                    <div class="product-details">
-                        <div class="category-wrap">
-                            <div class="category-list">
-                                <a href="category.html" class="product-category">CHEEK</a>,
-                                <a href="category.html" class="product-category">LIPS</a>
-                            </div>
-
-                            <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                        </div>
-
-                        <h2 class="product-title">
-                            <a href="product.html">Face Powder</a>
-                        </h2>
-
-                        <div class="ratings-container">
-                            <div class="product-ratings">
-                                <span class="ratings" style="width: 0%"></span><!-- End .ratings -->
-                                <span class="tooltiptext tooltip-top"></span>
-                            </div><!-- End .product-ratings -->
-                        </div><!-- End .product-container -->
-
-                        <div class="price-box">
-                            <span class="product-price">$99.00</span>
-                        </div><!-- End .price-box -->
-                    </div><!-- End .product-details -->
-                </div><!-- End .product-default -->
-            </div>
-        </div>
-    </section><!-- End .section-2 -->
-
-    <section class="section-3 category-banner-section container appear-animate">
-        <div class="owl-carousel owl-theme" data-owl-options="{
-					'items': 3,
-					'margin': 20,
-					'dots': false,
-					'loop': false,
-					'responsive': {
-						'0': {
-							'items': 1
-						},
-						'580': {
-							'items': 2
-						},
-						'1200': {
-							'items': 3
-						}
-					}
-				}">
-        </div><!-- category-banner-section -->
-    </section><!-- End .section-3 -->
-
-    <section class="section-6 blog-section bg-gray  appear-animate">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-7 col-lg-6 mb-2 mb-sm-0">
-
-                    <h2 class="section-title">Отзывы покупателей</h2>
-
-                    <div class="owl-carousel owl-theme" data-owl-options="{
-								'autoplay': false,
-								'autoHeight': true
-							}">
-                        <div class="testimonial bg-white">
-                            <div class="testimonial-owner">
-                                <figure>
-                                    <img src="{% static 'assets/images/clients/client-2.jpg' %}" alt="client">
-                                </figure>
-
-                                <div class="testi-content">
-                                    <div class="ratings-container mb-1">
-                                        <div class="product-ratings">
-                                            <div class="ratings" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-
-                                    <h4 class="testimonial-title p-0">Что-то классное</h4>
-
-                                    <blockquote class="ml-3 pr-0">
-                                        <p>Супер классно можно еще</p>
-                                    </blockquote>
-
-                                    <h5 class="testi-author">от Joe Doe</h5>
-                                </div>
-                            </div>
-                        </div><!-- End .testimonial -->
-
-                        <div class="testimonial bg-white">
-                            <div class="testimonial-owner">
-                                <figure>
-                                    <img src="{% static 'assets/images/clients/client-1.jpg' %}" alt="client">
-                                </figure>
-
-                                <div class="testi-content">
-                                    <div class="ratings-container mb-1">
-                                        <div class="product-ratings">
-                                            <div class="ratings" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-
-                                    <h4 class="testimonial-title p-0">И еще что-то очень крутое</h4>
-
-                                    <blockquote class="ml-3 pr-0">
-                                        <p>Очень круто!</p>
-                                    </blockquote>
-
-                                    <h5 class="testi-author">от Jane Doe</h5>
-                                </div>
-                            </div>
-                        </div><!-- End .testimonial -->
-                    </div><!-- End .testimonial-slider -->
-                </div>
-                {# отзывы #}
-                <div class="col-md-5 col-lg-6">
-                    <h2 class="section-title">Отзывы покупателей</h2>
-
-                    <div class="owl-carousel owl-theme" data-owl-options="{
-								'autoplay': false,
-								'autoHeight': true
-							}">
-                        <div class="testimonial bg-white">
-                            <div class="testimonial-owner">
-                                <figure>
-                                    <img src="{% static 'assets/images/clients/client-2.jpg' %}" alt="client">
-                                </figure>
-
-                                <div class="testi-content">
-                                    <div class="ratings-container mb-1">
-                                        <div class="product-ratings">
-                                            <div class="ratings" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-
-                                    <h4 class="testimonial-title p-0">Что-то классное</h4>
-
-                                    <blockquote class="ml-3 pr-0">
-                                        <p>Супер классно можно еще</p>
-                                    </blockquote>
-
-                                    <h5 class="testi-author">от Joe Doe</h5>
-                                </div>
-                            </div>
-                        </div><!-- End .testimonial -->
-
-                        <div class="testimonial bg-white">
-                            <div class="testimonial-owner">
-                                <figure>
-                                    <img src="{% static 'assets/images/clients/client-1.jpg' %}" alt="client">
-                                </figure>
-
-                                <div class="testi-content">
-                                    <div class="ratings-container mb-1">
-                                        <div class="product-ratings">
-                                            <div class="ratings" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-
-                                    <h4 class="testimonial-title p-0">И еще что-то очень крутое</h4>
-
-                                    <blockquote class="ml-3 pr-0">
-                                        <p>Очень круто!</p>
-                                    </blockquote>
-
-                                    <h5 class="testi-author">от Jane Doe</h5>
-                                </div>
-                            </div>
-                        </div><!-- End .testimonial -->
-                    </div><!-- End .testimonial-slider -->
+                    </div>
                 </div>
             </div>
         </div>
-    </section><!-- End .blog-section -->
-</main><!-- End .main -->
+    </section>
+
+    {% show_goods %}
+
+</main>
+
 {% endblock %}

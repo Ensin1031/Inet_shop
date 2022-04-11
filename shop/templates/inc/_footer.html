@@ -81,8 +81,8 @@
                             <li><a href="#">Мои заказы</a></li>
                             <li><a href="{% url 'payments' %}">Способы оплаты</a></li>
                             <li><a href="{% url 'delivery' %}">Доставка</a></li>
+                            <li><a href="{% url 'return' %}">Возврат</a></li>
                             <li><a href="{% url 'faqs' %}">FAQs</a></li>
-                            <li><a href="{% url 'support' %}">Поддержка</a></li>
                             <li><a href="{% url 'privacy' %}">Конфиденциальность</a></li>
                         </ul>
                     </div>
@@ -93,10 +93,12 @@
                         <h4 class="widget-title">О нас</h4>
 
                         <ul class="links">
+                            <li><a href="{% url 'about' %}">О нас</a></li>
+                            <li><a href="{% url 'support' %}">Поддержка</a></li>
                             <li><a href="{% url 'warranty' %}">Гарантии</a></li>
                             <li><a href="{% url 'conditions' %}">Условия и положения</a></li>
-                            <li><a href="{% url 'return' %}">Возврат</a></li>
                             <li><a href="{% url 'intellproperty' %}">Интеллектуальная собственность</a></li>
+                            <li><a href="{% url 'contact' %}">Свяжитесь с нами</a></li>
                         </ul>
                     </div>
                 </div>
