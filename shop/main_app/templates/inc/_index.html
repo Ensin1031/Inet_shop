@@ -1,0 +1,86 @@
+{% load static %}
+
+<section class="section-2 product-collection container">
+    <div class="row m-0">
+
+        {% for good in goods %}
+
+        <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
+             data-animation-delay="400">
+            <div class="product-default inner-quickview inner-icon">
+
+                {% for key, value in show_photo.items %}
+                {% if key == good %}
+
+                <figure>
+
+                    {% if value %}
+
+                    <a href="{{ key.get_absolute_url }}">
+                        <img src="{{ value.photo.url }}" alt="product" width="400" height="400"/></a>
+
+                    {% else %}
+
+                    <a href="{{ key.get_absolute_url }}">
+                        <img src="https://picsum.photos/1024/768?grayscale"></a>
+
+                    {# добавить в корзину? #}
+                    <div class="btn-icon-group">
+                        <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
+                                class="icon-bag"></i></button>
+                    </div>
+
+                    {% endif %}
+
+                </figure>
+
+                {% endif %}
+                {% endfor %}
+
+                <div class="product-details">
+                    <div class="category-wrap">
+                        <div class="category-list">
+                            <a href="{{ good.category.get_absolute_url }}" class="product-category">{{ good.category }}</a>
+                        </div>
+                    </div>
+
+                    <h2 class="product-title">
+                        <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
+                    </h2>
+
+                    <div class="ratings-container">
+                        <div class="product-ratings">
+
+                            {% for key, value in show_rating.items %}
+                            {% if key == good %}
+
+                            <span class="ratings" style="width:{{ value }}%"></span><!-- End .ratings -->
+                            <span class="tooltiptext tooltip-top"></span>
+
+                            {% endif %}
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+
+                    <div class="price-box">
+
+                        {% for key, value in show_new_price.items %}
+                        {% if key == good %}
+
+                        <span class="old-price">{{ key.price }} y.e.</span>
+                        <span class="product-price">{{ value }} y.e.</span>
+
+                        {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</section>
