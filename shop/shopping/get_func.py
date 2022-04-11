@@ -117,5 +117,6 @@ def category_by_count():
     show_category = {}
     for value in category:
         show_category[value] = GoodsDB.objects.filter(category=value).filter(presence=True).count()
-    return (category, show_category,)
+    result = (category, show_category,)
+    return result
 

@@ -45,7 +45,6 @@ class ShowAllGoods(ListView):
 
     def get_queryset(self):
         '''используем, чтобы вывести только те товары, которые помечены, как наличные в магазине'''
-        print(self.request)
         return GoodsDB.objects.filter(presence=True)
 
 

@@ -21,26 +21,6 @@
 
 
 <main class="main">
-    {% comment %}
-    <div class="container position-relative">
-        <div class="shop-banner bg-img banner-left"
-             style="background-image: url({% static 'assets/images/slider/slide-1.jpg' %})">
-            <div class="banner-layer banner-layer-middle">
-                <h2 class="m-b-1 appear-animate banner-title" data-animation-duration="1200" data-animation-delay="800"
-                    data-animation-name="fadeIn">Горячие скидки</h2>
-                <h3 class="text-uppercase rotated-upto-text mb-0 position-relative appear-animate line-height-1"
-                    data-animation-delay="800" data-animation-duration="1200" data-animation-name="blurIn"><small>Up
-                    to</small>50% Off
-                </h3>
-
-                <a href="category.html" class="btn btn-xl btn-icon-right appear-animate text-dark p-0" role="button"
-                   data-animation-delay="2200" data-animation-duration="1200" data-animation-name="fadeIn">Скорее к
-                    покупкам <i
-                            class="fas fa-long-arrow-alt-right"></i></a>
-            </div><!-- End .div-content -->
-        </div>
-    </div><!-- End .container -->
-    {% endcomment %}
     <!--TODO переделать бредкрамп-->
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
@@ -89,7 +69,7 @@
                             {% if key == good %}
                             <figure>
                                 {% if value %}
-                                <a href="{{ ket.get_absolute_url }}">
+                                <a href="{{ key.get_absolute_url }}">
                                     <img src="{{ value.photo.url }}" alt="product">
                                 </a>
                                 <div class="btn-icon-group">
