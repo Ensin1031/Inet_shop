@@ -4,25 +4,9 @@ from django.views.generic import TemplateView, ListView
 from shopping.models import GoodsDB, GalleryDB
 
 
-class SearchGoodView(ListView):
-    """doc string"""
-    model = GoodsDB
-    template_name = 'shopping/shopping.html'
-    context_object_name = 'good'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['photos'] = GalleryDB.objects.all()
-        context['title'] = 'Найденные товары'
-        return context
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        return GoodsDB.objects.filter(title__icontains=query)
-
-
 class MainPageView(TemplateView):
     """doc string"""
+    model = GoodsDB
     template_name = 'main_app/index.html'
 
     def get_context_data(self, **kwargs):
@@ -31,123 +15,58 @@ class MainPageView(TemplateView):
         return context
 
 
-class BlogView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/blog.html'
+"""
+в shopping/shopping.html
+{% empty %}
+<p>По Вашему запросу ничего не найдено</p>
+"""
 
-    def get_context_data(self, **kwargs):
+
+class SearchGoodView(ListView):
+    """doc string"""
+    model = GoodsDB
+    template_name = 'shopping/shopping.html' #shopping.html
+    context_object_name = 'good'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Блог'
+        context['hello'] = 'Найденные товары'
+        # context['q'] = f"q={self.request.GET.get('q')}&"
         return context
 
+    def get_queryset(self):
+        return GoodsDB.objects.filter(title__icontains=self.request.GET.get('q'))
 
-class AboutView(TemplateView):
+
+
+# TODO переделать
+class PromotionOneView(ListView):
     """doc string"""
-    template_name = 'main_app/about.html'
+    model = GoodsDB
+    template_name = 'shopping/category.html' #shopping.html
+    context_object_name = 'good'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'О нас'
+        context['photos'] = GalleryDB.objects.all()
+        context['hello'] = 'Выгодные предложения'
         return context
 
+    def get_queryset(self):
+        return GoodsDB.objects.filter(price__gte=299)
 
-class ContactView(TemplateView):
+
+class PromotionTwoView(ListView):
+    model = GoodsDB
     """doc string"""
-    template_name = 'main_app/contact.html'
+    template_name = 'shopping/category.html' #shopping.html
+    context_object_name = 'good'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Свяжитесь с нами'
+        context['photos'] = GalleryDB.objects.all()
+        context['hello'] = 'Выгодные предложения'
         return context
 
-
-class PaymentView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/payment.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Способы оплаты'
-        return context
-
-
-class DeliveryView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/delivery.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Доставка'
-        return context
-
-
-class FAQsView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/faqs.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Часто задаваемые вопросы'
-        return context
-
-
-class SupportView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/support.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Поддержка'
-        return context
-
-
-class PrivacyView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/privacy.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Конфиденциальность'
-        return context
-
-
-class WarrantyView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/warranty.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Гарантии'
-        return context
-
-
-class ConditionsView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/conditions.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Условия и положения'
-        return context
-
-
-class ReturnView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/return.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Возврат'
-        return context
-
-
-class IntellPropertyView(TemplateView):
-    """doc string"""
-    template_name = 'main_app/intellproperty.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Интеллектуальная собственность'
-        return context
-
-
+    def get_queryset(self):
+        return GoodsDB.objects.filter(price__lte=399)

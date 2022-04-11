@@ -1,4 +1,5 @@
 {% load static %}
+{% load mptt_tags %}
 
 <div class="top-notice">
     <div class="container">
@@ -19,27 +20,10 @@
 <header class="header">
     <div class="header-top">
         <div class="container">
-            <div class="header-left header-dropdowns">
-                {% comment %}
-                <div class="header-menu">
-                    {# язык #}
-                    <h4>Вы находитесь в РФ</h4>
-                </div>
-                {% endcomment %}
-
-                <span class="separator"></span>
+            <div class="header-left">
                 <div class="header-menu">
                     <ul class="mb-0 d-none d-lg-flex">
-                        {% if request.user.is_authenticated %}
-                        <li>Добро пожаловать, {{ user.username }}</li>
-                        {# {% url 'logout' %} #}
-                        <li><a href="#" class="outline-btn">Выход</a></li>
-                        {% else %}
-                        {# {% url 'register' %} #}
-                        <li><a href="#" class="outline-btn">Регистрация</a></li>
-                        {# {% url 'login' %} #}
-                        <li><a href="" class="outline-btn">Авторизация</a></li>
-                        {% endif %}
+                        <li>Вы находитесь в РФ</li>
                     </ul>
                 </div>
             </div>
@@ -141,160 +125,102 @@
                             {% if request.user.is_authenticated %}
                             <div class="dropdown-cart-action">
                                 <a href="№" class="btn btn-dark btn-block">Оформить заказ</a>
-                            {% else %}
-                            {# {% url 'register' %} #}
-                            <div class="dropdown-cart-action">
-                                <a href="#" class="btn btn-dark btn-block">Регистрация</a>
-                            {% comment %}
-                            {# {% url 'login' %} #}
-                            <div class="dropdown-cart-action">
-                                 <a href="#" class="btn btn-dark btn-block">Авторизация</a>
-                            {% endcomment %}
-                            {% endif %}
+                                {% else %}
+                                {# {% url 'register' %} #}
+                                <div class="dropdown-cart-action">
+                                    <a href="#" class="btn btn-dark btn-block">Регистрация</a>
+                                    {% comment %}
+                                    {# {% url 'login' %} #}
+                                    <div class="dropdown-cart-action">
+                                        <a href="#" class="btn btn-dark btn-block">Авторизация</a>
+                                        {% endcomment %}
+                                        {% endif %}
 
-                            </div><!-- End .dropdown-cart-total -->
-                        </div><!-- End .dropdownmenu-wrapper -->
-                    </div><!-- End .dropdown-menu -->
-                </div><!-- End .dropdown -->
-            </div><!-- End .header-right -->
-        </div><!-- End .container -->
-    </div><!-- End .header-top -->
+                                    </div><!-- End .dropdown-cart-total -->
+                                </div><!-- End .dropdownmenu-wrapper -->
+                            </div><!-- End .dropdown-menu -->
+                        </div><!-- End .dropdown -->
+                    </div><!-- End .header-right -->
+                </div><!-- End .container -->
+            </div><!-- End .header-top -->
 
-    <div class="header-middle sticky-header">
-        <div class="container">
-            <div class="header-left d-none d-lg-flex">
-                <div class="main-nav d-flex w-lg-max">
-                    <ul class="menu">
-                        <li class="active">
-                            <a href="{% url 'index' %}">Главная страница</a>
-                        </li>
+            <div class="header-middle sticky-header">
+                <div class="container">
+                    <div class="header-left d-none d-lg-flex">
+                        <div class="main-nav d-flex w-lg-max">
+                            <ul class="menu">
+                                <li class="active">
+                                    <a href="{% url 'index' %}">Главная страница</a>
+                                </li>
 
-                        <li class="active">
-                            <a href="{% url 'shopping' %}">Все товары</a>
-                            {% comment %}
-                                <div class="megamenu megamenu-fixed-width megamenu-3cols">
-                                    <div class="row">
-                                        <div class="col-lg-9">
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <div class="menu-title mb-1">
-                                                        <a href="{% url 'products' %}">Категории<span class="tip tip-new">New!</span></a>
-                                                    </div>
-                                                    <ul class="submenu">
-                                                    {% for cat in categories %}
-                                                        <li><a href="{% url 'category' cat.slug %}">{{ cat.title }}</a></li>
-                                                    {% endfor %}
-                                                    </ul>
-                                                </div><!-- End .col-lg-6 -->
-                                                <div class="col-lg-6">
-                                                    <div class="menu-title mb-1">
-                                                        <a href="#">Бренды</a>
-                                                    </div>
-                                                    <ul class="submenu">
-                                                        <li><a href="#">Product List Item Types</a></li>
-                                                        <li><a href="category-infinite-scroll.html">Ajax Infinite
-                                                                Scroll</a>
-                                                        </li>
-                                                        <li><a href="category-3col.html">3 Columns Products</a></li>
-                                                        <li><a href="category.html">4 Columns Products <span
-                                                                    class="tip tip-new">New</span></a></li>
-                                                        <li><a href="category-5col.html">5 Columns Products</a></li>
-                                                        <li><a href="category-6col.html">6 Columns Products</a></li>
-                                                        <li><a href="category-7col.html">7 Columns Products</a></li>
-                                                        <li><a href="category-8col.html">8 Columns Products</a></li>
-                                                    </ul>
-                                                </div><!-- End .col-lg-6 -->
-                                            </div><!-- End .row -->
-                                        </div><!-- End .col-lg-9 -->
-                                        <div class="col-lg-3 p-0">
-                                            <div class="banner h-100">
-                                                <a href="#">
-                                                    <img src="{% static 'assets/images/menu-banner-2.jpg' %}"
-                                                             alt="Menu banner">
-                                                </a>
-                                            </div><!-- End .banner -->
-                                        </div><!-- End .col-lg-3 -->
-                                    </div>
-                                </div><!-- End .megamenu -->
-                            {% endcomment %}
-                        </li>
-                        {% comment %}
-                        <li class="megamenu-container border-0">
-                            <a href="product.html" class="sf-with-ul border-0">Все товары</a>
-                            <div class="megamenu">
-                                <div class="row">
-                                    <div class="col-lg-9">
+                                <li class="active">
+                                    <a href="{% url 'shopping' %}">Все товары</a>
+                                    <div class="megamenu megamenu-fixed-width megamenu-3cols">
                                         <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="menu-title">
-                                                    <a href="#">Variations</a>
-                                                </div>
-                                                <ul class="submenu">
-                                                    <li><a href="product.html">Horizontal Thumbnails</a></li>
-                                                    <li><a href="product-full-width.html">Vertical
-                                                                Thumbnails</a></li>
-                                                    <li><a href="product.html">Inner Zoom</a></li>
-                                                    <li><a href="product-addcart-sticky.html">Addtocart
-                                                                Sticky</a></li>
-                                                    <li><a href="product-sidebar-left.html">Accordion Tabs</a>
-                                                    </li>
-                                                </ul>
-                                            </div><!-- End .col-lg-4 -->
-                                            <div class="col-lg-4">
-                                                <div class="menu-title">
-                                                    <a href="#">Variations</a>
-                                                </div>
-                                                <ul class="submenu">
-                                                    <li><a href="product-sticky-tab.html">Sticky Tabs</a></li>
-                                                    <li><a href="product-simple.html">Simple Product</a></li>
-                                                    <li><a href="product-sidebar-left.html">With Left
-                                                                Sidebar</a></li>
-                                                </ul>
-                                            </div><!-- End .col-lg-4 -->
-                                            <div class="col-lg-4">
-                                                <div class="menu-title">
-                                                    <a href="#">Product Layout Types</a>
-                                                </div>
-                                                <ul class="submenu">
-                                                    <li><a href="product.html">Default Layout</a></li>
-                                                    <li><a href="product-extended-layout.html">Extended
-                                                                Layout</a></li>
-                                                    <li><a href="product-full-width.html">Full Width Layout</a></li>
-                                                    <li><a href="product-grid-layout.html">Grid Images
-                                                                Layout</a></li>
-                                                    <li><a href="product-sticky-both.html">Sticky Both Side
-                                                                Info</a></li>
-                                                    <li><a href="product-sticky-info.html">Sticky Right Side
-                                                                Info</a></li>
-                                                </ul>
-                                            </div><!-- End .col-lg-4 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .col-lg-9 -->
-                                    <div class="col-lg-3 p-0">
-                                        <div class="banner h-100">
-                                            <a href="#">
-                                                <img src="{% static 'assets/images/menu-banner.jpg' %}"
-                                                             alt="Menu banner" class="product-promo p-0"></a>
-                                        </div><!-- End .banner -->
-                                    </div><!-- End .col-lg-3 -->
-                                </div><!-- End .row -->
-                            </div><!-- End .megamenu -->
-                        </li>
-                        {% endcomment %}
+                                            <div class="col-lg-9">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="menu-title mb-1">
+                                                            <a href="{% url 'shopping' %}">Категории</a>
+                                                        </div>
+                                                        <ul class="submenu">
+                                                            {% recursetree categories %}
+                                                            <li><a href="{{ node.get_absolute_url }}"><h6>{{ node.title }}</h6></a>
+                                                                {% if not node.is_leaf_node %}
+                                                                <ul class="children">
+                                                                    <a href="{{ children.get_absolute_url }}"><p>{{ children }}</p></a>
+                                                                </ul>
+                                                                {% endif %}
+                                                            </li>
+                                                            {% endrecursetree %}
+                                                        </ul>
+                                                    </div>
 
+                                                    <div class="col-lg-6">
+                                                        <div class="menu-title mb-1">
+                                                            <a href="{% url 'shopping' %}">Бренды</a>
+                                                        </div>
+                                                        <ul class="submenu">
+                                                            {% for brand in brands %}
+                                                            <li><a href="{{ brand.get_absolute_url }}"><h6>{{ brand.title }}</h6></a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 p-0">
+                                                <div class="banner h-100">
+                                                    <a href="#">
+                                                        <img src="{% static 'assets/images/menu-banner-2.jpg' %}"
+                                                             alt="Menu banner">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
+                    <div class="header-right d-none d-lg-flex">
+                        <div class="main-nav d-flex w-lg-max justify-content-end">
+                            <ul class="menu">
+                                {% if request.user.is_authenticated %}
+                                <li>Добро пожаловать, {{ user.username }}</li>
+                                {# {% url 'logout' %} #}
+                                <li><a href="#" class="outline-btn">Выход</a></li>
+                                {% else %}
+                                {# {% url 'register' %} #}
+                                <li><a href="#" class="outline-btn">Регистрация</a></li>
+                                {# {% url 'login' %} #}
+                                <li><a href="" class="outline-btn">Авторизация</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div><!-- End .header-left -->
-
-            <div class="header-right d-none d-lg-flex">
-                <div class="main-nav d-flex w-lg-max justify-content-end">
-                    <ul class="menu">
-                        <li><a href="{% url 'blog' %}">Блог</a></li>
-                        <li><a href="{% url 'about' %}">О нас</a></li>
-                        <li><a href="{% url 'contact' %}">Свяжитесь с нами</a></li>
-                    </ul>
-                </div>
-            </div><!-- End .header-right -->
-        </div><!-- End .container -->
-    </div><!-- End .header-middle -->
-</header><!-- End .header -->
+            </div>
+        </div>
+    </div>
+</header>

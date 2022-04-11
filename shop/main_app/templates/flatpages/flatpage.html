@@ -1,0 +1,33 @@
+{% extends 'base.html' %}}
+{% load static %}
+
+{% block title %}
+
+{{ flatpage.title }} :: {{ block.super }}
+
+{% endblock %}
+{% block content %}
+
+<main class="main about-page">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ flatpage.title }}</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="text-center mb-4">
+                    <h2 class="title mb-3">{{ flatpage.title }}</h2>
+                    {{ flatpage.content }}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
