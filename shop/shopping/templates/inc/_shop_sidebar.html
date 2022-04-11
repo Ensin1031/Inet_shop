@@ -1,0 +1,210 @@
+{% load static %}
+{% load static mptt_tags %}
+
+<div class="sidebar-wrapper">
+
+<!--TODO категории-->
+    <div class="widget">
+        <h3 class="widget-title">
+            <a data-toggle="collapse" href="#widget-body-2" role="button" aria-expanded="true"
+               aria-controls="widget-body-2">Категории</a>
+        </h3>
+
+        <div class="collapse show" id="widget-body-2">
+            <div class="widget-body">
+
+                {% comment %}
+                <ul class="site_nav_primary__submenu ul__column white_box">
+                    {% recursetree category %}
+                    <li>
+                        <a class="btn btn__light" href="{{ node.get_absolute_url }}">
+                            <span style="fa fa-angle-left">{{ node.title }}</span>
+                            {% if node.is_leaf_node %}
+                            <span>&nbsp;</span><span class="fa fa-angle-right"></span>
+                            {% endif %}
+                            {% if not node.is_leaf_node %}
+                            <span>&nbsp;</span><span class="fa fa-random"></span>
+                            {% endif %}
+                        </a>
+                        {% if not node.is_leaf_node %}
+                        <ul class="site_nav_primary__submenu ul__column white_box">
+                            {{ children }}
+                        </ul>
+                        {% endif %}
+                    </li>
+                    {% endrecursetree %}
+                </ul>
+                {% endcomment %}
+
+                {% comment %}
+                <ul>
+                    {% recursetree category %}
+                    <li>
+                        <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                        {% if not node.is_leaf_node %}
+                        <ul class="children">
+                            {{ children }}
+                        </ul>
+                        {% endif %}
+                    </li>
+                    {% endrecursetree %}
+                </ul>
+                {% endcomment %}
+
+                <ul class="submenu">
+                    {% recursetree category %}
+                    <li>
+                        <a href="{{ node.get_absolute_url }}">
+                            <h6>
+                                <span>{{ node.title }}</span>
+                                <span class="fa fa-angle-right"></span>
+
+                                {% for key, value in category_count.items %}
+                                {% if key == node %}
+                                ( {{ value }} )
+                                {% endif %}
+                                {% endfor %}
+                            </h6>
+                        </a>
+                        {% if not node.is_leaf_node %}
+                        <ul class="children">
+                            <a href="{{ children.get_absolute_url }}"><p>{{ children }}</p></a>
+                        </ul>
+                        {% endif %}
+                    </li>
+                    {% endrecursetree %}
+                </ul>
+
+
+            </div><!-- End .widget-body -->
+        </div><!-- End .collapse -->
+    </div><!-- End .widget -->
+
+    {% comment %}
+    <!--TODO фильтр по цене : НУЖЕН??                        -->
+    <div class="widget">
+        <h3 class="widget-title">
+            <a data-toggle="collapse" href="#widget-body-3" role="button" aria-expanded="true"
+               aria-controls="widget-body-3">Price</a>
+        </h3>
+
+        <div class="collapse show" id="widget-body-3">
+            <div class="widget-body">
+                <form action="#">
+                    <div class="price-slider-wrapper">
+                        <div id="price-slider"></div><!-- End #price-slider -->
+                    </div><!-- End .price-slider-wrapper -->
+
+                    <div class="filter-price-action d-flex align-items-center justify-content-between flex-wrap">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+
+                        <div class="filter-price-text">
+                            Price:
+                            <span id="filter-price-range"></span>
+                        </div><!-- End .filter-price-text -->
+                    </div><!-- End .filter-price-action -->
+                </form>
+            </div><!-- End .widget-body -->
+        </div><!-- End .collapse -->
+    </div><!-- End .widget -->
+    {% endcomment %}
+
+    <div class="widget">
+        <h3 class="widget-title">
+            <a data-toggle="collapse" href="#widget-body-5" role="button" aria-expanded="true"
+               aria-controls="widget-body-5">Производители</a>
+        </h3>
+
+        <div class="collapse show" id="widget-body-5">
+            <div class="widget-body">
+                <ul class="cat-list">
+                    {% for key, value in brands.items %}
+                    <li>
+                        <a href="{{ key.get_absolute_url }}">
+                            <span>{{ key.title }}</span>
+                            <span>({{ value }})</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- End .widget-body -->
+        </div><!-- End .collapse -->
+    </div><!-- End .widget -->
+
+    <div class="widget widget-featured">
+        <h3 class="widget-title">Лучшее</h3>
+
+        <div class="widget-body">
+            <div class="owl-carousel widget-featured-products">
+
+                {% for good in goods %}
+                    {% if forloop.counter == 1 %}<div class="featured-col">{% endif %}
+                    {% if forloop.counter == 4 %}<div class="featured-col">{% endif %}
+
+
+                        <div class="product-default left-details product-widget">
+                            {% for key, value in show_photo.items %}
+                            {% if key == good %}
+                            <figure>
+
+                                {% if value %}
+                                <a href="{{ key.get_absolute_url }}">
+                                    <img src="{{ value.photo.url }}" alt="product">
+                                </a>
+                                {% else %}
+                                <a href="{{ key.get_absolute_url }}">
+                                    <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">
+                                </a>
+                                {% endif %}
+
+                            </figure>
+                            {% endif %}
+                            {% endfor %}
+
+                            <div class="product-details">
+                                <h2 class="product-title">
+                                    <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
+                                </h2>
+                                <div class="ratings-container">
+                                    <div class="product-ratings">
+                                        {% for key, value in show_rating.items %}
+                                        {% if key == good %}
+                                        <span class="ratings" style="width:{{ value }}%"></span><!-- End .ratings -->
+                                        <span class="tooltiptext tooltip-top"></span>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <!-- End .ratings -->
+                                        <span class="tooltiptext tooltip-top"></span>
+                                    </div><!-- End .product-ratings -->
+                                </div><!-- End .product-container -->
+                                <div class="price-box">
+                                    {% for key, value in show_new_price.items %}
+                                    {% if key == good %}
+                                    <p class="old-price">{{ key.price }}y.e.</p>
+                                    <p class="product-price">{{ value }}y.e.</p>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div><!-- End .price-box -->
+                            </div><!-- End .product-details -->
+                        </div>
+                    {% if forloop.counter == 3 %}</div>{% endif %}
+                    {% if forloop.counter == 6 %}</div>{% endif %}
+                {% endfor %}
+
+                {% comment %}
+
+                {% endcomment %}
+
+            </div><!-- End .widget-featured-slider -->
+        </div><!-- End .widget-body -->
+    </div><!-- End .widget -->
+
+<!--TODO текстовая панелька-->
+    <div class="widget widget-block">
+        <h3 class="widget-title">Мы работаем ради вас</h3>
+        <h5>Немного о нас.</h5>
+        <p>Наш интернет магазин - самый лучший интернет магазин из всех интернет магазинов, и никакие другие интернет магазины не переинтернетмагазинят наш интернет магазин по интернетмагазиности. </p>
+        <p>И вообще, мы Главный конкурент АлиЭкспресса!.</p>
+    </div><!-- End .widget -->
+
+</div><!-- End .sidebar-wrapper -->

@@ -1,0 +1,43 @@
+{% comment %}
+<div class="items-per-page">
+    <form action="" method="post" id="items_on_page">
+        {% csrf_token %}
+            <div class="sel form-group">
+                <select id="items_per_page" name="items_per_page" onchange="this.form.submit()">
+                {% for item in per_page_options %}
+                <option  selected="selected"  value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+                </select>
+            </div>
+    </form>
+</div>
+{% endcomment %}
+
+
+<div class="toolbox-item toolbox-show">
+    <label>Показать по:</label>
+
+
+    <div class="select-custom">
+        <select name="count" class="form-control">
+            <option value="12">12</option>
+            <option value="24">24</option>
+            <option value="36">36</option>
+<!--            {% for good in goods %}-->
+<!--            <option value="{{ good.get_absolute_url }}">{{ good.get_absolute_url }}</option>-->
+<!--            {% endfor %}-->
+        </select>
+    </div><!-- End .select-custom -->
+
+
+</div><!-- End .toolbox-item -->
+
+<div class="toolbox-item layout-modes">
+    <a href="category.html" class="layout-btn btn-grid active" title="Grid">
+        <i class="icon-mode-grid"></i>
+    </a>
+    <a href="category-list.html" class="layout-btn btn-list" title="List">
+        <i class="icon-mode-list"></i>
+    </a>
+</div><!-- End .layout-modes -->
+

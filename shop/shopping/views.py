@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import *
 from .forms import AddReviewForm
+from .get_func import *
 
 
 class ShowGood(LoginRequiredMixin, CreateView, DetailView):
@@ -22,17 +23,8 @@ class ShowGood(LoginRequiredMixin, CreateView, DetailView):
         context = super().get_context_data(**kwargs)
         context['photos'] = GalleryDB.objects.filter(product=context['object'])
         context['reviews'] = ReviewsDB.objects.filter(good=context['object'])
-        context['new_price'] = int(context['object'].price * 0.75)
-
-        len_rating = len(context['reviews'])
-        if len_rating > 0:
-            sum_rating = 0
-            for value in context['reviews']:
-                sum_rating += int(value.review_rating)
-            context['finish_rating'] = int(sum_rating / len_rating)
-        else:
-            context['finish_rating'] = 0
-
+        context['new_price'] = new_price(context['object'].price)
+        context['finish_rating'] = rating_good(self.object)
         return context
 
 
@@ -41,14 +33,19 @@ class ShowAllGoods(ListView):
     model = GoodsDB
     template_name = 'shopping/shopping.html'
     context_object_name = 'goods'
+    paginate_by = 12
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ShowAllGoods, self).get_context_data(**kwargs)
-        context['photos'] = GalleryDB.objects.all()
+        context['rating_list'] = rating_list(context['goods'])
+        context['new_price_list'] = new_price_list(context['goods'])
+        context['show_photo'] = photo_list(context['goods'])
+
         return context
 
     def get_queryset(self):
         '''используем, чтобы вывести только те товары, которые помечены, как наличные в магазине'''
+        print(self.request)
         return GoodsDB.objects.filter(presence=True)
 
 

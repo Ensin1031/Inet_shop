@@ -18,14 +18,14 @@
                 <a href="{{ key.get_absolute_url }}">
                     <img src="{{ value.photo.url }}">
                 </a>
-<!--                    TODO Разобраться с акциями и скидками-->
+<!--TODO Разобраться с акциями и скидками-->
                 <div class="btn-icon-group">
                     <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
                             class="icon-shopping-cart"></i></button>
                 </div>
                 {% else %}
                 <a href="{{ key.get_absolute_url }}">
-                    <img src="https://picsum.photos/1024/768?grayscale">
+                    <img src="{% static 'assets/images/photo_net.jpg' %}">
                 </a>
                 <div class="btn-icon-group">
                     <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
@@ -40,7 +40,7 @@
             <div class="product-details">
                 <div class="category-wrap">
                     <div class="category-list">
-                        <a href="category.html" class="product-category">{{ good.category }}</a>
+                        <a href="category.html" class="product-category">Категория: {{ good.category }}</a>
                     </div>
                 </div>
                 <h3 class="product-title">
