@@ -54,3 +54,19 @@ class PromotionOneView(ListView):
 
     def get_queryset(self):
         return GoodsDB.objects.filter(price__gte=299)
+
+
+class PromotionTwoView(ListView):
+    model = GoodsDB
+    """doc string"""
+    template_name = 'shopping/category.html' #shopping.html
+    context_object_name = 'good'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['photos'] = GalleryDB.objects.all()
+        context['hello'] = 'Выгодные предложения'
+        return context
+
+    def get_queryset(self):
+        return GoodsDB.objects.filter(price__lte=399)
