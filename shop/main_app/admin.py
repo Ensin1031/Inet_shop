@@ -28,12 +28,25 @@ class PromotionPhotoInLine(admin.TabularInline):
 
 @admin.register(PromotionDB)
 class PromotionAdmin(admin.ModelAdmin):
-    inlines = (PromotionPhotoInLine, )
-    list_display = ('promo_title', 'is_active', 'category_name', 'brand_name',
+    inlines = (PromotionPhotoInLine,)
+    list_display = ('promo_title', 'is_active', 'get_category', 'get_brand',
                     'discount', 'slug',)
-    list_filter = ('is_active', 'category',  'brand', 'discount',)
-    list_editable = ('is_active', )
-    search_fields = ('promo_title', 'category_name', 'brand_name',)
+    list_filter = ('is_active', 'discount', 'category', 'brand',)
+    list_editable = ('is_active',)
+    search_fields = ('promo_title', 'category', 'brand',)
+    fields = (('promo_title', 'is_active'), 'discount', 'category', 'brand',)
+    filter_horizontal = ('category', 'brand',)
+
+    def get_category(self, obj):
+        return obj.get_category()
+
+    get_category.short_description = 'Категория'
+
+    def get_brand(self, obj):
+        return obj.get_brand()
+
+    get_brand.short_description = 'Производитель'
+
     # fieldsets = (
     #     ('Акция', {
     #         'fields': (
