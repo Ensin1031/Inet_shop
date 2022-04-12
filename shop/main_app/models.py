@@ -26,27 +26,15 @@ class PromotionDB(models.Model):
             default=False,
             verbose_name='Активна'
     )
-    category = models.BooleanField(
-            default=False,
-            verbose_name='Участие категории'
-    )
-    category_name = models.ForeignKey(
+    category = models.ManyToManyField(
             CategoryDB,
-            on_delete=models.PROTECT,
             related_name='from_category',
-            null=True,
             blank=True,
             verbose_name='Категория'
     )
-    brand = models.BooleanField(
-            default=False,
-            verbose_name='Участие производителя'
-    )
-    brand_name = models.ForeignKey(
+    brand = models.ManyToManyField(
             BrandNameDB,
-            on_delete=models.PROTECT,
             related_name='from_brand',
-            null=True,
             blank=True,
             verbose_name='Производитель'
     )
@@ -61,7 +49,6 @@ class PromotionDB(models.Model):
                 validators.MaxValueValidator(0.99)
             ]
     )
-
     description = models.TextField(
             blank=True,
             verbose_name='Описание акции'
@@ -80,35 +67,32 @@ class PromotionDB(models.Model):
         super(PromotionDB, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('brand', kwargs={'slug': self.slug})
+        return reverse('promotion', kwargs={'slug': self.slug})
 
     def __str__(self):
         return f'{self.promo_title}'
 
-    def clean_fields(self, exclude=None):
-        super().clean_fields(exclude=exclude)
-        errors = {}
+    def get_category(self):
+        return ','.join([str(category) for category in self.category.all()])
 
-        if self.category and not self.category_name:
-            errors['category_name'] = ValidationError(
-                    'Не указана категория, участвующая в акции'
-            )
-        if not self.category and self.category_name:
-            errors['category_name'] = ValidationError(
-                    'Категории не участвуют в акции'
-            )
+    def get_brand(self):
+        return ','.join([str(brand) for brand in self.brand.all()])
 
-        if self.brand and not self.brand_name:
-            errors['brand_name'] = ValidationError(
-                    'Не указан производитель, участвующий в акции'
-            )
-        if not self.brand and self.brand_name:
-            errors['brand_name'] = ValidationError(
-                    'Производители не участвуют в акции'
-            )
-
-        if errors:
-            raise ValidationError(errors)
+    # TODO валидация если категории - нет, бренда - нет
+    # def clean_fields(self, exclude=None):
+    #     super().clean_fields(exclude=exclude)
+    #     errors = {}
+    #
+    #     if not self.category and not self.brand:
+    #         errors['category'] = ValidationError(
+    #                 'Не указана категория, участвующая в акции'
+    #         )
+    #         errors['brand'] = ValidationError(
+    #                 'Не указан производитель, участвующий в акции'
+    #         )
+    #
+    #     if errors:
+    #         raise ValidationError(errors)
 
     class Meta:
         verbose_name = 'Акция'
