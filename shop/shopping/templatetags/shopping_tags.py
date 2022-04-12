@@ -20,6 +20,7 @@ def show_band(category=None):
         'show_photo': photo_list(goods),
         'show_new_price': new_price_list(goods),
         'show_rating': rating_list(goods),
+        'promo_list': promo_list(goods)
     }
     return count
 
@@ -37,5 +38,6 @@ def show_sidebar():
         'brands': brand_by_count(),
         'category': category[0],
         'category_count': category[1],
+        'promo_list': promo_list(goods)
     }
     return count

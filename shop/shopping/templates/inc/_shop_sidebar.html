@@ -68,7 +68,7 @@
                         </a>
                         {% if not node.is_leaf_node %}
                         <ul class="children">
-                            <a href="{{ children.get_absolute_url }}"><p>{{ children }}</p></a>
+                            {{ children }}
                         </ul>
                         {% endif %}
                     </li>
@@ -157,6 +157,18 @@
                                 </a>
                                 {% endif %}
 
+                                {% for key, value in promo_list.items %}
+                                {% if key == good %}
+                                <div class="label-group">
+                                    {% if value != 0 %}
+                                    <span class="product-label label-sale">-{{ value }}%</span>
+                                    {% endif %}
+                                </div><!-- End .price-box -->
+                                {% endif %}
+                                {% endfor %}
+
+
+
                             </figure>
                             {% endif %}
                             {% endfor %}
@@ -177,14 +189,18 @@
                                         <span class="tooltiptext tooltip-top"></span>
                                     </div><!-- End .product-ratings -->
                                 </div><!-- End .product-container -->
+                                {% for key, value in show_new_price.items %}
+                                {% if key == good %}
                                 <div class="price-box">
-                                    {% for key, value in show_new_price.items %}
-                                    {% if key == good %}
-                                    <p class="old-price">{{ key.price }}y.e.</p>
-                                    <p class="product-price">{{ value }}y.e.</p>
+                                    {% if value == good.price %}
+                                    <p class="product-price">{{ value }} у.е.</p>
+                                    {% else %}
+                                    <p class="old-price">{{ good.price }} y.e.</p>
+                                    <p class="product-price">{{ value }} у.е.</p>
                                     {% endif %}
-                                    {% endfor %}
                                 </div><!-- End .price-box -->
+                                {% endif %}
+                                {% endfor %}
                             </div><!-- End .product-details -->
                         </div>
                     {% if forloop.counter == 3 %}</div>{% endif %}

@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
 from .forms import AddReviewForm
 from .get_func import *
+from main_app.models import *
 
 
 class ShowGood(LoginRequiredMixin, CreateView, DetailView):
@@ -23,7 +24,8 @@ class ShowGood(LoginRequiredMixin, CreateView, DetailView):
         context = super().get_context_data(**kwargs)
         context['photos'] = GalleryDB.objects.filter(product=context['object'])
         context['reviews'] = ReviewsDB.objects.filter(good=context['object'])
-        context['new_price'] = new_price(context['object'].price)
+        context['discount'] = get_promo(self.object)
+        context['new_price'] = new_price(context['object'].price, context['discount'])
         context['finish_rating'] = rating_good(self.object)
         return context
 
@@ -40,11 +42,22 @@ class ShowAllGoods(ListView):
         context['rating_list'] = rating_list(context['goods'])
         context['new_price_list'] = new_price_list(context['goods'])
         context['show_photo'] = photo_list(context['goods'])
+        context['promo_list'] = promo_list(context['goods'])
 
         return context
 
     def get_queryset(self):
         '''используем, чтобы вывести только те товары, которые помечены, как наличные в магазине'''
+        print(self.request)
+        if self.request.GET.get('show_gl'):
+            self.paginate_by = self.request.GET.get('show_gl')
+            print(self.request.GET.get('show_gl'))
+        if self.request.GET.get('show_goods_how'):
+            print(self.request.GET.get('show_goods_how'))
+        # if self.request.method == 'GET':
+        #     print(self.request)
+        #     if self.request.GET.get('show_gl'):
+        #         self.paginate_by = self.request.GET.get('show_gl')
         return GoodsDB.objects.filter(presence=True)
 
 

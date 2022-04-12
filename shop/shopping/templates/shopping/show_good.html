@@ -76,8 +76,12 @@
                     <hr class="short-divider">
 
                     <div class="price-box">
+                        {% if good_item.price == new_price %}
+                        <span class="product-price">{{ new_price }} у.е.</span>
+                        {% else %}
                         <span class="old-price">{{ good_item.price }} у.е.</span>
                         <span class="product-price">{{ new_price }} у.е.</span>
+                        {% endif %}
                     </div><!-- End .price-box -->
 
                     <div class="product-desc">

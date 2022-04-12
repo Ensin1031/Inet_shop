@@ -1,39 +1,63 @@
-{% comment %}
-<div class="items-per-page">
-    <form action="" method="post" id="items_on_page">
+<div class="toolbox-item toolbox-show">
+    <label>Показать по: </label>
+    <form action="{% url 'shopping' %}" method="get" class="toolbox-item">
         {% csrf_token %}
-            <div class="sel form-group">
-                <select id="items_per_page" name="items_per_page" onchange="this.form.submit()">
-                {% for item in per_page_options %}
-                <option  selected="selected"  value="{{ item }}">{{ item }}</option>
-                {% endfor %}
-                </select>
-            </div>
+        <input type="submit" name="show_gl" value="9" class="page-link">
     </form>
+    <form action="{% url 'shopping' %}" method="get" class="toolbox-item">
+        {% csrf_token %}
+        <input type="submit" name="show_gl" value="12" class="page-link">
+    </form>
+    <form action="{% url 'shopping' %}" method="get" class="toolbox-item">
+        {% csrf_token %}
+        <input type="submit" name="show_gl" value="15" class="page-link">
+    </form>
+    <label></label>
+</div>
+
+
+{% comment %}
+<div class="toolbox-item toolbox-show">
+
+    <form action="{% url 'shopping' %}" method="get" class="toolbox-item">
+        {% csrf_token %}
+        <input type="submit" name="show_goods_how" value="chess" class="page-link">
+    </form>
+
 </div>
 {% endcomment %}
 
 
-<div class="toolbox-item toolbox-show">
-    <label>Показать по:</label>
-
-
-    <div class="select-custom">
-        <select name="count" class="form-control">
-            <option value="12">12</option>
-            <option value="24">24</option>
-            <option value="36">36</option>
-        </select>
-    </div><!-- End .select-custom -->
-
-
-</div><!-- End .toolbox-item -->
-
 <div class="toolbox-item layout-modes">
-    <a href="category.html" class="layout-btn btn-grid active" title="Grid">
-        <i class="icon-mode-grid"></i>
+
+    {% comment %}
+    <form action="{% url 'shopping' %}" method="get">
+        <input type="text" name="s" placeholder="Поиск...">
+        <input type="text" name="review_object" value="{{ post }}" style="display: none;">
+        <input type="submit" style="display: none;">
+        <input type="submit" value="Поиск">
+    </form>
+    {% endcomment %}
+
+
+    <a href="#push" class="layout-btn btn-grid active" title="Шахматы">
+        <form action="{% url 'shopping' %}" method="get" style="display: none;">
+            <input type="text" name="show_chess" value="3x">
+            <input name="push" type="submit">
+        </form>
+        <i class="icon-mode-grid">
+
+        </i>
     </a>
-    <a href="category-list.html" class="layout-btn btn-list" title="List">
+
+    {% comment %}
+    <form name="chess" action="{% url 'shopping' %}" method="get">
+        <input type="text" name="show_chess" value="3x" style="display: none;">
+        <input type="submit" style="display: none;">
+    </form>
+    {% endcomment %}
+
+    <a href="{% url 'shopping' %} visio=3x" class="layout-btn btn-list" title="Построчно">
         <i class="icon-mode-list"></i>
     </a>
 </div><!-- End .layout-modes -->
