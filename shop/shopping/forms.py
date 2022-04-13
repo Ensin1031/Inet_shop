@@ -4,7 +4,9 @@ from .models import ReviewsDB
 
 
 class AddReviewForm(forms.ModelForm):
-
+    """
+    Form of adding a review
+    """
     class Meta:
         model = ReviewsDB
         fields = ('review_title', 'review_rating', 'review_text',)

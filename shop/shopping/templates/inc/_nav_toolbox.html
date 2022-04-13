@@ -1,0 +1,69 @@
+<form action="{% url 'shopping' %}" method="get" class="toolbox-item">
+    {% csrf_token %}
+    <nav class="toolbox">
+
+        <div class="toolbox-left">
+            <div class="toolbox-item toolbox-sort">
+                <label>Сортировать по:</label>
+
+                <div class="select-custom">
+                    <select name="sort_on" class="form-control">
+                        <option value="menu_order" selected="selected">Стандартная сортировка</option>
+                        <option value="popularity">Сортировка по популярности</option>
+                        <option value="rating">Сортировка по рейтингу</option>
+                        <option value="price">Сортировка оп цене: по возрастанию</option>
+                        <option value="price-desc">Сортировка оп цене: по убыванию</option>
+                    </select>
+                </div><!-- End .select-custom -->
+
+            </div><!-- End .toolbox-item -->
+        </div><!-- End .toolbox-left -->
+
+        <div class="toolbox-right">
+            <div class="toolbox-item toolbox-show">
+                <label>Товаров на странице:</label>
+
+                <div class="select-custom">
+                    <select name="show_on_page" class="form-control">
+                        <option value="6">6</option>
+                        <option value="9">9</option>
+                        <option value="12">12</option>
+                        <option value="15">15</option>
+                        <option value="18">18</option>
+                        <option value="21">21</option>
+                    </select>
+                </div><!-- End .select-custom -->
+            </div><!-- End .toolbox-item -->
+
+            <div class="toolbox-item toolbox-show">
+                <label>Показать в виде:</label>
+
+                <div class="select-custom">
+                    <select name="show_as" class="form-control">
+                        <option value="grid">Сетка</option>
+                        <option value="list">Список</option>
+                    </select>
+                </div><!-- End .select-custom -->
+            </div><!-- End .toolbox-item -->
+
+
+            {% comment %}
+            <div class="toolbox-item layout-modes">
+                <a href="category.html" class="layout-btn btn-grid active" title="Сетка">
+                    <i class="icon-mode-grid"></i>
+                </a>
+                <a href="category-list.html" class="layout-btn btn-list" title="Список">
+                    <i class="icon-mode-list"></i>
+                </a>
+            </div><!-- End .layout-modes -->
+            {% endcomment %}
+
+            <div class="toolbox-right">
+                <input type="submit" class="page-link" value="Показать">
+            </div>
+
+        </div><!-- End .toolbox-right -->
+
+
+    </nav>
+</form>

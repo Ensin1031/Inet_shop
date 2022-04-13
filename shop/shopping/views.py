@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,7 +10,7 @@ from .get_func import *
 from main_app.models import *
 
 
-class ShowGood(LoginRequiredMixin, CreateView, DetailView):
+class ShowGood(CreateView, DetailView):
     '''Single product page class'''
     model = GoodsDB
     template_name = 'shopping/show_good.html'
@@ -16,9 +18,12 @@ class ShowGood(LoginRequiredMixin, CreateView, DetailView):
     form_class = AddReviewForm
 
     def form_valid(self, form):
-        form.instance.user_name = self.request.user
-        form.instance.good = GoodsDB.objects.filter(slug=self.kwargs.get('slug')).first()
-        return super().form_valid(form)
+        if self.request.user.is_authenticated:
+            form.instance.user_name = self.request.user
+            form.instance.good = GoodsDB.objects.filter(slug=self.kwargs.get('slug')).first()
+            return super(ShowGood, self).form_valid(form)
+        else:
+            raise Http404('Для отправки своего отзыва Вы должны зарегистрироваться или залогиниться')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,7 +40,7 @@ class ShowAllGoods(ListView):
     model = GoodsDB
     template_name = 'shopping/shopping.html'
     context_object_name = 'goods'
-    paginate_by = 12
+    paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ShowAllGoods, self).get_context_data(**kwargs)
@@ -46,19 +51,29 @@ class ShowAllGoods(ListView):
 
         return context
 
+    # TODO
     def get_queryset(self):
-        '''используем, чтобы вывести только те товары, которые помечены, как наличные в магазине'''
-        print(self.request)
-        if self.request.GET.get('show_gl'):
-            self.paginate_by = self.request.GET.get('show_gl')
-            print(self.request.GET.get('show_gl'))
-        if self.request.GET.get('show_goods_how'):
-            print(self.request.GET.get('show_goods_how'))
-        # if self.request.method == 'GET':
-        #     print(self.request)
-        #     if self.request.GET.get('show_gl'):
-        #         self.paginate_by = self.request.GET.get('show_gl')
-        return GoodsDB.objects.filter(presence=True)
+        if self.request.method == 'GET':
+            self.paginate_by = self.request.GET.get('show_on_page')
+            if self.request.GET.get('sort_on') == 'popularity':
+                result = GoodsDB.objects.order_by('-n_views').filter(presence=True)
+                # TODO реализовать с ценой, с учетом скидок и акций
+            # elif self.request.GET.get('sort_on') == 'price':
+            #     result = GoodsDB.objects.filter(presence=True).order_by('price')
+            # elif self.request.GET.get('sort_on') == 'price-desc':
+            #     result = GoodsDB.objects.filter(presence=True).order_by('-price')
+                # TODO реализовать сортировку по рейтингу
+            # elif self.request.GET.get('sort_on') == 'rating':
+            #     ...
+            else:
+                result = GoodsDB.objects.filter(presence=True)
+            return result
+
+        # if self.request.GET.get('sort_on'):
+        #     print(self.request.GET.get('sort_on'))
+
+
+        # return result
 
 
 
