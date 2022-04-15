@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "aa75c3725a5684e21a240a34886ce4b6a3cd6caf3243cb49b4bff1bba7c73907"
+            "sha256": "d7aa2ae5590601d90b3040fdbaf097983b40041f2a850902df6b7147787b9542"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -62,6 +62,13 @@
             "index": "pypi",
             "version": "==1.9.8"
         },
+        "django-bootstrap-form": {
+            "hashes": [
+                "sha256:de3f7893e515352834d446c441c0cb861637f92cebbe59d8229469c6cd3dc640"
+            ],
+            "index": "pypi",
+            "version": "==3.4"
+        },
         "django-debug-toolbar": {
             "hashes": [
                 "sha256:644bbd5c428d3283aa9115722471769cac1bec189edf3a0c855fd8ff870375a9",
@@ -69,6 +76,14 @@
             ],
             "index": "pypi",
             "version": "==3.2.4"
+        },
+        "django-filter": {
+            "hashes": [
+                "sha256:632a251fa8f1aadb4b8cceff932bb52fe2f826dd7dfe7f3eac40e5c463d6836e",
+                "sha256:f4a6737a30104c98d2e2a5fb93043f36dd7978e0c7ddc92f5998e85433ea5063"
+            ],
+            "index": "pypi",
+            "version": "==21.1"
         },
         "django-js-asset": {
             "hashes": [

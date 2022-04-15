@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
 from .forms import AddReviewForm
 from .get_func import *
+from .filters import GoodsFilter
 from main_app.models import *
 
 
@@ -48,41 +49,28 @@ class ShowAllGoods(ListView):
         context['new_price_list'] = new_price_list(context['goods'])
         context['show_photo'] = photo_list(context['goods'])
         context['promo_list'] = promo_list(context['goods'])
-
+        context['filter'] = GoodsFilter(self.request.GET, queryset=self.get_queryset())
+        if self.request.GET.get('show_as') == 'list':
+            context['show_as'] = 'list'
+        else:
+            context['show_as'] = 'grid'
         return context
 
-    # TODO
     def get_queryset(self):
-        if self.request.method == 'GET':
+        if 'slug_cat' in self.kwargs.keys():
+            queryset =GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat'])
+        elif 'slug_brand' in self.kwargs.keys():
+            queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand'])
+        else:
+            queryset = GoodsDB.objects.filter(presence=True)
+        if self.request.GET.get('show_on_page'):
             self.paginate_by = self.request.GET.get('show_on_page')
-            if self.request.GET.get('sort_on') == 'popularity':
-                result = GoodsDB.objects.order_by('-n_views').filter(presence=True)
-                # TODO реализовать с ценой, с учетом скидок и акций
-            # elif self.request.GET.get('sort_on') == 'price':
-            #     result = GoodsDB.objects.filter(presence=True).order_by('price')
-            # elif self.request.GET.get('sort_on') == 'price-desc':
-            #     result = GoodsDB.objects.filter(presence=True).order_by('-price')
-                # TODO реализовать сортировку по рейтингу
-            # elif self.request.GET.get('sort_on') == 'rating':
-            #     ...
-            else:
-                result = GoodsDB.objects.filter(presence=True)
-            return result
-
-        # if self.request.GET.get('sort_on'):
-        #     print(self.request.GET.get('sort_on'))
-
-
-        # return result
+        return queryset
 
 
 
 
 
-
-def shopping(request):
-    '''тестовая функция обработки покупки заказа'''
-    return render(request, 'shopping/shopping.html', {'hello': 'Hello, shop!'})
 
 
 def get_category(request, slug):
@@ -99,7 +87,3 @@ def get_brand(request, slug):
     '''тестовая функция просмотра товара по производителю'''
     return render(request, 'shopping/brand.html', {'hello': f'Hello, brand {slug}!'})
 
-
-# def show_good(request, slug):
-#     '''тестовая функция просмотра товара по производителю'''
-#     return render(request, 'shopping/show_good.html', {'hello': f'Hello, good {slug}!'})

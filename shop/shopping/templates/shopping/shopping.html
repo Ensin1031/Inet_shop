@@ -2,6 +2,7 @@
 {% load static %}
 {% load shopping_tags %}
 {% load static mptt_tags %}
+{% load bootstrap %}
 
 
 {% block title %}
@@ -9,16 +10,6 @@
 {% endblock %}
 
 {% block content %}
-
-{% comment %}
-<div>
-    {% for item in goods %}
-    {{ item }} {{ item.date_at }} {{ item.category }} {{ item.slug }}
-    {% endfor %}
-</div>
-{{ category }}
-{% endcomment %}
-
 
 <main class="main">
     <!--TODO переделать бредкрамп-->
@@ -33,123 +24,31 @@
 
     <div class="container mb-3">
         <div class="row">
+
+
+
             <div class="col-lg-9 main-content">
-
-                {% comment %}
-                <nav class="toolbox">
-                    <!--TODO сделать сортировку-->
-                    <div class="toolbox-left">
-                        <div class="toolbox-item toolbox-sort">
-                            <label>Сортировать:</label>
-
-                            <div class="select-custom">
-                                <select name="orderby" class="form-control">
-                                    <option value="menu_order" selected="selected">Стандартная сортировка</option>
-                                    <option value="popularity">Сортировка по популярности</option>
-                                    <option value="rating">Sort by average rating</option>
-                                    <option value="date">Sort by newness</option>
-                                    <option value="price">Сортировка по цене: по возрастанию</option>
-                                    <option value="price-desc">Сортировка по цене: по убыванию</option>
-                                </select>
-                            </div><!-- End .select-custom -->
-
-                        </div><!-- End .toolbox-item -->
-                    </div><!-- End .toolbox-left -->
-
-                    <div class="toolbox-right">
-                        {% include 'inc/_toolbox_in_count.html' %}
-                    </div><!-- End .toolbox-right -->
-                </nav>
-                {% endcomment %}
-
 
                 {% include 'inc/_nav_toolbox.html' %}
 
-                <div class="row">
+                {% if show_as == 'list' %}
+                    {% include 'inc/_body_list.html' %}
+                {% else %}
+                    {% include 'inc/_body_grid.html' %}
+                {% endif %}
 
-                    {% for good in goods %}
-                    <div class="col-6 col-sm-4">
-                        <div class="product-default inner-quickview inner-icon">
-
-                            {% for key, value in show_photo.items %}
-                            {% if key == good %}
-                            <figure>
-                                {% if value %}
-                                <a href="{{ key.get_absolute_url }}">
-                                    <img src="{{ value.photo.url }}" alt="product">
-                                </a>
-
-                                {% else %}
-                                <a href="{{ key.get_absolute_url }}">
-                                    <img src="{% static 'assets/images/photo_net.jpg' %}">
-                                </a>
-                                {% endif %}
-
-                                {% for key, value in promo_list.items %}
-                                {% if key == good %}
-                                <div class="label-group">
-                                    {% if value != 0 %}
-                                    <span class="product-label label-sale">-{{ value }}%</span>
-                                    {% endif %}
-                                </div><!-- End .price-box -->
-                                {% endif %}
-                                {% endfor %}
-
-                            </figure>
-                            {% endif %}
-                            {% endfor %}
-
-                            <div class="product-details">
-                                <div class="category-wrap">
-                                    <div class="category-list">
-                                        <a href="{{ good.category.get_absolute_url }}" class="product-category">Категория:
-                                            {{ good.category }}</a>
-                                    </div>
-                                    <a href="#" class="btn-icon-wish"><i class="icon-heart"></i></a>
-                                </div>
-                                <h2 class="product-title">
-                                    <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
-                                </h2>
-
-                                <div class="ratings-container">
-                                    {% for key, value in rating_list.items %}
-                                    {% if key.title == good.title %}
-                                    <div class="product-ratings">
-                                        <span class="ratings" style="width:{{ value }}%"></span><!-- End .ratings -->
-                                        <span class="tooltiptext tooltip-top"></span>
-                                    </div><!-- End .product-ratings -->
-                                    {% endif %}
-                                    {% endfor %}
-                                </div><!-- End .product-container -->
-
-                                {% for key, value in new_price_list.items %}
-                                {% if key == good %}
-                                <div class="price-box">
-                                    {% if value == good.price %}
-                                    <span class="product-price">{{ value }} у.е.</span>
-                                    {% else %}
-                                    <span class="old-price">{{ good.price }} y.e.</span>
-                                    <span class="product-price">{{ value }} у.е.</span>
-                                    {% endif %}
-                                </div><!-- End .price-box -->
-                                {% endif %}
-                                {% endfor %}
-                            </div><!-- End .product-details -->
-                        </div>
-                    </div><!-- End .col-sm-4 -->
-                    {% endfor %}
-
-                </div><!-- End .row -->
 
                 <nav class="toolbox toolbox-pagination">
 
                     <div class="toolbox-left">
-                        {% include 'inc/_toolbox_in_count.html' %}
+                        {% include 'inc/_nav_toolbox.html' %}
                     </div><!-- End .toolbox-left -->
 
                     {% include 'inc/_shop_pag.html' %}
 
                 </nav>
+
+
             </div><!-- End .col-lg-9 -->
 
             <div class="sidebar-overlay"></div>

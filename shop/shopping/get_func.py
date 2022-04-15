@@ -1,7 +1,4 @@
-from django.db.models import Q
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q, Case, When
 
 from .models import *
 from main_app.models import *
@@ -158,6 +155,23 @@ def promo_list(goods):
     return result
 
 
+def sort_base_funk(goods_dict, rev=True):
+    """
+    Базовая функция сортировки
+
+    получает: словарь типа
+    {<объект_GoodsDB_№1>: <int(1-100)_значение_для_GoodsDB_№1>, <объект_GoodsDB_№2>: <int(1-100)_значение_для_GoodsDB_№2>,... }
+    вторым аргументом - булевое значение реверса сортировки, по умолчанию =True
+
+    возвращает: <QuerySet[отсортированный список]>
+    """
+    result = list(dict(sorted(goods_dict.items(), key=lambda x: x[1], reverse=rev)).keys())
+    pk_list = [x.pk for x in result]
+    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
+    queryset = GoodsDB.objects.filter(pk__in=pk_list).order_by(preserved)
+    return queryset
+
+
 def sort_on_rating(goods):
     """
     функция получения списка товаров из GoodsDB, отсортированных по рейтингу + параметру наличия в магазине
@@ -166,7 +180,8 @@ def sort_on_rating(goods):
 
     возвращает: отсортированный список товаров
     """
-    result = list()
+    rating_dict = rating_list(goods)
+    return sort_base_funk(rating_dict)
 
 
 def sort_on_price(goods):
@@ -176,10 +191,10 @@ def sort_on_price(goods):
 
     принимает: список объектов из GoodsDB
 
-    возвращает: отсортированный список товаров
+    возвращает: отсортированный список товаров по цене по возрастанию
     """
-
-    ...
+    price_dict = new_price_list(goods)
+    return sort_base_funk(price_dict, False)
 
 
 def sort_on_price_desc(goods):
@@ -189,9 +204,7 @@ def sort_on_price_desc(goods):
 
     принимает: список объектов из GoodsDB
 
-    возвращает: отсортированный список товаров
+    возвращает: отсортированный список товаров по цене по убыванию
     """
-
-    ...
-
-
+    price_dict = new_price_list(goods)
+    return sort_base_funk(price_dict)

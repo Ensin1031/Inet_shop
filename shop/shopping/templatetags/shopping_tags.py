@@ -1,5 +1,6 @@
 from django import template
 from django.db.models import Sum, Count
+from django.utils.http import urlencode
 
 from shopping.models import GalleryDB, GoodsDB, CategoryDB, ReviewsDB, BrandNameDB
 from shopping.get_func import *
@@ -41,3 +42,10 @@ def show_sidebar():
         'promo_list': promo_list(goods)
     }
     return count
+
+
+@register.simple_tag(takes_context=True)
+def url_replace(context, **kwargs):
+    query = context['request'].GET.dict()
+    query.update(kwargs)
+    return urlencode(query)

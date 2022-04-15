@@ -16,7 +16,7 @@
 <!--TODO доналадить бредкрамп-->
                 <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
                 <li class="breadcrumb-item"><a href="{% url 'shopping' %}">Магазин</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'shopping' %}">{{ good_item.category }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ good_item.category.get_absolute_url }}">{{ good_item.category }}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ good_item.title }}</li>
             </ol>
         </div>
@@ -98,7 +98,7 @@
                             <input class="horizontal-quantity form-control" type="text">
                         </div><!-- End .product-single-qty -->
 <!--TODO поменять ссылку на страницу покупки-->
-                        <a href="#" class="btn btn-dark add-cart icon-shopping-cart" title="Add to Cart">Купить</a>
+                        <a href="#" class="btn btn-dark add-cart icon-shopping-cart" title="Перейти к покупке">Купить</a>
                         {% else %}
                         <p>Если вы хотите купить этот товар:</p>
                         <a href="#">Зарегистрируйтесь</a> | <a href="#">Авторизуйтесь</a>

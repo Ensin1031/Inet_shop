@@ -25,7 +25,7 @@ class BrandNameDB(models.Model):
         super(BrandNameDB, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('brand', kwargs={'slug': self.slug})
+        return reverse('brand', kwargs={'slug_brand': self.slug})
 
     def __str__(self):
         return str(self.title)
@@ -50,7 +50,7 @@ class CategoryDB(MPTTModel):
         super(CategoryDB, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('category', kwargs={'slug': self.slug})
+        return reverse('category', kwargs={'slug_cat': self.slug})
 
     def __str__(self):
         return str(self.title)
