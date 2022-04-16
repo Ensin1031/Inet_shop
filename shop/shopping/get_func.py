@@ -1,11 +1,17 @@
-from django.db.models import Q, Case, When
+from django.db.models import Q, Case, When, Prefetch
 
 from .models import *
 from main_app.models import *
 
 
-rating_all = ReviewsDB.objects.select_related('good')
-promo_all = PromotionDB.objects.all()
+rating_all = ReviewsDB.objects.all()
+promo_all = PromotionDB.objects.all()#\
+    # .prefetch_related('category')\
+    # .prefetch_related('brand')
+
+
+# .prefetch_related(Prefetch('category', queryset=CategoryDB.objects.filter(from_category__is_active=True).filter(from_category__category=good_object[0].category)))
+# .prefetch_related(Prefetch('brand', queryset=BrandNameDB.objects.filter(from_brand__is_active=True).filter(from_brand__brand=good_object[0].brand)))
 
 
 def rating_good(good):
@@ -17,7 +23,7 @@ def rating_good(good):
 
     возвращает: int(значение)
     """
-    pre_rating = rating_all.filter(good=good).select_related('good')
+    pre_rating = rating_all.filter(good=good)
     len_rating = pre_rating.count()
 
     if len_rating > 0:
@@ -133,8 +139,6 @@ def get_promo(good):
 
     возвращает: float(значение)
     """
-    # promo = PromotionDB.objects.all()
-    # print(promo)
     promo = promo_all.filter(is_active=True).filter(Q(category=good.category) | Q(brand=good.brand))
     discount = list()
     if promo:
@@ -174,7 +178,7 @@ def sort_base_funk(goods_dict, rev=True):
     result = list(dict(sorted(goods_dict.items(), key=lambda x: x[1], reverse=rev)).keys())
     pk_list = [x.pk for x in result]
     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
-    queryset = GoodsDB.objects.filter(pk__in=pk_list).order_by(preserved)
+    queryset = GoodsDB.objects.filter(pk__in=pk_list).order_by(preserved).select_related('category').select_related('brand')
     return queryset
 
 

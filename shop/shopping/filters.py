@@ -2,6 +2,7 @@ import django_filters
 
 from .get_func import *
 
+
 class GoodsFilter(django_filters.FilterSet):
     """Implementation of sorting fields on the main page of the store"""
     CHOICES_SORT = (

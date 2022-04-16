@@ -13,7 +13,7 @@ from main_app.models import *
 
 
 class ShowGood(CreateView, DetailView):
-    '''Single product page class'''
+    """Single product page class"""
     model = GoodsDB
     template_name = 'shopping/show_good.html'
     context_object_name = 'good_item'
@@ -37,14 +37,17 @@ class ShowGood(CreateView, DetailView):
         return context
 
     def get_queryset(self):
-        good_object = GoodsDB.objects.filter(slug=self.kwargs.get('slug'))\
-            .select_related('category')\
+        good_object = GoodsDB.objects.filter(slug=self.kwargs.get('slug')) \
+            .select_related('category') \
             .select_related('brand')
-        return good_object  # .prefetch_related(Prefetch('category', queryset=CategoryDB.objects.filter(from_category__is_active=True).filter(from_category__category=good_object[0].category))).prefetch_related(Prefetch('brand', queryset=BrandNameDB.objects.filter(from_brand__is_active=True).filter(from_brand__brand=good_object[0].brand)))
+        return good_object
+
+        # .prefetch_related(Prefetch('category', queryset=CategoryDB.objects.filter(from_category__is_active=True).filter(from_category__category=good_object[0].category)))
+        # .prefetch_related(Prefetch('brand', queryset=BrandNameDB.objects.filter(from_brand__is_active=True).filter(from_brand__brand=good_object[0].brand)))
 
 
 class ShowAllGoods(ListView):
-    '''Full list class of goods'''
+    """Full list class of goods"""
     model = GoodsDB
     template_name = 'shopping/shopping.html'
     context_object_name = 'goods'
@@ -52,31 +55,33 @@ class ShowAllGoods(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ShowAllGoods, self).get_context_data(**kwargs)
+        context['filter'] = GoodsFilter(self.request.GET, queryset=context['object_list'])
+        context['object_list'] = context['filter'].qs
         context['rating_list'] = rating_list(context['goods'])
         context['new_price_list'] = new_price_list(context['goods'])
         context['show_photo'] = photo_list(context['goods'])
         context['promo_list'] = promo_list(context['goods'])
-        context['filter'] = GoodsFilter(self.request.GET, queryset=self.get_queryset())
         if self.request.GET.get('show_as') == 'list':
             context['show_as'] = 'list'
         else:
             context['show_as'] = 'grid'
+
         return context
 
     def get_queryset(self):
+
         if 'slug_cat' in self.kwargs.keys():
-            queryset =GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat']).select_related('category')
+            queryset = GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat']).select_related('category').select_related('brand')
         elif 'slug_brand' in self.kwargs.keys():
-            queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand']).select_related('category')
+            queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand']).select_related('category').select_related('brand')
         else:
-            queryset = GoodsDB.objects.filter(presence=True).select_related('category')
+            queryset = GoodsDB.objects.filter(presence=True).select_related('category').select_related('brand')
 
         if self.request.GET.get('show_on_page'):
             self.paginate_by = self.request.GET.get('show_on_page')
-        return queryset
 
-
-
+        result = GoodsFilter(self.request.GET, queryset).qs.select_related('category').select_related('brand')
+        return result.select_related('category').select_related('brand')
 
 
 
@@ -94,4 +99,3 @@ def show_image(request, slug):
 def get_brand(request, slug):
     '''тестовая функция просмотра товара по производителю'''
     return render(request, 'shopping/brand.html', {'hello': f'Hello, brand {slug}!'})
-
