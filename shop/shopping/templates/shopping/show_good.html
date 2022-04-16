@@ -92,8 +92,8 @@
 
                     <hr class="divider">
 
-                    {% if request.user.is_authenticated %}
                     <div class="product-action">
+                        {% if request.user.is_authenticated %}
                         <div class="product-single-qty">
                             <input class="horizontal-quantity form-control" type="text">
                         </div><!-- End .product-single-qty -->
@@ -102,13 +102,10 @@
                         {% else %}
                         <p>Если вы хотите купить этот товар:</p>
                         <a href="#">Зарегистрируйтесь</a> | <a href="#">Авторизуйтесь</a>
-
-
+                        {% endif %}
                     </div><!-- End .product-action -->
-                    {% endif %}
 
                     <hr class="divider mb-1">
-
                 </div><!-- End .product-single-details -->
             </div><!-- End .row -->
         </div><!-- End .product-single-container -->
@@ -204,7 +201,9 @@
             </div><!-- End .tab-content -->
         </div><!-- End .product-single-tabs -->
 
+        {% comment %}
         {% show_band good_item.category %}
+        {% endcomment %}
 
     </div><!-- End .container -->
 </main><!-- End .main -->

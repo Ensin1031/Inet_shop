@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models import Prefetch
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
@@ -35,6 +36,12 @@ class ShowGood(CreateView, DetailView):
         context['finish_rating'] = rating_good(self.object)
         return context
 
+    def get_queryset(self):
+        good_object = GoodsDB.objects.filter(slug=self.kwargs.get('slug'))\
+            .select_related('category')\
+            .select_related('brand')
+        return good_object  # .prefetch_related(Prefetch('category', queryset=CategoryDB.objects.filter(from_category__is_active=True).filter(from_category__category=good_object[0].category))).prefetch_related(Prefetch('brand', queryset=BrandNameDB.objects.filter(from_brand__is_active=True).filter(from_brand__brand=good_object[0].brand)))
+
 
 class ShowAllGoods(ListView):
     '''Full list class of goods'''
@@ -58,11 +65,12 @@ class ShowAllGoods(ListView):
 
     def get_queryset(self):
         if 'slug_cat' in self.kwargs.keys():
-            queryset =GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat'])
+            queryset =GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat']).select_related('category')
         elif 'slug_brand' in self.kwargs.keys():
-            queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand'])
+            queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand']).select_related('category')
         else:
-            queryset = GoodsDB.objects.filter(presence=True)
+            queryset = GoodsDB.objects.filter(presence=True).select_related('category')
+
         if self.request.GET.get('show_on_page'):
             self.paginate_by = self.request.GET.get('show_on_page')
         return queryset

@@ -11,7 +11,7 @@ register = template.Library()
 
 @register.inclusion_tag('inc/_goods_band.html')
 def show_band(category=None):
-    '''show best products band'''
+    '''show the best products band'''
     if category == None:
         goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:8]
     else:

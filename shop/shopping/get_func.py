@@ -4,6 +4,10 @@ from .models import *
 from main_app.models import *
 
 
+rating_all = ReviewsDB.objects.select_related('good')
+promo_all = PromotionDB.objects.all()
+
+
 def rating_good(good):
     """
     final rating for one good
@@ -13,8 +17,8 @@ def rating_good(good):
 
     возвращает: int(значение)
     """
-    pre_rating = ReviewsDB.objects.filter(good=good)
-    len_rating = len(pre_rating)
+    pre_rating = rating_all.filter(good=good).select_related('good')
+    len_rating = pre_rating.count()
 
     if len_rating > 0:
         sum_rating = 0
@@ -50,8 +54,8 @@ def rating_list(good_list):
     {<объект_GoodsDB_№1>: <среднее_значение_рейтинга>,<объект_GoodsDB_№2>: <среднее_значение_рейтинга>,... }
     """
     rating = {}
-    for obj in good_list:
-        rating[obj] = rating_good(obj)
+    for item in good_list:
+        rating[item] = rating_good(item)
     return rating
 
 
@@ -129,7 +133,9 @@ def get_promo(good):
 
     возвращает: float(значение)
     """
-    promo = PromotionDB.objects.filter(is_active=True).filter(Q(category=good.category) | Q(brand=good.brand))
+    # promo = PromotionDB.objects.all()
+    # print(promo)
+    promo = promo_all.filter(is_active=True).filter(Q(category=good.category) | Q(brand=good.brand))
     discount = list()
     if promo:
         for obj in promo:
