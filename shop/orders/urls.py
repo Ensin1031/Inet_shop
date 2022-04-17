@@ -4,5 +4,5 @@ from .views import *
 
 
 urlpatterns = [
-    path('', orders_index, name='orders_index'),
+    path('<str:slug>/', OrderGood.as_view(), name='orders_index'),
 ]

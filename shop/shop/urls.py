@@ -23,7 +23,7 @@ urlpatterns = [
     path('', include('main_app.urls')),
     path('pers_area/', include('pers_area.urls')),
     path('shopping/', include('shopping.urls')),
-    path('orders/', include('orders.urls')),
+    path('shopping/orders/', include('orders.urls')),
 ]
 
 if settings.DEBUG:

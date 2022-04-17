@@ -37,11 +37,11 @@ class BrandNameDB(models.Model):
 
 
 class CategoryDB(MPTTModel):
-    '''The model of category.'''
+    """The model of category."""
     title = models.CharField(max_length=100, unique=True, verbose_name='Категория', )
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='child_category',
                             verbose_name='Назначьте родительскую категорию', )
-    photo = models.ImageField(upload_to='photos/%Y/%m/%d', blank=True, null=True, verbose_name='Фото',)
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d', blank=True, null=True, verbose_name='Фото', )
     slug = AutoSlugField(max_length=100, db_index=True, unique=True, verbose_name='URL Категории',
                          populate_from=instance_slug, slugify=slugify_value)
 
@@ -66,7 +66,7 @@ class CategoryDB(MPTTModel):
 
 
 class ReviewsDB(models.Model):
-    '''Model of Reviews for godds'''
+    """Model of Reviews for godds"""
     UGLI = '20'
     NO_GOOD = '40'
     NORMAL = '60'
@@ -80,12 +80,14 @@ class ReviewsDB(models.Model):
         (GREAT, 'Отлично'),
     )
     review_title = models.CharField(max_length=150, verbose_name='Название отзыва')
-    user_name = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='review_user_name', verbose_name='Имя пользователя')
-    review_text = models.TextField(max_length=500, blank=True, verbose_name='Текст отзыва',)
+    user_name = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='review_user_name',
+                                  verbose_name='Имя пользователя')
+    review_text = models.TextField(max_length=500, blank=True, verbose_name='Текст отзыва', )
     date_at_review = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания отзыва')
     good = models.ForeignKey('GoodsDB', on_delete=models.CASCADE, related_name='review_for_good', null=True,
                              verbose_name='К какому товару привязан отзыв')
-    review_rating = models.CharField(max_length=3, choices=RATINGS_CHOICES, default=NORMAL, verbose_name='Рейтинг товара')
+    review_rating = models.CharField(max_length=3, choices=RATINGS_CHOICES, default=NORMAL,
+                                     verbose_name='Рейтинг товара')
     slug = AutoSlugField(max_length=150, db_index=True, unique=True, verbose_name='URL Отзыва',
                          populate_from=instance_slug, slugify=slugify_value)
 
@@ -106,10 +108,10 @@ class ReviewsDB(models.Model):
 
 
 class GalleryDB(models.Model):
-    '''Gallery of images by product'''
-    photo = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name='Фото',)
+    """Gallery of images by product"""
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name='Фото', )
     product = models.ForeignKey('GoodsDB', on_delete=models.CASCADE, related_name='images_for_goods', null=True,
-                                verbose_name='Картинка привязана к товару',)
+                                verbose_name='Картинка привязана к товару', )
     slug = AutoSlugField(max_length=255, db_index=True, unique=True, verbose_name='URL Картинки',
                          populate_from=instance_slug, slugify=slugify_value)
 
@@ -130,7 +132,7 @@ class GalleryDB(models.Model):
 
 
 class GoodsDB(models.Model):
-    '''Model of goods'''
+    """Model of goods"""
     title = models.CharField(max_length=255, verbose_name='Наименование товара')
     brand = models.ForeignKey(BrandNameDB, on_delete=models.PROTECT, related_name='brand_good',
                               verbose_name='Производитель')
