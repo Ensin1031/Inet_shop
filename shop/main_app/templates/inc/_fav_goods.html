@@ -22,7 +22,7 @@
                     {% else %}
 
                     <a href="{{ key.get_absolute_url }}">
-                        <img src="https://picsum.photos/1024/768?grayscale"></a>
+                        <img src="{% static 'assets/images/photo_net.jpg' %}"></a>
 
                     {# добавить в корзину? #}
                     <div class="btn-icon-group">
@@ -32,6 +32,21 @@
 
                     {% endif %}
 
+                    {% for key, value in promo_list.items %}
+                    {% if key == good %}
+
+                    <div class="label-group">
+
+                        {% if value != 0 %}
+
+                        <span class="product-label label-sale">-{{ value }}%</span>
+
+                        {% endif %}
+                    </div>>
+
+                    {% endif %}
+                    {% endfor %}
+
                 </figure>
 
                 {% endif %}
@@ -40,7 +55,7 @@
                 <div class="product-details">
                     <div class="category-wrap">
                         <div class="category-list">
-                            <a href="{{ good.category.get_absolute_url }}" class="product-category">{{ good.category }}</a>
+                            <a href="{{ good.category.get_absolute_url }}" class="product-category">Категория: {{ good.category }}</a>
                         </div>
                     </div>
 
@@ -54,7 +69,7 @@
                             {% for key, value in show_rating.items %}
                             {% if key == good %}
 
-                            <span class="ratings" style="width:{{ value }}%"></span><!-- End .ratings -->
+                            <span class="ratings" style="width:{{ value }}%"></span>
                             <span class="tooltiptext tooltip-top"></span>
 
                             {% endif %}
@@ -69,8 +84,12 @@
                         {% for key, value in show_new_price.items %}
                         {% if key == good %}
 
-                        <span class="old-price">{{ key.price }} y.e.</span>
-                        <span class="product-price">{{ value }} y.e.</span>
+                            {% if value == good.price %}
+                            <span class="product-price">{{ value }} у.е.</span>
+                            {% else %}
+                            <span class="old-price">{{ good.price }} y.e.</span>
+                            <span class="product-price">{{ value }} у.е.</span>
+                            {% endif %}
 
                         {% endif %}
                         {% endfor %}

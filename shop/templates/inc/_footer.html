@@ -1,49 +1,7 @@
 {% load static %}
 
 <footer class="footer font2 appear-animate" data-animation-delay="300" data-animation-duration="1200">
-    <div class="instagram-section">
-        <h2 class="section-title text-center">Мы в Instagram</h2>
-        {# change CompetitorAli #}
-        <h6 class="section-subtitle text-center font-weight-normal">@CompetitorAli</h6>
-
-        <div class="owl-carousel owl-theme" data-owl-options="{
-		            'loop': false,
-		            'nav': false,
-		            'dots': false,
-		            'margin': 20,
-		            'items': 2,
-		            'responsive': {
-		                '480': {
-		                    'items': 3
-		                },
-		                '576': {
-		                    'items': 4
-		                },
-		                '768': {
-		                    'items': 5
-		                },
-		                '992': {
-		                    'items': 6
-		                },
-		                '1200': {
-		                    'items': 7
-		                },
-		                '1400': {
-		                    'items': 9
-		                }
-		            }
-		        }">
-            <img src="{% static 'assets/images/instagrams/instagram-1.jpg' %}" alt="instagram">
-            <img src="{% static 'assets/images/instagrams/instagram-2.jpg' %}" alt="instagram">
-            <img src="{% static 'assets/images/instagrams/instagram-3.jpg' %}" alt="instagram">
-            <img src="{% static 'assets/images/instagrams/instagram-4.jpg' %}" alt="instagram">
-            <img src="{% static 'assets/images/instagrams/instagram-5.jpg' %}" alt="instagram">
-            <img src="{% static 'assets/images/instagrams/instagram-6.jpg' %}" alt="instagram">
-            <img src="{% static 'assets/images/instagrams/instagram-7.jpg' %}" alt="instagram">
-            <img src="{% static 'assets/images/instagrams/instagram-8.jpg' %}" alt="instagram">
-            <img src="{% static 'assets/images/instagrams/instagram-9.jpg' %}" alt="instagram">
-        </div>
-    </div>
+    <div class="instagram-section"></div>
 
     <div class="container">
         <div class="footer-middle">
@@ -76,8 +34,8 @@
                         <h4 class="widget-title">Мой аккаунт</h4>
 
                         <ul class="links">
-                            {# линки лк заказы #}
-                            <li><a href="#">Личный кабинет</a></li>
+                            {# линки заказы #}
+                            <li><a href="{% url 'my_account' %}">Личный кабинет</a></li>
                             <li><a href="#">Мои заказы</a></li>
                             <li><a href="{% url 'payments' %}">Способы оплаты</a></li>
                             <li><a href="{% url 'delivery' %}">Доставка</a></li>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}
+
+Войти :: {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">Войти</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col">
+                <div class="heading">
+                    <h2 class="title">Войти в свой аккаунт</h2>
+                    <p>Если у Вас уже есть аккаунт, пожалуйста, авторизуйтесь:</p>
+                </div>
+
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+
+                    {% bootstrap_form form layout='inline' %}
+
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary">ВОЙТИ</button>
+                        <input type="hidden" name="next" value="{{ next }}" />
+                        <a href="#" class="forget-pass"><strong> Забыли пароль?</strong></a>
+                    </div>
+                    {# оформа #}
+                    <p>Если Вы еще не с нами - <a href="{% url 'register' %}"><strong>зарегистрируйтесь тут.</strong></a></p>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

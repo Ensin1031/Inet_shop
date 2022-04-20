@@ -1,57 +1,64 @@
 from django import template
-from django.db.models import Sum, Count
 
-from shopping.models import GalleryDB, GoodsDB, CategoryDB, ReviewsDB, BrandNameDB
+from shopping.get_func import *
 
 
 register = template.Library()
 
 
-# TODO добавить акции
-# TODO переделать
-@register.inclusion_tag('inc/_index.html')
-def show_goods():
-    '''show best products band'''
-    goods = GoodsDB.objects.filter(presence=True).select_related('category').order_by('-n_views')[:9]
-
-    show_new_price = {}
-    show_photo = {}
-    show_rating = {}
-
-    for good in goods:
-        show_photo[good] = good.images_for_goods.first()
-        show_new_price[good] = int(int(good.price) * 0.75)
-
-        zn = good.review_for_good.filter(good=good).aggregate(Count('review_rating'))
-        if zn['review_rating__count'] > 0:
-            show_rating[good] = 0
-
-            for value in good.review_for_good.filter(good=good):
-                show_rating[good] += int(value.review_rating)
-
-            show_rating[good] = int(show_rating[good] / zn['review_rating__count'])
-        else:
-            show_rating[good] = 0
+@register.inclusion_tag('inc/_submenu.html')
+def show_submenu():
+    """"""
+    categories = CategoryDB.objects.all()
+    brands = BrandNameDB.objects.all()
 
     count = {
-        'goods': goods,
-        'show_photo': show_photo,
-        'show_new_price': show_new_price,
-        'show_rating': show_rating,
+        'categories': categories,
+        'brands': brands,
     }
 
     return count
 
 
-@register.inclusion_tag('inc/_header.html')
-def show_cat_brands():
+@register.inclusion_tag('inc/_promo.html')
+def show_promo():
     """"""
-    categories = CategoryDB.objects.all()
-    brands = BrandNameDB.objects.all()
+    promotions = PromotionDB.objects.filter(is_active=True)
+    cat_promo = {}
+    brand_promo = {}
 
-    context = {
-        'categories': categories,
-        'brands': brands,
+    for promo in promotions:
+        for cat in promo.category.all():
+            cat_promo.setdefault(promo, []).append(cat.title)
+        for brand in promo.brand.all():
+            brand_promo.setdefault(promo, []).append(brand.title)
+    count = {
+        'promotions': promotions,
+        'cat_promo': cat_promo,
+        'brand_promo': brand_promo
     }
 
-    return context
+    return count
+
+
+# TODO
+@register.inclusion_tag('inc/_fav_goods.html')
+def show_fav_goods(category=None):
+    """"""
+    if category == None:
+        goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:9]
+    else:
+        goods = GoodsDB.objects.filter(presence=True).filter(
+            category=category).order_by('-n_views')[:9]
+    count = {
+        'goods': goods,
+        'show_photo': photo_list(goods),
+        'show_new_price': new_price_list(goods),
+        'show_rating': rating_list(goods),
+        'promo_list': promo_list(goods)
+    }
+    return count
+
+
+
+
