@@ -3,67 +3,15 @@
 {% load index_tags %}
 
 {% block title %}
-{{ title }} :: {{ block.super }}
+Главная страница :: {{ block.super }}
 {% endblock %}
 {% block content %}
 
 <main class="main">
-    <section class="section-1 pt-0">
-        <div class="home-slider slide-animate owl-carousel owl-theme show-nav-hover">
-            {# условия акции 1#}
-            <div class="home-banner bg-img banner-left"
-                 style="background-image: url({% static 'assets/images/slider/slide-1.jpg' %});">
-                <div class="container position-relative">
-                    <div class="banner-layer banner-layer-middle">
-                        <h2 class="m-b-1 appear-animate banner-title" data-animation-duration="1200"
-                            data-animation-delay="800" data-animation-name="fadeIn">УСПЕЙ ЗАКАЗАТЬ</h2>
-                        <h3 class="text-uppercase rotated-upto-text mb-0 position-relative appear-animate"
-                            data-animation-delay="800" data-animation-duration="1200" data-animation-name="blurIn">
-                            <small>OFF</small>50%</h3>
 
-                        <hr class="divider-short-thick appear-animate" data-animation-duration="1200"
-                            data-animation-delay="800" data-animation-name="fadeIn">
+    {% show_promo %}
 
-                        <h5 class="text-uppercase d-inline-block mb-0 ls-n-20 pr-1 pt-2 appear-animate"
-                            data-animation-delay="1600" data-animation-duration="1200" data-animation-name="fadeIn">от
-                            <span><strong>299 р.</strong></span></h5>
-
-                        <a href="{% url 'promotion_1' %}" class="btn btn-dark btn-xl btn-icon-right appear-animate"
-                           role="button" data-animation-delay="2200" data-animation-duration="1200"
-                           data-animation-name="fadeIn">КУПИ СЕЙЧАС <i class="fas fa-long-arrow-alt-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            {# условия акции 2 + image #}
-            <div class="home-banner bg-img"
-                 style="background-image: url({% static 'assets/images/slider/slide-2.jpg' %});">
-                <div class="container position-relative">
-                    <div class="banner-layer banner-layer-middle">
-                        <h2 class="m-b-1 appear-animate banner-title" data-animation-duration="1200"
-                            data-animation-delay="800" data-animation-name="fadeIn">Выгодно тут!</h2>
-                        <h3 class="text-uppercase rotated-upto-text mb-0 position-relative appear-animate"
-                            data-animation-duration="1200" data-animation-delay="800" data-animation-name="blurIn">
-                            <small>до </small>399 р.</h3>
-
-                        <hr class="divider-short-thick appear-animate" data-animation-duration="1200"
-                            data-animation-delay="800" data-animation-name="fadeIn">
-
-                        <h5 class="text-uppercase d-inline-block mb-0 ls-n-20 pr-1 pt-2 appear-animate"
-                            data-animation-duration="1200" data-animation-delay="800" data-animation-name="fadeIn">must
-                            <span><strong>HAVE</strong></span></h5>
-
-                        <a href="{% url 'promotion_2' %}" class="btn btn-dark btn-xl btn-icon-right appear-animate"
-                           role="button"
-                           data-animation-delay="2200" data-animation-duration="1200" data-animation-name="fadeIn">Купи
-                            сейчас <i class="fas fa-long-arrow-alt-right"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {% show_goods %}
+    {% show_fav_goods %}
 
 </main>
 

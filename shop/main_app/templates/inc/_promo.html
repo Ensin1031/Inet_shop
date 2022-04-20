@@ -1,0 +1,59 @@
+{% load static %}
+{% load index_filters %}
+
+<section class="section-1 pt-0">
+    <div class="home-slider slide-animate owl-carousel owl-theme show-nav-hover">
+
+        {% for promo in promotions %}
+
+        <div class="home-banner bg-img banner-left" style="background-image: url( {{ promo.photo.url }} );">
+            <div class="container position-relative">
+                <div class="banner-layer banner-layer-middle">
+                    <h2 class="m-b-1 appear-animate banner-title" data-animation-duration="1200"
+                        data-animation-delay="800" data-animation-name="fadeIn">{{ promo.promo_title }}</h2>
+                    <h3 class="text-uppercase rotated-upto-text mb-0 position-relative appear-animate"
+                        data-animation-delay="800" data-animation-duration="1200" data-animation-name="blurIn">
+                        <small>OFF</small>{{ promo.discount|discount }}%</h3>
+
+                    <hr class="divider-short-thick appear-animate" data-animation-duration="1200"
+                        data-animation-delay="800" data-animation-name="fadeIn">
+
+                    {% for key, value in cat_promo.items %}
+                    {% if key == promo %}
+                    {% for cat in value %}
+
+                    <h5 class="text-uppercase d-inline-block mb-0 ls-n-20 pr-1 pt-2 appear-animate"
+                        data-animation-delay="1600" data-animation-duration="1200"
+                        data-animation-name="fadeIn">{{ cat }}</h5>
+
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+
+                    <br>
+
+                    {% for key, value in brand_promo.items %}
+                    {% if key == promo %}
+                    {% for brand in value %}
+
+                    <h5 class="text-uppercase d-inline-block mb-0 ls-n-20 pr-1 pt-2 appear-animate"
+                        data-animation-delay="1600" data-animation-duration="1200"
+                        data-animation-name="fadeIn">{{ brand }}</h5>
+
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+
+                    <br>
+
+                    <a href="{{ promo.get_absolute_url }}" class="btn btn-dark btn-xl btn-icon-right appear-animate"
+                       role="button" data-animation-delay="2200" data-animation-duration="1200"
+                       data-animation-name="fadeIn">КУПИ СЕЙЧАС <i class="fas fa-long-arrow-alt-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</section>

@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView
 
-from shopping.models import GoodsDB, GalleryDB
+from shopping.views import ShowAllGoods
+from shopping.get_func import *
+from shopping.filters import GoodsFilter
 
 
 class MainPageView(TemplateView):
@@ -9,64 +10,25 @@ class MainPageView(TemplateView):
     model = GoodsDB
     template_name = 'main_app/index.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Главная страница'
-        return context
 
-
-"""
-в shopping/shopping.html
-{% empty %}
-<p>По Вашему запросу ничего не найдено</p>
-"""
-
-
-class SearchGoodView(ListView):
+# todo search get q
+class SearchGoodView(ShowAllGoods):
     """doc string"""
-    model = GoodsDB
-    template_name = 'shopping/shopping.html' #shopping.html
-    context_object_name = 'good'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['hello'] = 'Найденные товары'
-        # context['q'] = f"q={self.request.GET.get('q')}&"
-        return context
 
     def get_queryset(self):
-        return GoodsDB.objects.filter(title__icontains=self.request.GET.get('q'))
+        search = self.request.GET.get('q')
+        return GoodsDB.objects.filter(presence=True, title__icontains=search)
 
 
-
-# TODO переделать
-class PromotionOneView(ListView):
+class PromotionView(ShowAllGoods):
     """doc string"""
-    model = GoodsDB
-    template_name = 'shopping/category.html' #shopping.html
-    context_object_name = 'good'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['photos'] = GalleryDB.objects.all()
-        context['hello'] = 'Выгодные предложения'
-        return context
 
     def get_queryset(self):
-        return GoodsDB.objects.filter(price__gte=299)
+        active_promo = PromotionDB.objects.filter(slug=self.kwargs.get('slug_promo'))
+        for promo in active_promo:
+            good_filter = Q(category__in=[cat.id for cat in promo.category.all()]) \
+                          | Q(brand__in=[brand.id for brand in promo.brand.all()])
+            queryset = GoodsDB.objects.filter(presence=True).filter(good_filter)
 
-
-class PromotionTwoView(ListView):
-    model = GoodsDB
-    """doc string"""
-    template_name = 'shopping/category.html' #shopping.html
-    context_object_name = 'good'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['photos'] = GalleryDB.objects.all()
-        context['hello'] = 'Выгодные предложения'
-        return context
-
-    def get_queryset(self):
-        return GoodsDB.objects.filter(price__lte=399)
+        result = GoodsFilter(self.request.GET, queryset).qs
+        return result

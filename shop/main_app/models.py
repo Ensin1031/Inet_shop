@@ -53,6 +53,11 @@ class PromotionDB(models.Model):
             blank=True,
             verbose_name='Описание акции'
     )
+    photo = models.ImageField(
+            upload_to='photo/promo/%Y/%m/%d',
+            verbose_name='Фото',
+            null=True
+    )
     slug = AutoSlugField(
             max_length=35,
             db_index=True,
@@ -67,7 +72,7 @@ class PromotionDB(models.Model):
         super(PromotionDB, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('promotion', kwargs={'slug': self.slug})
+        return reverse('promo', kwargs={'slug_promo': self.slug})
 
     def __str__(self):
         return f'{self.promo_title}'
@@ -98,43 +103,3 @@ class PromotionDB(models.Model):
         verbose_name = 'Акция'
         verbose_name_plural = 'Акции'
         ordering = ('-is_active', )
-
-
-class PromotionPhotoDB(models.Model):
-    """doc string"""
-    photo = models.ImageField(
-            upload_to='photo/promo/%Y/%m/%d',
-            verbose_name='Фото'
-    )
-    promotion = models.ForeignKey(
-            PromotionDB,
-            on_delete=models.CASCADE,
-            related_name='images_for_promo',
-            verbose_name='Фото привязано к акции'
-    )
-    slug = AutoSlugField(
-            max_length=255,
-            db_index=True,
-            unique=True,
-            verbose_name='URL Фото акции',
-            populate_from=instance_slug,
-            slugify=slugify_value
-    )
-
-    def save(self, *args, **kwargs):
-        self.slug = uuslug(str(self.photo), instance=self)
-        super(PromotionPhotoDB, self).save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse('show_image', kwargs={'slug': self.slug})
-
-    def __str__(self):
-        return f'{self.photo}'
-
-    class Meta:
-        verbose_name = 'Фото акции'
-        verbose_name_plural = 'Фото акций'
-
-
-
-

@@ -17,6 +17,5 @@ urlpatterns = [
     path('conditions/', views.flatpage, {'url': '/conditions/'}, name='conditions'),
     path('return/', views.flatpage, {'url': '/return/'}, name='return'),
     path('intellproperty/', views.flatpage, {'url': '/intellproperty/'}, name='intellproperty'),
-    path('promotion_1/', PromotionOneView.as_view(), name='promotion_1'),
-    path('promotion_2/', PromotionTwoView.as_view(), name='promotion_2'),
+    path('promo/<str:slug_promo>/', PromotionView.as_view(), name='promo'),
 ]
