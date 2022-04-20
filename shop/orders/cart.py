@@ -1,6 +1,8 @@
 from decimal import Decimal
 from django.conf import settings
-from shopping.models import GoodsDB
+
+from shopping.models import GoodsDB, GalleryDB
+from shopping.get_func import new_price, get_promo
 
 
 class Cart(object):
@@ -22,11 +24,12 @@ class Cart(object):
         """
         product_ids = self.cart.keys()
         # получаем товары и добавляем их в корзину
-        products = GoodsDB.objects.filter(id__in=product_ids)
+        products = GoodsDB.objects.filter(id__in=product_ids)   # .prefetch_related('images_for_goods')
 
         cart = self.cart.copy()
         for product in products:
             cart[str(product.id)]['product'] = product
+            cart[str(product.id)]['photos'] = product.images_for_goods.first()
 
         for item in cart.values():
             item['price'] = Decimal(item['price'])
@@ -51,7 +54,10 @@ class Cart(object):
         """
         product_id = str(good.id)
         if product_id not in self.cart:     # делаем преобразование в JSON
-            self.cart[product_id] = {'quantity': 0, 'price': str(good.price)}
+            self.cart[product_id] = {
+                'quantity': 0,
+                'price': str(new_price(good.price, get_promo(good))),
+            }
         if update_quantity:     # преобразуем количество единиц товара в корзине
             self.cart[product_id]['quantity'] = quantity
         else:
@@ -79,3 +85,7 @@ class Cart(object):
         # очищаем корзину в сессии
         del self.session[settings.CART_SESSION_ID]
         self.save()
+
+    def testing_print(self, a='work basket'):
+        print(f'test {a}')
+        return f'test_print {a}'

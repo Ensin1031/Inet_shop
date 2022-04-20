@@ -1,0 +1,146 @@
+{% extends 'base.html' %}}
+{% load static %}
+
+
+{% block title %}
+Basket: Корзина  :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<main class="main">
+
+<!--TODO доналадить бредкрамп-->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">Корзина</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container mb-6">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="cart-table-container">
+                    <table class="table table-cart">
+
+                        <thead>
+                        <tr>
+                            <th class="product-col">Название товара</th>
+                            <th class="price-col">Цена</th>
+                            <th class="qty-col">Кол-во</th>
+                            <th>Итого</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for item in cart %}
+                        {% with good=item.product %}
+                        <tr class="product-row">
+                            <td class="product-col">
+                                {% if item.photos != None %}
+                                <figure class="product-image-container">
+
+                                    <a href="{{ good.get_absolute_url }}">
+                                        <img src="{{ item.photos.photo.url }}" width="150">
+                                    </a>
+                                </figure>
+                                {% else %}
+                                <figure class="product-image-container">
+                                    <a href="{{ good.get_absolute_url }}">
+                                        <img src="{% static 'assets/images/photo_net.jpg' %}" width="150">
+                                    </a>
+                                </figure>
+                                {% endif %}
+
+                                <h2 class="product-title">
+                                    <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
+                                </h2>
+                            </td>
+                            <td>{{ item.price }} y.e.</td>
+                            <td>
+                                <br>
+                                <br>
+                                <form action="{% url 'orders:cart_add' good.id %}" method="post">
+                                    {% csrf_token %}
+                                    {{ item.update_quantity_form.quantity }}
+                                    {{ item.update_quantity_form.update }}
+                                    <input type="submit" class="btn btn-sm btn-primary" value="Обновить">
+                                </form>
+                            </td>
+                            <td>{{ item.total_price }} y.e.</td>
+                        </tr>
+                        <tr class="product-action-row">
+                            <td colspan="4" class="clearfix">
+                                <div class="float-left">
+                                    <a href="{% url 'orders:cart_remove' good.id %}" class="btn-move">Удалить из корзины</a>
+                                </div><!-- End .float-left -->
+
+                                <div class="float-right">
+                                    <a href="{% url 'shopping' %}" title="Вернуться к покупкам" class="fa fa-shopping-cart"></a>
+                                </div><!-- End .float-right -->
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+
+                        </tbody>
+
+
+<!--TODO панель с кнопками под списком товаров НУЖНА????-->
+                        <tfoot>
+
+                        <tr>
+
+                            <td colspan="4" class="clearfix">
+                                {% comment %}
+                                <div class="float-left">
+                                    <a href="category.html" class="btn btn-outline-secondary">Continue Shopping</a>
+                                </div><!-- End .float-left -->
+
+                                <div class="float-right">
+                                    <a href="#" class="btn btn-outline-secondary btn-clear-cart">Clear Shopping Cart</a>
+                                    <a href="#" class="btn btn-outline-secondary btn-update-cart">Update Shopping
+                                        Cart</a>
+                                </div><!-- End .float-right -->
+                                {% endcomment %}
+                            </td>
+
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div><!-- End .cart-table-container -->
+
+            </div><!-- End .col-lg-8 -->
+
+
+            <div class="col-lg-4">
+                <div class="cart-summary">
+                    <h3>Сумма Вашей покупки</h3>
+
+                    <table class="table table-totals">
+                        <tbody>
+                        <tr>
+
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td>{{ cart.get_total_price }} y.e.</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="checkout-methods">
+                        <a href="#" class="btn btn-block btn-sm btn-primary">Перейти к покупке</a>
+                    </div><!-- End .checkout-methods -->
+                </div><!-- End .cart-summary -->
+            </div><!-- End .col-lg-4 -->
+        </div><!-- End .row -->
+    </div><!-- End .container -->
+</main><!-- End .main -->
+
+{% endblock %}

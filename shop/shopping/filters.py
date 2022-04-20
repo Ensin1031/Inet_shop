@@ -46,7 +46,8 @@ class GoodsFilter(django_filters.FilterSet):
     @staticmethod
     def show_sort_list(queryset, name, value):
         if value == 'popularity':
-            result = queryset.order_by('-n_views')
+            print(queryset)
+            result = queryset
         elif value == 'rating':
             result = sort_on_rating(queryset)
         elif value == 'price':

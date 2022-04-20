@@ -94,11 +94,12 @@
 
                     <div class="product-action">
                         {% if request.user.is_authenticated %}
-                        <div class="product-single-qty">
-                            <input class="horizontal-quantity form-control" type="text">
-                        </div><!-- End .product-single-qty -->
-<!--TODO поменять ссылку на страницу покупки-->
-                        <a href="{% url 'orders_index' good_item.slug %}" class="btn btn-dark add-cart icon-shopping-cart" title="Перейти к покупке">Купить</a>
+                        <form action="{% url 'orders:cart_add' good_item.id %}" method="post">
+                            {% csrf_token %}
+                            {{ cart_product_form }}
+                            <input type="submit" class="btn btn-sm btn-primary" value="В корзину">
+                        </form>
+
                         {% else %}
                         <p>Если вы хотите купить этот товар:</p>
                         <a href="#">Зарегистрируйтесь</a> | <a href="#">Авторизуйтесь</a>
