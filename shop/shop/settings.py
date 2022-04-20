@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+
+import django.core.mail.backends.smtp
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,8 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django_filters',
     'bootstrapform',
+    'bootstrap4',
+    'phonenumber_field',
     'main_app.apps.MainAppConfig',
-    'pers_area.apps.PersAreaConfig',
+    'accounts.apps.AccountsConfig',
     'shopping.apps.ShoppingConfig',
     'orders.apps.OrdersConfig',
 ]
@@ -157,3 +161,16 @@ MEDIA_URL = '/media/'   # нужен для построения пути при
 INTERNAL_IPS = ["127.0.0.1"]
 
 SITE_ID = 1
+
+AUTH_USER_MODEL = 'accounts.ShopUser' # используемая модель пользователя
+
+LOGIN_REDIRECT_URL = '/' # путь редиректа при выходе из аккаунта
+
+LOGIN_URL = '/accounts/login/' # путь авторизации
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # класс-отправитель писем по протоколу SMPT
+
+DEFAULT_FROM_EMAIL = 'webmaster@localhost' # email отправителя (по умолчанию)
+
+EMAIL_PORT = 1025 # номер TCP-порта (в cmd запустить: python -m smtpd -n -c DebuggingServer localhost:1025,
+                  # для активации пользователя запустить в браузере ссылку из терминала http://localhost:8000/accounts/register/activate/username:...)
