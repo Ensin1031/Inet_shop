@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.auth.models import User
+from accounts.models import ShopUser
+from django.conf import settings
 from uuslug import uuslug
 from autoslug import AutoSlugField
 
@@ -80,7 +82,7 @@ class ReviewsDB(models.Model):
         (GREAT, 'Отлично'),
     )
     review_title = models.CharField(max_length=150, verbose_name='Название отзыва')
-    user_name = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='review_user_name', verbose_name='Имя пользователя')
+    user_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, related_name='review_user_name', verbose_name='Имя пользователя')
     review_text = models.TextField(max_length=500, blank=True, verbose_name='Текст отзыва',)
     date_at_review = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания отзыва')
     good = models.ForeignKey('GoodsDB', on_delete=models.CASCADE, related_name='review_for_good', null=True,

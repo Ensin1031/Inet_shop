@@ -13,10 +13,11 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-<!--TODO доналадить бредкрамп-->
+                <!--TODO доналадить бредкрамп-->
                 <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
                 <li class="breadcrumb-item"><a href="{% url 'shopping' %}">Магазин</a></li>
-                <li class="breadcrumb-item"><a href="{{ good_item.category.get_absolute_url }}">{{ good_item.category }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ good_item.category.get_absolute_url }}">{{ good_item.category
+                    }}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ good_item.title }}</li>
             </ol>
         </div>
@@ -94,11 +95,12 @@
 
                     <div class="product-action">
                         {% if request.user.is_authenticated %}
-                        <div class="product-single-qty">
-                            <input class="horizontal-quantity form-control" type="text">
-                        </div><!-- End .product-single-qty -->
-<!--TODO поменять ссылку на страницу покупки-->
-                        <a href="#" class="btn btn-dark add-cart icon-shopping-cart" title="Перейти к покупке">Купить</a>
+                        <form action="{% url 'orders:cart_add' good_item.id %}" method="post">
+                            {% csrf_token %}
+                            {{ cart_product_form }}
+                            <input type="submit" class="btn btn-sm btn-primary" value="В корзину">
+                        </form>
+
                         {% else %}
                         <p>Если вы хотите купить этот товар:</p>
                         <a href="#">Зарегистрируйтесь</a> | <a href="#">Авторизуйтесь</a>
@@ -119,7 +121,8 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="product-tab-reviews" data-toggle="tab" href="#product-reviews-content"
-                       role="tab" aria-controls="product-reviews-content" aria-selected="false" name="rev">Отзывы: ({{ reviews | length }})</a>
+                       role="tab" aria-controls="product-reviews-content" aria-selected="false" name="rev">Отзывы: ({{
+                        reviews | length }})</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -153,7 +156,8 @@
                                             </div><!-- End .ratings-container -->
 
                                             <div class="comment-info mb-1">
-                                                <h4 class="avatar-name">Автор: {{ item.user_name }}</h4> - <span class="comment-date">{{ item.date_at_review | date:"d E Y  H:i" }}</span>
+                                                <h4 class="avatar-name">Автор: {{ item.user_name }}</h4> - <span
+                                                    class="comment-date">{{ item.date_at_review | date:"d E Y  H:i" }}</span>
                                             </div><!-- End .comment-info -->
 
                                             <div class="comment-info mb-1">
@@ -179,11 +183,8 @@
                                     {% if request.user.is_authenticated %}
                                     <form action="{{ good_item.get_absolute_url }}" class="comment-form m-0"
                                           method="post">
-
                                         {% csrf_token %}
-
                                         {{ form.as_p }}
-
                                         <input type="submit" class="btn btn-dark ls-n-15" value="Отправить">
                                     </form>
 

@@ -67,15 +67,6 @@
             {% endif %}
             {% endfor %}
 
-<!--TODO поменять ссылку на страницу покупки-->
-            <div class="product-action">
-                {% if request.user.is_authenticated %}
-                <a href="#" class="fa fa-shopping-cart" aria-hidden="true" title="Перейти к покупке"> Купить</a>
-                {% else %}
-                <a href="#">Зарегистрируйтесь</a> | <a href="#">Авторизуйтесь</a>
-                {% endif %}
-            </div>
-
         </div><!-- End .product-details -->
     </div>
     {% endfor %}

@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from orders.forms import CartAddProductForm
 from .models import *
 from .forms import AddReviewForm
 from .get_func import *
@@ -34,6 +35,7 @@ class ShowGood(CreateView, DetailView):
         context['discount'] = get_promo(self.object)
         context['new_price'] = new_price(context['object'].price, context['discount'])
         context['finish_rating'] = rating_good(self.object)
+        context['cart_product_form'] = CartAddProductForm()
         return context
 
     def get_queryset(self):
@@ -80,15 +82,12 @@ class ShowAllGoods(ListView):
         if self.request.GET.get('show_on_page'):
             self.paginate_by = self.request.GET.get('show_on_page')
 
-        result = GoodsFilter(self.request.GET, queryset).qs.select_related('category').select_related('brand')
+        if self.request.GET.get('sort_on') == 'popularity':
+            result = GoodsFilter(self.request.GET, queryset.order_by('-n_views')).qs.select_related('category').select_related('brand')
+        else:
+            result = GoodsFilter(self.request.GET, queryset).qs.select_related('category').select_related('brand')
         return result.select_related('category').select_related('brand')
 
-
-
-
-def get_category(request, slug):
-    '''тестовая функция просмотра товара по категориям'''
-    return render(request, 'shopping/get_category.html', {'hello': f'Hello, category {slug}!'})
 
 
 def show_image(request, slug):
@@ -96,6 +95,3 @@ def show_image(request, slug):
     return render(request, 'shopping/show_image.html', {'hello': f'Hello, image {slug}!'})
 
 
-def get_brand(request, slug):
-    '''тестовая функция просмотра товара по производителю'''
-    return render(request, 'shopping/brand.html', {'hello': f'Hello, brand {slug}!'})
