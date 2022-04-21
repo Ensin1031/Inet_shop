@@ -51,7 +51,7 @@ class ShopUserAdmin(admin.ModelAdmin):
               ('is_active', 'is_activated'),
               ('is_staff', 'is_superuser'),
               'last_login', 'date_joined',
-              ('phone_number', 'address'))
+              'phone_number', ('postcode', 'country'), ('region', 'city', 'address'))
     readonly_fields = ('last_login', 'date_joined',)
     actions = (send_activation_notifications,)
 
