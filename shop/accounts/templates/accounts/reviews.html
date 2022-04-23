@@ -1,0 +1,68 @@
+{% extends 'base.html' %}}
+{% load static %}
+
+{% block title %}
+
+Мои отзывы :: {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">Мой аккаунт</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-lg-9 order-lg-last dashboard-content">
+                <h2>Мои отзывы</h2>
+
+                {% for review in reviews %}
+
+                <li class="comment-container">
+
+                    <div class="comment-box">
+                        <a href="{{ review.get_absolute_url }}">{{ review.good.title }}</a><br>
+                        <div class="ratings-container">
+                            <div class="product-ratings"><span class="ratings" style="width:{{ review.review_rating }}%"></span>
+                            </div>
+                        </div>
+
+                        <div class="comment-info mb-1">
+                            <h4 class="avatar-name">Автор: {{ review.user_name }}</h4> - <span
+                                class="comment-date">{{ review.date_at_review | date:"d E Y  H:i" }}</span>
+                        </div>
+
+                        <div class="comment-info mb-1">
+                            <h3 class="avatar-name">Заголовок: {{ review.review_title }}</h3>
+                        </div>
+
+                        <div class="comment-text">
+                            <p>
+                                {{ review.review_text | truncatewords_html:25 | safe }}
+                            </p>
+                        </div>
+                    </div>
+                </li>
+
+                {% empty %}
+                <p>Вы еще не оставили отзывы к товарам.</p>
+                <p><a href="{% url 'shopping' %}"><strong>Перейти в магазин</strong></a></p>
+                {% endfor %}
+
+            </div>
+
+            {% include "inc/_acc_sidebar.html" %}
+
+        </div>
+    </div>
+</main>
+
+{% endblock %}

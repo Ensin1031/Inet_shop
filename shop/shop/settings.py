@@ -166,13 +166,18 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = 'accounts.ShopUser' # используемая модель пользователя
 
-LOGIN_REDIRECT_URL = '/' # путь редиректа при выходе из аккаунта
-
 LOGIN_URL = '/accounts/login/' # путь авторизации
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # класс-отправитель писем по протоколу SMPT
+LOGIN_REDIRECT_URL = '/' # путь редиректа при входе в аккаунт
+
+LOGOUT_REDIRECT_URL = '/' # путь редиректа при выходе из аккаунта
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # класс-отправитель писем по протоколу SMTP
 
 DEFAULT_FROM_EMAIL = 'webmaster@localhost' # email отправителя (по умолчанию)
 
+EMAIL_HOST = 'localhost'
+
 EMAIL_PORT = 1025 # номер TCP-порта (в cmd запустить: python -m smtpd -n -c DebuggingServer localhost:1025,
-                  # для активации пользователя запустить в браузере ссылку из терминала http://localhost:8000/accounts/register/activate/username:...)
+                  # для активации пользователя запустить ссылку из терминала http://localhost:8000/accounts/register/activate/username:...)
+

@@ -3,8 +3,10 @@ import datetime
 
 from .models import ShopUser
 from .utilities import send_activation_notification
+from shopping.models import ReviewsDB
 
 
+# TODO inline orders?
 def send_activation_notifications(modeladmin, request, queryset):
     for rec in queryset:
         if not rec.is_activated:
@@ -42,18 +44,35 @@ class NonactivatedFilter(admin.SimpleListFilter):
                                    date_joined__date__lt=date_not_activated)
 
 
+class ReviewInline(admin.TabularInline):
+    fk_name = 'user_name'
+    model = ReviewsDB
+
+
 @admin.register(ShopUser)
 class ShopUserAdmin(admin.ModelAdmin):
+    inlines = (ReviewInline,)
     list_display = ('__str__', 'email', 'is_activated', 'date_joined',)
     search_fields = ('username', 'email', 'first_name', 'last_name',)
     list_filter = (NonactivatedFilter,)
-    fields = (('username', 'email'), ('first_name', 'last_name'),
-              ('is_active', 'is_activated'),
-              ('is_staff', 'is_superuser'),
-              'last_login', 'date_joined',
-              'phone_number', ('postcode', 'country'), ('region', 'city', 'address'))
     readonly_fields = ('last_login', 'date_joined',)
     actions = (send_activation_notifications,)
-
+    fieldsets = (
+        ('Основная информация', {
+            'fields': (
+                ('username', 'email'),
+                ('first_name', 'middle_name', 'last_name'),
+                ('is_active', 'is_activated'),
+                ('is_staff', 'is_superuser'),
+                ('last_login', 'date_joined'),
+            )
+        }),
+        ('Дополнительная информация', {
+            'fields': (
+                'phone_number', ('postcode', 'country'), 'region', 'city',
+                'address'
+            )
+        })
+    )
 
 

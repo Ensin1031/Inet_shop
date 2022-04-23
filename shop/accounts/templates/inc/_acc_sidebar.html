@@ -1,0 +1,13 @@
+{% load static %}
+
+<aside class="sidebar col-lg-3">
+    <div class="widget widget-dashboard">
+        <ul class="list">
+            <li><a href="{% url 'profile' %}">Мои данные</a></li>
+            <li><a href="{% url 'address' %}">Мой адрес</a></li>
+            <li><a href="#">Мои заказы</a></li>
+            <li><a href="{% url 'reviews' %}">Мои отзывы</a></li>
+            <li><a href="{% url 'delete' %}">Удалить аккаунт</a></li>
+        </ul>
+    </div>
+</aside>

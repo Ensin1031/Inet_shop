@@ -1,15 +1,32 @@
-from django.http import request
-from django.urls import include, path
-from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView, \
+    PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
-from shop.settings import LOGIN_REDIRECT_URL
 from .views import *
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(next_page=LOGIN_REDIRECT_URL), name='logout'),
-    path('register/activate/<str:sign>/', user_activate, name='register_activate'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('register/activate/<str:sign>/', user_activate,
+         name='register_activate'),
     path('register/done/', RegisterDoneView.as_view(), name='register_done'),
     path('register/', RegisterUserView.as_view(), name='register'),
-    path('my_account/', MyAccountView.as_view(), name='my_account')
+    path('password_reset/done/', PasswordResetDoneView.as_view(
+            template_name='registration/pass_reset_done.html'
+    ), name='password_reset_done'),
+    path('password_reset/', ShopPasswordResetView.as_view(),
+         name='password_reset'),
+    path('reset/done/', PasswordResetCompleteView.as_view(
+            template_name='registration/pass_reset_complete.html'
+    ), name='password_reset_complete'),
+    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(
+            template_name='registration/pass_reset_confirm.html'
+    ), name='password_reset_confirm'),
+    path('my_account/profile/', ChangeUserInfoView.as_view(), name='profile'),
+    path('my_account/address/', ChangeUserAddressView.as_view(),
+         name='address'),
+    path('my_account/reviews/', ReviewUserView.as_view(),
+         name='reviews'),
+    path('my_account/delete/', DeleteUserView.as_view(), name='delete'),
+    path('my_account/', MyAccountView.as_view(), name='my_account'),
 ]
