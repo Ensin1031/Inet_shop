@@ -1,0 +1,45 @@
+{% extends 'base.html' %}}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}
+
+Сброс пароля :: {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">Сброс пароля</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col">
+                <div class="heading">
+                    <h2 class="title">Сброс пароля</h2>
+                    <p>Введите адрес электронной почты, с которым Вы регистрировались в нашем магазине.</p>
+                    <form action="{% url 'password_reset' %}" method="post">
+                        {% csrf_token %}
+
+                        {% bootstrap_form_errors form type='fields' %}
+                        {% bootstrap_form form layout='inline' %}
+
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary">Сбросить пароль</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

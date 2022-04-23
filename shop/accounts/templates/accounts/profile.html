@@ -1,9 +1,10 @@
 {% extends 'base.html' %}}
 {% load static %}
+{% load bootstrap4 %}
 
 {% block title %}
 
-Мой аккаунт :: {{ block.super }}
+Мои данные :: {{ block.super }}
 
 {% endblock %}
 
@@ -22,9 +23,19 @@
     <div class="container mb-5">
         <div class="row">
             <div class="col-lg-9 order-lg-last dashboard-content">
-                <h2>Приветствуем, {{ user.username }}!</h2>
-                <p>Вы находитесь в своем личном кабинете. Здесь Вы можете обновить свои данные,
-                    а так посмотреть свои заказы и отзывы к товарам.</p>
+                <h2>Мои данные</h2>
+
+                <form action="{% url 'profile' %}" method="post">
+                    {% csrf_token %}
+                    {% bootstrap_messages %}
+                    {% bootstrap_form form layout='inline' %}
+
+
+                    <div class="form-footer-right">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+
+                </form>
             </div>
 
             {% include "inc/_acc_sidebar.html" %}

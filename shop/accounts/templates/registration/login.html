@@ -25,7 +25,8 @@
             <div class="col">
                 <div class="heading">
                     <h2 class="title">Войти в свой аккаунт</h2>
-                    <p>Если у Вас уже есть аккаунт, пожалуйста, авторизуйтесь:</p>
+                    <p>Если у Вас уже есть аккаунт, пожалуйста, авторизуйтесь.</p>
+                    <p>Если Вы еще не с нами - <a href="{% url 'register' %}"><strong>зарегистрируйтесь тут.</strong></a></p>
                 </div>
 
                 <form action="{% url 'login' %}" method="post">
@@ -36,10 +37,8 @@
                     <div class="form-footer">
                         <button type="submit" class="btn btn-primary">ВОЙТИ</button>
                         <input type="hidden" name="next" value="{{ next }}" />
-                        <a href="#" class="forget-pass"><strong> Забыли пароль?</strong></a>
+                        <a href="{% url 'password_reset' %}" class="forget-pass"><strong>Забыли пароль?</strong></a>
                     </div>
-                    {# оформа #}
-                    <p>Если Вы еще не с нами - <a href="{% url 'register' %}"><strong>зарегистрируйтесь тут.</strong></a></p>
                 </form>
 
             </div>
