@@ -72,7 +72,10 @@ class OrderCreate(LoginRequiredMixin, CreateView):
                                        product=item['product'],
                                        price=item['price'],
                                        quantity=item['quantity'])
-            item['product'].n_views += 1        # накручиваем просмотры)
+            views = item['product']         # накручиваем просмотры
+            views.n_views = F('n_views') + 1
+            views.save()
+
         cart.clear()
         return super(OrderCreate, self).form_valid(form)
 
