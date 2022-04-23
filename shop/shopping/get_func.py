@@ -47,7 +47,7 @@ def new_price(old_price, discount=1):
 
     возвращает: int(значение)
     """
-    return int(old_price * discount)
+    return round(old_price * discount, 2)
 
 
 def rating_list(good_list):

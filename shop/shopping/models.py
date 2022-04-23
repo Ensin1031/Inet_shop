@@ -136,7 +136,7 @@ class GoodsDB(models.Model):
     title = models.CharField(max_length=255, verbose_name='Наименование товара')
     brand = models.ForeignKey(BrandNameDB, on_delete=models.PROTECT, related_name='brand_good',
                               verbose_name='Производитель')
-    price = models.IntegerField(default=0, verbose_name='Цена товара')
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Цена товара')
     presence = models.BooleanField(default=True, verbose_name='Наличие в магазине')
     category = TreeForeignKey(CategoryDB, on_delete=models.PROTECT, related_name='category_good',
                               verbose_name='Категория товара')

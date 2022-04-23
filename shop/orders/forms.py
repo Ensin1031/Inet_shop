@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import OrderDB
+
 
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
 
@@ -15,3 +17,17 @@ class CartAddProductForm(forms.Form):
     update = forms.BooleanField(required=False,     # поле обновить
                                 initial=False,
                                 widget=forms.HiddenInput)
+
+
+class ToBuyForm(forms.Form):
+    '''добавляем флажок Покупать/Не покупать'''
+    select_to_buy = forms.BooleanField(initial=True)
+
+
+class OrderCreateForm(forms.ModelForm):
+    """Form for creating an order record in the model OrderDB"""
+    class Meta:
+        model = OrderDB
+        fields = ('first_name', 'last_name', 'postal_code', 'country',
+                  'region', 'city', 'address', 'phone_number', 'delivery_type',)
+
