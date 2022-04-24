@@ -14,12 +14,16 @@
 <main class="main">
 
 
-    <!--TODO переделать бредкрамп-->
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
+                {% if breadcrumb_list|length <= 1 %}
                 <li class="breadcrumb-item active" aria-current="page">Магазин</li>
+                {% else %}
+                <li class="breadcrumb-item"><a href="{% url 'shopping' %}">Магазин</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+                {% endif %}
             </ol>
         </div>
     </nav>

@@ -1,7 +1,6 @@
 {% load static %}
 {% load shopping_tags %}
 
-
 {% if page_obj.has_other_pages %}
 <ul class="pagination toolbox-item">
 
@@ -40,40 +39,5 @@
 
 
 {% comment %}
-
-{% if page_obj.has_other_pages %}
-<ul class="pagination toolbox-item">
-
-    {% if page_obj.has_previous %}
-    <li class="page-item">
-        <a class="page-link page-link-btn" href="?{{ request.GET.get }}&{{ s }}page={{ page_obj.previous_page_number }}">
-            <i class="icon-angle-left"></i>
-        </a>
-    </li>
-    {% endif %}
-
-    {% for p in page_obj.paginator.page_range %}
-
-    {% if page_obj.number == p %}
-    <li class="page-item">
-        <span class="page-link">{{ p }}</span>
-    </li>
-    {% elif p > page_obj.number|add:-4 and p < page_obj.number|add:4 %}
-    <li class="page-item">
-        <a class="page-link" href="?{{ request.GET.get }}&{{ s }}page={{ p }}">{{ p }}</a>
-    </li>
-    {% endif %}
-
-    {% endfor %}
-
-    {% if page_obj.has_next %}
-    <li class="page-item">
-        <a class="page-link page-link-btn" href="?{{ request.GET.get }}&{{ s }}page={{ page_obj.next_page_number }}">
-            <i class="icon-angle-right"></i>
-        </a>
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
 
 {% endcomment %}
