@@ -10,15 +10,15 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(OrderDB)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'for_user', 'paid', 'date_at', 'date_up',)
+    list_display = ('id', 'for_user', 'status', 'date_at', 'date_up',)
     list_display_links = ('id', 'for_user', 'date_at', 'date_up',)
-    list_filter = ('paid', 'date_at', 'date_up',)
-    list_editable = ('paid',)
+    list_filter = ('status', 'date_at', 'date_up',)
+    list_editable = ('status',)
     readonly_fields = ('id', 'date_at', 'date_up',)
     inlines = (OrderItemInline,)
     fieldsets = (
         ('О заказе', {
-            'fields': ('id', 'paid', 'date_at', 'date_up', 'delivery_type')
+            'fields': ('id', 'status', 'date_at', 'date_up', 'delivery_type')
         }),
         ('Покупатель', {
             'fields': ('for_user', 'first_name', 'last_name',)

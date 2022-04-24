@@ -8,6 +8,15 @@ from shopping.models import GoodsDB
 
 class OrderDB(models.Model):
     """Checkout Model"""
+    ACCEPTED = 'NR'
+    PAID = 'PD'
+    SENT = 'SE'
+    STATUS_CHOICES = (
+        (ACCEPTED, 'Заказ на рассмотрении, Вам отправлено письмо на оплату'),
+        (PAID, 'Ваш заказ оплачен, ожидайте отправления'),
+        (SENT, 'Ваш заказ отправлен'),
+    )
+
     POST_RUSSIA = 'PR'
     COURIER_DELIVERY = 'CD'
     EXPRESS_COURIER_DELIVERY = 'ED'
@@ -16,6 +25,7 @@ class OrderDB(models.Model):
         (COURIER_DELIVERY, 'Заберите Ваш заказ в офисе курьерской службы'),
         (EXPRESS_COURIER_DELIVERY, 'Ваш товар доставят Вам домой курьером'),
     )
+
     for_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True,
                                  related_name='order_user_name', verbose_name='Покупатель')
     first_name = models.CharField(max_length=150, verbose_name='Имя')
@@ -26,7 +36,7 @@ class OrderDB(models.Model):
     city = models.CharField(max_length=100, default='Хабаровск', verbose_name='Населенный пункт')
     address = models.CharField(max_length=150, verbose_name='Адрес')
     phone_number = PhoneNumberField(verbose_name='Номер телефона')
-    paid = models.BooleanField(default=False, verbose_name='Оплачено')
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=ACCEPTED, verbose_name='Статус заказа')
     date_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания записи')
     date_up = models.DateTimeField(auto_now=True, verbose_name='Дата последнего изменения записи')
     delivery_type = models.CharField(max_length=2, choices=DELIVERY_CHOICES, default=POST_RUSSIA,

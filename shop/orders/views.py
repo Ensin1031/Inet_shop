@@ -65,19 +65,22 @@ class OrderCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         cart = Cart(self.request)
-        form.instance.for_user = self.request.user
-        order = form.save()
-        for item in cart:
-            OrderItemDB.objects.create(order=order,
-                                       product=item['product'],
-                                       price=item['price'],
-                                       quantity=item['quantity'])
-            views = item['product']         # накручиваем просмотры
-            views.n_views = F('n_views') + 1
-            views.save()
+        if len(cart) > 0:
+            form.instance.for_user = self.request.user
+            order = form.save()
+            for item in cart:
+                OrderItemDB.objects.create(order=order,
+                                           product=item['product'],
+                                           price=item['price'],
+                                           quantity=item['quantity'])
+                views = item['product']             # накручиваем просмотры ))
+                views.n_views = F('n_views') + 1
+                views.save()
 
-        cart.clear()
-        return super(OrderCreate, self).form_valid(form)
+            cart.clear()
+            return super(OrderCreate, self).form_valid(form)
+        else:
+            return super(OrderCreate, self).form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super(OrderCreate, self).get_context_data(**kwargs)

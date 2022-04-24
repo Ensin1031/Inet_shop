@@ -18,8 +18,7 @@ django-phonenumber-field = "==6.1.0"
 django-phonenumbers = '==1.0.1'
 phonenumbers = '==8.12.46'
 django-bootstrap4 = "==22.1"
-
-
+celery = "==5.2.5"
 
 [dev-packages]
 

@@ -13,7 +13,6 @@
 
 <main class="main">
 
-    {# include 'breadcrumbs/_breadcrumb.html' #}
 
     <!--TODO переделать бредкрамп-->
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
@@ -25,6 +24,7 @@
         </div>
     </nav>
 
+
     <div class="container mb-3">
         <div class="row">
 
@@ -33,6 +33,8 @@
             <div class="col-lg-9 main-content">
 
                 {% include 'inc/_nav_toolbox.html' %}
+
+                <h3>{{ title }}</h3>
 
                 {% if show_as == 'list' %}
                     {% include 'inc/_body_list.html' %}

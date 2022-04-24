@@ -71,10 +71,15 @@ class ShowAllGoods(ListView):
         else:
             context['show_as'] = 'grid'
 
+        if 'slug_cat' in self.kwargs.keys():
+            context['title'] = f'Товары категории {CategoryDB.objects.get(slug=self.kwargs["slug_cat"])}'
+        elif 'slug_brand' in self.kwargs.keys():
+            context['title'] = f'Товары от производителя {BrandNameDB.objects.get(slug=self.kwargs["slug_brand"])}'
+        else:
+            context['title'] = 'Все товары'
         return context
 
     def get_queryset(self):
-
         if 'slug_cat' in self.kwargs.keys():
             queryset = GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat'])\
                 .select_related('category').select_related('brand')
