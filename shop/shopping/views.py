@@ -36,6 +36,7 @@ class ShowGood(CreateView, DetailView):
         context['new_price'] = new_price(context['object'].price, context['discount'])
         context['finish_rating'] = rating_good(self.object)
         context['cart_product_form'] = CartAddProductForm()
+        context['breadcrumb_list'] = self.request.path[1: -1].split('/')
         return context
 
     def get_queryset(self):
@@ -63,6 +64,8 @@ class ShowAllGoods(ListView):
         context['new_price_list'] = new_price_list(context['goods'])
         context['show_photo'] = photo_list(context['goods'])
         context['promo_list'] = promo_list(context['goods'])
+        context['breadcrumb_list'] = self.request.path[1: -1].split('/')
+
         if self.request.GET.get('show_as') == 'list':
             context['show_as'] = 'list'
         else:
@@ -73,9 +76,11 @@ class ShowAllGoods(ListView):
     def get_queryset(self):
 
         if 'slug_cat' in self.kwargs.keys():
-            queryset = GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat']).select_related('category').select_related('brand')
+            queryset = GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat'])\
+                .select_related('category').select_related('brand')
         elif 'slug_brand' in self.kwargs.keys():
-            queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand']).select_related('category').select_related('brand')
+            queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand'])\
+                .select_related('category').select_related('brand')
         else:
             queryset = GoodsDB.objects.filter(presence=True).select_related('category').select_related('brand')
 
@@ -83,9 +88,11 @@ class ShowAllGoods(ListView):
             self.paginate_by = self.request.GET.get('show_on_page')
 
         if self.request.GET.get('sort_on') == 'popularity':
-            result = GoodsFilter(self.request.GET, queryset.order_by('-n_views')).qs.select_related('category').select_related('brand')
+            result = GoodsFilter(self.request.GET, queryset.order_by('-n_views'))\
+                .qs.select_related('category').select_related('brand')
         else:
-            result = GoodsFilter(self.request.GET, queryset).qs.select_related('category').select_related('brand')
+            result = GoodsFilter(self.request.GET, queryset).qs\
+                .select_related('category').select_related('brand')
         return result.select_related('category').select_related('brand')
 
 

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}}
+{% load static %}
+{% load bootstrap4 %}
+
+
+{% block title %}
+Успешная регистрация заявки  :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    <h1>Thank you</h1>
+    <p>Your order has been successfully completed. Your order number is
+        <strong>{{ order.id }}</strong>.</p>
+
+{% endblock %}

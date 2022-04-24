@@ -3,7 +3,7 @@
 
 <div class="sidebar-wrapper">
 
-<!--TODO категории-->
+    <!--TODO категории-->
     <div class="widget">
         <h3 class="widget-title">
             <a data-toggle="collapse" href="#widget-body-2" role="button" aria-expanded="true"
@@ -75,39 +75,9 @@
                     {% endrecursetree %}
                 </ul>
 
-
             </div><!-- End .widget-body -->
         </div><!-- End .collapse -->
     </div><!-- End .widget -->
-
-    {% comment %}
-    <!--TODO фильтр по цене : НУЖЕН??                        -->
-    <div class="widget">
-        <h3 class="widget-title">
-            <a data-toggle="collapse" href="#widget-body-3" role="button" aria-expanded="true"
-               aria-controls="widget-body-3">Price</a>
-        </h3>
-
-        <div class="collapse show" id="widget-body-3">
-            <div class="widget-body">
-                <form action="#">
-                    <div class="price-slider-wrapper">
-                        <div id="price-slider"></div><!-- End #price-slider -->
-                    </div><!-- End .price-slider-wrapper -->
-
-                    <div class="filter-price-action d-flex align-items-center justify-content-between flex-wrap">
-                        <button type="submit" class="btn btn-primary">Filter</button>
-
-                        <div class="filter-price-text">
-                            Price:
-                            <span id="filter-price-range"></span>
-                        </div><!-- End .filter-price-text -->
-                    </div><!-- End .filter-price-action -->
-                </form>
-            </div><!-- End .widget-body -->
-        </div><!-- End .collapse -->
-    </div><!-- End .widget -->
-    {% endcomment %}
 
     <div class="widget">
         <h3 class="widget-title">
@@ -138,8 +108,10 @@
             <div class="owl-carousel widget-featured-products">
 
                 {% for good in goods %}
-                    {% if forloop.counter == 1 %}<div class="featured-col">{% endif %}
-                    {% if forloop.counter == 4 %}<div class="featured-col">{% endif %}
+                {% if forloop.counter == 1 %}
+                <div class="featured-col">{% endif %}
+                    {% if forloop.counter == 4 %}
+                    <div class="featured-col">{% endif %}
 
 
                         <div class="product-default left-details product-widget">
@@ -166,7 +138,6 @@
                                 </div><!-- End .price-box -->
                                 {% endif %}
                                 {% endfor %}
-
 
 
                             </figure>
@@ -203,8 +174,12 @@
                                 {% endfor %}
                             </div><!-- End .product-details -->
                         </div>
-                    {% if forloop.counter == 3 %}</div>{% endif %}
-                    {% if forloop.counter == 6 %}</div>{% endif %}
+                        {% if forloop.counter == 3 %}
+                    </div>
+                    {% endif %}
+                    {% if forloop.counter == 6 %}
+                </div>
+                {% endif %}
                 {% endfor %}
 
                 {% comment %}
@@ -215,11 +190,12 @@
         </div><!-- End .widget-body -->
     </div><!-- End .widget -->
 
-<!--TODO текстовая панелька-->
+    <!--TODO текстовая панелька-->
     <div class="widget widget-block">
         <h3 class="widget-title">Мы работаем ради вас</h3>
         <h5>Немного о нас.</h5>
-        <p>Наш интернет магазин - самый лучший интернет магазин из всех интернет магазинов, и никакие другие интернет магазины не переинтернетмагазинят наш интернет магазин по интернетмагазиности. </p>
+        <p>Наш интернет магазин - самый лучший интернет магазин из всех интернет магазинов, и никакие другие интернет
+            магазины не переинтернетмагазинят наш интернет магазин по интернетмагазиности. </p>
         <p>И вообще, мы Главный конкурент АлиЭкспресса!.</p>
     </div><!-- End .widget -->
 
