@@ -36,7 +36,6 @@ class ShowGood(CreateView, DetailView):
         context['new_price'] = new_price(context['object'].price, context['discount'])
         context['finish_rating'] = rating_good(self.object)
         context['cart_product_form'] = CartAddProductForm()
-        context['breadcrumb_list'] = self.request.path[1: -1].split('/')
         return context
 
     def get_queryset(self):

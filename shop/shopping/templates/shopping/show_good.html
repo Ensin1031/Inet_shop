@@ -13,7 +13,6 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <!--TODO доналадить бредкрамп-->
                 <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
                 <li class="breadcrumb-item"><a href="{% url 'shopping' %}">Магазин</a></li>
                 <li class="breadcrumb-item"><a href="{{ good_item.category.get_absolute_url }}">
@@ -102,7 +101,7 @@
                     <hr class="divider">
 
                     <div class="product-action">
-                        <form action="{% url 'orders:cart_add' good_item.id %}" method="post">
+                        <form action="{% url 'orders:cart_add' good_item.id %}?next={{ request.path|urlencode }}" method="post">
                             {% csrf_token %}
                             {{ cart_product_form }}
                             <input type="submit" class="btn btn-sm btn-primary" value="В корзину">
