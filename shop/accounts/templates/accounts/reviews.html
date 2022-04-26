@@ -46,7 +46,7 @@
 
                         <div class="comment-text">
                             <p>
-                                {{ review.review_text | truncatewords_html:25 | safe }}
+                                {{ review.review_text | truncatechars:120 }}
                             </p>
                         </div>
                     </div>

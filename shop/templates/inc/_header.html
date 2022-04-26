@@ -27,126 +27,32 @@
                     </ul>
                 </div>
             </div>
-            <div class="header-right w-lg-max ml-0 ml-lg-auto">
-                <div class="header-contact d-none d-sm-flex align-items-center ml-auto">
-                    <i class="icon-phone-2"></i>
-                    <h6><a href="tel:+7 (4212) 11 22 33" class="d-block">+7 (4212) 11 22 33</a></h6>
-                </div>
+                <div class="header-right w-lg-max ml-0 ml-lg-auto">
+                    <div class="header-contact d-none d-sm-flex align-items-center ml-auto">
+                        <i class="icon-phone-2"></i>
+                        <h6><a href="tel:+7 (4212) 11 22 33" class="d-block">+7 (4212) 11 22 33</a></h6>
+                    </div>
 
-                <span class="separator d-sm-block d-none"></span>
+                    <span class="separator d-sm-block d-none"></span>
 
-                <div class="header-search header-search-popup header-search-category d-block header-icon text-dark">
-                    <a href="#" class="search-toggle btn p-0 icon-search-3" role="button"></a>
-                    {# search #}
-                    <form action="{% url 'search' %}" method="get">
-                        <div class="header-search-wrapper">
-                            <input type="search" class="form-control bg-white" name="q" id="q" placeholder="Поиск..."
-                                   required="">
-                            <button class="btn fas fa-search bg-transparent p-0 border-0" type="submit"></button>
-                        </div>
-                    </form>
-                </div>
-
-
-                    <a href="{% url 'my_account' %}" class="header-icon text-dark"><i class="icon-user-2"></i></a>
-
-
-                {# ссылка на корзину автор.неавтор#}
-                <div class="dropdown cart-dropdown pl-1 text-dark">
-                    {# {% url 'cart.html' %} #}
-                    <a href="cart.html" class="dropdown-toggle" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false" data-display="static">
-                        <i class="icon-shopping-cart"></i></a>
-                        {# count #}
-                        <span class="cart-count badge-circle">count</span>
-
-
-                    <div class="dropdown-menu">
-                        <div class="dropdownmenu-wrapper">
-                            <div class="dropdown-cart-header">
-                                {# count #}
-                                <span>count товаров</span>
-                                {# url cart.html #}
-                                <a href="#" class="float-right">В корзине</a>
+                    <div class="header-search header-search-popup header-search-category d-block header-icon text-dark">
+                        <a href="#" class="search-toggle btn p-0 icon-search-3" role="button"></a>
+                        {# search #}
+                        <form action="{% url 'search' %}" method="get">
+                            <div class="header-search-wrapper">
+                                <input type="search" class="form-control bg-white" name="q" id="q" placeholder="Поиск..."
+                                       required="">
+                                <button class="btn fas fa-search bg-transparent p-0 border-0" type="submit"></button>
                             </div>
-                            {# список товаров в корзине цикл #}
-                            <div class="dropdown-cart-products">
-                                <div class="product">
-                                    <div class="product-details">
-                                        <h4 class="product-title">
-                                            {# url product.html #}
-                                            <a href="#">Имя товара</a>
-                                        </h4>
+                        </form>
+                    </div>
 
-                                        <span class="cart-product-info">
-                                            {# count and price #}
-											<span class="cart-product-qty">count х price</span>
-										</span>
-                                    </div>
+                        <a href="{% url 'my_account' %}" class="header-icon text-dark"><i class="icon-user-2"></i></a>
 
-                                    <figure class="product-image-container">
-                                        {# url product.html #}
-                                        <a href="#" class="product-image">
-                                            {# url отражение картинки #}
-                                            <img src="{% static 'assets/images/products/cart/product-1.jpg' %}"
-                                                 alt="product" width="80" height="80">
-                                        </a>
-                                        {# url удаление из корзины #}
-                                        <a href="#" class="btn-remove icon-cancel" title="Удалить из корзины"></a>
-                                    </figure>
-                                </div><!-- End .product -->
+                    {% include 'inc/_cart.html' %}
 
-                                {% comment %}
-                                <div class="product">
-                                    <div class="product-details">
-                                        <h4 class="product-title">
-                                            <a href="product.html">Product.name</a>
-                                        </h4>
-
-                                        <span class="cart-product-info">
-											<span class="cart-product-qty">count * price</span>
-										</span>
-                                    </div><!-- End .product-details -->
-
-                                    <figure class="product-image-container">
-                                        <a href="product.html" class="product-image">
-                                            <img src="{% static 'assets/images/products/cart/product-1.jpg' %}"
-                                                 alt="product" width="80" height="80">
-                                        </a>
-                                        <a href="#" class="btn-remove icon-cancel" title="Удалить из корзины"></a>
-                                    </figure>
-                                </div>
-                                {% endcomment %}
-                            </div><!-- End .cart-product -->
-
-                            <div class="dropdown-cart-total">
-                                <span>Всего</span>
-                                {# count * price агрегат из корзины #}
-                                <span class="cart-total-price float-right">count * price</span>
-                            </div><!-- End .dropdown-cart-total -->
-                            {# оформить заказ #}
-                            {% if request.user.is_authenticated %}
-                            <div class="dropdown-cart-action">
-                                <a href="№" class="btn btn-dark btn-block">Оформить заказ</a>
-                                {% else %}
-                                {# {% url 'register' %} #}
-                                <div class="dropdown-cart-action">
-                                    <a href="#" class="btn btn-dark btn-block">Регистрация</a>
-                                    {% comment %}
-                                    {# {% url 'login' %} #}
-                                    <div class="dropdown-cart-action">
-                                        <a href="#" class="btn btn-dark btn-block">Авторизация</a>
-                                        {% endcomment %}
-                                        {% endif %}
-
-                                    </div><!-- End .dropdown-cart-total -->
-                                </div><!-- End .dropdownmenu-wrapper -->
-                            </div><!-- End .dropdown-menu -->
-                        </div><!-- End .dropdown -->
-                    </div><!-- End .header-right -->
-                </div><!-- End .container -->
-            </div><!-- End .header-top -->
-
+                </div><!-- End .header-top -->
+            </div>
             <div class="header-middle sticky-header">
                 <div class="container">
                     <div class="header-left d-none d-lg-flex">

@@ -4,12 +4,13 @@ import datetime
 from .models import ShopUser
 from .utilities import send_activation_notification
 from shopping.models import ReviewsDB
+from orders.models import OrderDB, OrderItemDB
 
 
-# TODO inline orders?
 def send_activation_notifications(modeladmin, request, queryset):
     for rec in queryset:
         if not rec.is_activated:
+            # TODO tasks
             send_activation_notification(rec)
     modeladmin.message_user(request, 'Письма для активации отправлены')
 
@@ -44,14 +45,25 @@ class NonactivatedFilter(admin.SimpleListFilter):
                                    date_joined__date__lt=date_not_activated)
 
 
+# TODO inline orders?
 class ReviewInline(admin.TabularInline):
     fk_name = 'user_name'
     model = ReviewsDB
 
 
+class OrdersInline(admin.TabularInline):
+    fk_name = 'for_user'
+    model = OrderDB
+
+    # def get_queryset(self, request):
+    #     queryset = super().get_queryset(request)
+    #     queryset = OrderDB.objects.prefetch_related('items')
+    #     return queryset
+
+
 @admin.register(ShopUser)
 class ShopUserAdmin(admin.ModelAdmin):
-    inlines = (ReviewInline,)
+    inlines = (ReviewInline, OrdersInline)
     list_display = ('__str__', 'email', 'is_activated', 'date_joined',)
     search_fields = ('username', 'email', 'first_name', 'last_name',)
     list_filter = (NonactivatedFilter,)

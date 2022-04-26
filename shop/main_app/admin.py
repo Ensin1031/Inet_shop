@@ -4,6 +4,7 @@ from django.contrib.flatpages.models import FlatPage
 
 
 from .models import PromotionDB
+from .forms import PromotionForm
 
 
 class FlatPageAdmin(FlatPageAdmin):
@@ -23,6 +24,8 @@ admin.site.register(FlatPage, FlatPageAdmin)
 
 @admin.register(PromotionDB)
 class PromotionAdmin(admin.ModelAdmin):
+    form = PromotionForm
+
     list_display = ('promo_title', 'is_active', 'get_category', 'get_brand',
                     'discount', 'photo', 'slug',)
     list_filter = ('is_active', 'discount', 'category', 'brand',)

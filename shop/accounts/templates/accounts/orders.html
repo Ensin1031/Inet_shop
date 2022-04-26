@@ -1,0 +1,64 @@
+{% extends 'base.html' %}}
+{% load static %}
+
+{% block title %}
+
+Мои заказы :: {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">Мой аккаунт</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-lg-9 order-lg-last dashboard-content">
+                <h2>Мои заказы</h2>
+
+                {% for order in orders %}
+
+                <li class="comment-container">
+
+                    <div class="comment-box">
+                        <a href="{{ order.get_absolute_url }}">№ {{ order.id }}</a><br>
+
+                        <div class="comment-info mb-1">
+                            <h4 class="avatar-name">Дата заказа: {{ order.date_at | date:"d E Y  H:i" }}</h4> - <span
+                                class="comment-date">Статус: {{ order.status }}</span>
+                        </div>
+
+<!--                        <div class="comment-info mb-1">-->
+<!--                            <h3 class="avatar-name">Заголовок: {{ review.review_title }}</h3>-->
+<!--                        </div>-->
+
+<!--                        <div class="comment-text">-->
+<!--                            <p>-->
+<!--                                {{ review.review_text | truncatewords_html:25 | safe }}-->
+<!--                            </p>-->
+<!--                        </div>-->
+                    </div>
+                </li>
+
+                {% empty %}
+                <p>Вы еще сделали ни один заказ!</p>
+                <p><a href="{% url 'shopping' %}"><strong>Перейти в магазин</strong></a></p>
+                {% endfor %}
+
+            </div>
+
+            {% include "inc/_acc_sidebar.html" %}
+
+        </div>
+    </div>
+</main>
+
+{% endblock %}

@@ -27,6 +27,7 @@ urlpatterns = [
          name='address'),
     path('my_account/reviews/', ReviewUserView.as_view(),
          name='reviews'),
+    path('my_account/orders/', OrderUserView.as_view(), name='orders'),
     path('my_account/delete/', DeleteUserView.as_view(), name='delete'),
     path('my_account/', MyAccountView.as_view(), name='my_account'),
 ]

@@ -13,6 +13,7 @@ from .forms import ChangeUserAddressForm, RegisterUserForm, ChangeUserInfoForm
 from .models import ShopUser
 from .utilities import signer
 from shopping.models import ReviewsDB
+from orders.models import OrderDB, OrderItemDB
 
 
 class RegisterUserView(CreateView):
@@ -103,7 +104,6 @@ class ReviewUserView(LoginRequiredMixin, ListView):
     """"""
     model = ShopUser
     template_name = 'accounts/reviews.html'
-    context_object_name = 'reviews'
 
     def setup(self, request, *args, **kwargs):
         self.user_id = request.user.pk
@@ -116,7 +116,27 @@ class ReviewUserView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['reviews'] = ReviewsDB.objects.filter(user_name__pk=self.user_id)
+        context['reviews'] = ReviewsDB.objects.filter(user_name__pk=self.user_id).select_related('user_name', 'good')
+        return context
+
+
+class OrderUserView(LoginRequiredMixin, ListView):
+    """"""
+    model = ShopUser
+    template_name = 'accounts/orders.html'
+
+    def setup(self, request, *args, **kwargs):
+        self.user_id = request.user.pk
+        return super().setup(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if not queryset:
+            queryset = self.get_queryset()
+        return get_object_or_404(queryset, pk=self.user_id)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['orders'] = OrderDB.objects.filter(for_user__pk=self.user_id)
         return context
 
 

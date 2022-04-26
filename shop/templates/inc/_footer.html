@@ -34,9 +34,8 @@
                         <h4 class="widget-title">Мой аккаунт</h4>
 
                         <ul class="links">
-                            {# линки заказы #}
                             <li><a href="{% url 'my_account' %}">Личный кабинет</a></li>
-                            <li><a href="#">Мои заказы</a></li>
+                            <li><a href="{% url 'orders' %}">Мои заказы</a></li>
                             <li><a href="{% url 'payments' %}">Способы оплаты</a></li>
                             <li><a href="{% url 'delivery' %}">Доставка</a></li>
                             <li><a href="{% url 'return' %}">Возврат</a></li>

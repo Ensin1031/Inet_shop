@@ -1,0 +1,63 @@
+{% load static %}
+
+<div class="dropdown cart-dropdown pl-1 text-dark">
+    <a href="{% url 'orders:orders_index' %}" class="dropdown-toggle" role="button" data-toggle="dropdown"
+       aria-haspopup="true" aria-expanded="false" data-display="static"><i class="icon-shopping-cart"></i></a>
+
+    <span class="cart-count badge-circle">{{ cart | length }}</span>
+
+    <div class="dropdown-menu">
+        <div class="dropdownmenu-wrapper">
+            <div class="dropdown-cart-header">
+
+                <span>{{ cart | length }} товаров</span>
+
+                <a href="{% url 'orders:orders_index' %}" class="float-right">В корзине</a>
+            </div>
+
+            {% for item in cart %}
+
+            <div class="dropdown-cart-products">
+                <div class="product">
+                    <div class="product-details">
+                        <h4 class="product-title">
+                            <a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a>
+                        </h4>
+
+                        <span class="cart-product-info"><span class="cart-product-qty">{{ item.quantity }} х {{ item.price }}</span></span>
+                    </div>
+
+                    {% if item.photos != None %}
+                    <figure class="product-image-container">
+                        <a href="{{ item.product.get_absolute_url }}">
+                            <img src="{{ item.photos.photo.url }}" width="150">
+                        </a>
+
+                        <a href="{% url 'orders:cart_remove' item.product.id %}" class="btn-remove icon-cancel"
+                           title="Удалить из корзины"></a>
+                    </figure>
+                    {% else %}
+                    <figure class="product-image-container">
+                        <a href="{{ good.get_absolute_url }}">
+                            <img src="{% static 'assets/images/photo_net.jpg' %}" width="150">
+                        </a>
+
+                        <a href="{% url 'orders:cart_remove' item.product.id %}" class="btn-remove icon-cancel"
+                           title="Удалить из корзины"></a>
+                    </figure>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="dropdown-cart-total">
+                <span>Всего</span><span class="cart-total-price float-right">{{ cart.get_total_price }}</span>
+            </div>
+
+            <div class="dropdown-cart-action">
+                <a href="{% url 'orders:orders_index' %}" class="btn btn-dark btn-block">Перейти в корзину</a>
+
+            </div>
+        </div>
+    </div>
+</div>
