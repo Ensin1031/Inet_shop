@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from uuslug import uuslug
@@ -83,23 +82,7 @@ class PromotionDB(models.Model):
     def get_brand(self):
         return ','.join([str(brand) for brand in self.brand.all()])
 
-    # TODO валидация если категории - нет, бренда - нет
-    # def clean_fields(self, exclude=None):
-    #     super().clean_fields(exclude=exclude)
-    #     errors = {}
-    #
-    #     if not self.category and not self.brand:
-    #         errors['category'] = ValidationError(
-    #                 'Не указана категория, участвующая в акции'
-    #         )
-    #         errors['brand'] = ValidationError(
-    #                 'Не указан производитель, участвующий в акции'
-    #         )
-    #
-    #     if errors:
-    #         raise ValidationError(errors)
-
     class Meta:
-        verbose_name = 'Акция'
-        verbose_name_plural = 'Акции'
+        verbose_name = 'Акция(ю)'
+        verbose_name_plural = 'Акции(ий)'
         ordering = ('-is_active', )

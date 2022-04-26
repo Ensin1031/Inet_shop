@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
 
+from orders.cart import Cart
 from shopping.views import ShowAllGoods
 from shopping.get_func import *
 from shopping.filters import GoodsFilter
@@ -18,6 +19,17 @@ class SearchGoodView(ShowAllGoods):
     def get_queryset(self):
         search = self.request.GET.get('q')
         return GoodsDB.objects.filter(presence=True, title__icontains=search)
+
+
+class CartShowView(TemplateView):
+    """"""
+    template_name = 'inc/_cart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = Cart(self.request)
+        context['cart'] = cart
+        return context
 
 
 class PromotionView(ShowAllGoods):

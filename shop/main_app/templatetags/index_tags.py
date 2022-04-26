@@ -23,7 +23,7 @@ def show_submenu():
 @register.inclusion_tag('inc/_promo.html')
 def show_promo():
     """"""
-    promotions = PromotionDB.objects.filter(is_active=True)
+    promotions = PromotionDB.objects.filter(is_active=True).prefetch_related('category', 'brand')
     cat_promo = {}
     brand_promo = {}
 
@@ -32,6 +32,7 @@ def show_promo():
             cat_promo.setdefault(promo, []).append(cat.title)
         for brand in promo.brand.all():
             brand_promo.setdefault(promo, []).append(brand.title)
+
     count = {
         'promotions': promotions,
         'cat_promo': cat_promo,
@@ -41,15 +42,15 @@ def show_promo():
     return count
 
 
-# TODO
 @register.inclusion_tag('inc/_fav_goods.html')
 def show_fav_goods(category=None):
     """"""
-    if category == None:
-        goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:9]
+    if category is None:
+        goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:9].select_related('category', 'brand')
     else:
         goods = GoodsDB.objects.filter(presence=True).filter(
-            category=category).order_by('-n_views')[:9]
+            category=category).order_by('-n_views')[:9].select_related('category', 'brand')
+
     count = {
         'goods': goods,
         'show_photo': photo_list(goods),
@@ -57,8 +58,5 @@ def show_fav_goods(category=None):
         'show_rating': rating_list(goods),
         'promo_list': promo_list(goods)
     }
+
     return count
-
-
-
-

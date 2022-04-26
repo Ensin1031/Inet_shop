@@ -24,13 +24,19 @@
                     <a href="{{ key.get_absolute_url }}">
                         <img src="{% static 'assets/images/photo_net.jpg' %}"></a>
 
-                    {# добавить в корзину? #}
-                    <div class="btn-icon-group">
-                        <button class="btn-icon btn-add-cart" data-toggle="modal" data-target="#addCartModal"><i
-                                class="icon-bag"></i></button>
-                    </div>
-
                     {% endif %}
+
+                    {% comment %}
+                    {# добавить в корзину? {% url 'orders:cart_add' good.id %} #}
+                    <div class="btn-icon-group">
+                        <form action="{% url 'orders:cart_add' key.id %}" method="post">
+                            {% csrf_token %}
+
+                            <input type="submit" class="btn-icon btn-add-cart" value="+">
+
+                        </form>
+                    </div>
+                    {% endcomment %}
 
                     {% for key, value in promo_list.items %}
                     {% if key == good %}
@@ -42,7 +48,7 @@
                         <span class="product-label label-sale">-{{ value }}%</span>
 
                         {% endif %}
-                    </div>>
+                    </div>
 
                     {% endif %}
                     {% endfor %}
