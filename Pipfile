@@ -12,13 +12,13 @@ django-debug-toolbar = "==3.2.4"
 django-mptt = "==0.13.4"
 django-autoslug = "==1.9.8"
 django-uuslug = "==2.0.0"
-django-filter = "==21.1"
-django-bootstrap-form = "==3.4"
 django-phonenumber-field = "==6.1.0"
 django-phonenumbers = '==1.0.1'
 phonenumbers = '==8.12.46'
 django-bootstrap4 = "==22.1"
 celery = "==5.2.5"
+django-filter = "==21.1"
+django-widget-tweaks = "==1.4.12"
 
 [dev-packages]
 

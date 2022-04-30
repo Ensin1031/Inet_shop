@@ -2,8 +2,7 @@
 {% load static %}
 {% load shopping_tags %}
 {% load static mptt_tags %}
-{% load bootstrap %}
-
+{% load widget_tweaks %}
 
 {% block title %}
 Магазин :: {{ block.super }}
@@ -40,7 +39,7 @@
 
                 <h3>{{ title }}</h3>
 
-                {% if show_as == 'list' %}
+                {% if show_as %}
                     {% include 'inc/_body_list.html' %}
                 {% else %}
                     {% include 'inc/_body_grid.html' %}
@@ -50,7 +49,7 @@
                 <nav class="toolbox toolbox-pagination">
 
                     <div class="toolbox-left">
-                        {% include 'inc/_nav_toolbox.html' %}
+                        {# include 'inc/_nav_toolbox.html' #}
                     </div><!-- End .toolbox-left -->
 
                     {% include 'inc/_shop_pag.html' %}
@@ -64,7 +63,7 @@
             <div class="sidebar-toggle"><i class="fas fa-sliders-h"></i></div>
             <aside class="sidebar-shop col-lg-3 order-lg-first mobile-sidebar">
 
-                {% show_sidebar %}
+                {% show_sidebar request %}
 
             </aside><!-- End .col-lg-3 -->
         </div><!-- End .row -->

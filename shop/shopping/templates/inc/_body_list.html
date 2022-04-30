@@ -3,71 +3,51 @@
 <div class="row pb-4">
     {% for good in goods %}
     <div class="col-12 product-default left-details product-list mb-4">
-
-        {% for key, value in show_photo.items %}
-        {% if key == good %}
+        {% for key, value in data_goods.items %}
+        {% if good == value.product %}
         <figure>
-            {% if value %}
-            <a href="{{ key.get_absolute_url }}">
-                <img src="{{ value.photo.url }}" alt="product">
+            {% if value.photo %}
+            <a href="{{ good.get_absolute_url }}">
+                <img src="{{ value.photo.photo.url }}" alt="product">
             </a>
-
             {% else %}
-            <a href="{{ key.get_absolute_url }}">
-                <img src="{% static 'assets/images/photo_net.jpg' %}">
+            <a href="{{ good.get_absolute_url }}">
+                <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">
             </a>
             {% endif %}
-
-            {% for key, value in promo_list.items %}
-            {% if key == good %}
+            {% if value.promo %}
             <div class="label-group">
-                {% if value != 0 %}
-                <span class="product-label label-sale">-{{ value }}%</span>
-                {% endif %}
-            </div><!-- End .price-box -->
+                <span class="product-label label-sale">-{{ value.promo }}</span>
+            </div>
             {% endif %}
-            {% endfor %}
-
         </figure>
-        {% endif %}
-        {% endfor %}
-
-
         <div class="product-details">
             <div class="category-list">
-                <a href="{{ good.category.get_absolute_url }}" class="product-category">Категория:
-                    {{ good.category }}</a>
+                <a href="{{ good.category.get_absolute_url }}" class="product-category">
+                    Категория: {{ good.category }}
+                </a>
             </div>
             <h2 class="product-title">
                 <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
             </h2>
             <div class="ratings-container">
-                {% for key, value in rating_list.items %}
-                {% if key.title == good.title %}
                 <div class="product-ratings">
-                    <span class="ratings" style="width:{{ value }}%"></span><!-- End .ratings -->
+                    <span class="ratings" style="width:{{ value.rating }}%"></span><!-- End .ratings -->
                     <span class="tooltiptext tooltip-top"></span>
                 </div><!-- End .product-ratings -->
-                {% endif %}
-                {% endfor %}
             </div><!-- End .product-container -->
-            <p class="product-description">
-                {{ good.description }}
-            </p>
-            {% for key, value in new_price_list.items %}
-            {% if key == good %}
+            <p class="product-description">{{ good.description }}</p>
             <div class="price-box">
-                {% if value == good.price %}
-                <span class="product-price">{{ value }} у.е.</span>
-                {% else %}
+                {% if value.promo %}
                 <span class="old-price">{{ good.price }} y.e.</span>
-                <span class="product-price">{{ value }} у.е.</span>
+                <span class="product-price">{{ value.new_price }} у.е.</span>
+                {% else %}
+                <span class="product-price">{{ good.price }} у.е.</span>
                 {% endif %}
             </div><!-- End .price-box -->
-            {% endif %}
-            {% endfor %}
-
         </div><!-- End .product-details -->
+        {% endif %}
+        {% endfor %}
     </div>
     {% endfor %}
 </div>

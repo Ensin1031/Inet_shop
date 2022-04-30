@@ -1,45 +1,36 @@
 from django import template
-from django.db.models import Sum, Count
+from django.db.models import Count, F
 from django.utils.http import urlencode
 
 from shopping.models import GalleryDB, GoodsDB, CategoryDB, ReviewsDB, BrandNameDB
 from shopping.get_func import *
 
-
 register = template.Library()
 
 
 @register.inclusion_tag('inc/_goods_band.html')
-def show_band(category=None):
+def show_band(good):
     '''show the best products band'''
-    if category == None:
-        goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:8].select_related('category').select_related('brand')
-    else:
-        goods = GoodsDB.objects.filter(presence=True).filter(category=category).order_by('-n_views')[:8].select_related('category').select_related('brand')
+    # goods = GoodsDB.objects.filter(presence=True).filter(category=good.category).order_by('-n_views')[:8].select_related('category', 'brand')
+    goods = good.category.category_good.filter(presence=True).filter(category=good.category).order_by('-n_views')[:8].select_related('category', 'brand')
+    show_goods = ShowObjects(goods)
     count = {
         'goods': goods,
-        'show_photo': photo_list(goods),
-        'show_new_price': new_price_list(goods),
-        'show_rating': rating_list(goods),
-        'promo_list': promo_list(goods)
+        'goods_dict': show_goods.show_goods_all,
     }
     return count
 
 
 @register.inclusion_tag('inc/_shop_sidebar.html')
-def show_sidebar():
+def show_sidebar(request):
     '''show sidebar on the shopping app'''
-    goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:6].select_related('category').select_related('brand')
-    category = category_by_count()
+    goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:6].select_related('category', 'brand')
+    data_goods = ShowObjects(goods)
     count = {
-        'goods': goods,
-        'show_photo': photo_list(goods),
-        'show_new_price': new_price_list(goods),
-        'show_rating': rating_list(goods),
-        'brands': brand_by_count(),
-        'category': category[0],
-        'category_count': category[1],
-        'promo_list': promo_list(goods)
+        'data_goods': data_goods.show_goods_all,
+        'brands': BrandNameDB.objects.annotate(cnt=Count('brand_good', filter=F('brand_good__presence'))),
+        'category': CategoryDB.objects.annotate(cnt=Count('category_good', filter=F('category_good__presence'))),
+        'request': request,
     }
     return count
 

@@ -1,7 +1,28 @@
 {% load static %}
 {% load static mptt_tags %}
+{% load shopping_tags %}
 
 <div class="sidebar-wrapper">
+    <div class="widget">
+        <h3 class="widget-title">
+            <a data-toggle="collapse" href="#widget-body-1" role="button" aria-expanded="true"
+               aria-controls="widget-body-1">Поиск:</a>
+        </h3>
+
+        <div class="collapse show" id="widget-body-1">
+
+            <div class="widget-body">
+                <form action="{% url 'pre_search' %}" method="get">
+                    {% csrf_token %}
+                    <input type="text" name="search_shop" placeholder="Поиск...">
+                    <input type="text" name="next" value="{{ request.path|urlencode }}" style="display: none;">
+                    <input type="submit" value="Поиск">
+                </form>
+            </div><!-- End .widget-body -->
+
+        </div><!-- End .collapse -->
+
+    </div><!-- End .widget -->
 
     <div class="widget">
         <h3 class="widget-title">
@@ -12,30 +33,7 @@
         <div class="collapse show" id="widget-body-2">
             <div class="widget-body">
 
-                {% comment %}
-                <ul class="site_nav_primary__submenu ul__column white_box">
-                    {% recursetree category %}
-                    <li>
-                        <a class="btn btn__light" href="{{ node.get_absolute_url }}">
-                            <span style="fa fa-angle-left">{{ node.title }}</span>
-                            {% if node.is_leaf_node %}
-                            <span>&nbsp;</span><span class="fa fa-angle-right"></span>
-                            {% endif %}
-                            {% if not node.is_leaf_node %}
-                            <span>&nbsp;</span><span class="fa fa-random"></span>
-                            {% endif %}
-                        </a>
-                        {% if not node.is_leaf_node %}
-                        <ul class="site_nav_primary__submenu ul__column white_box">
-                            {{ children }}
-                        </ul>
-                        {% endif %}
-                    </li>
-                    {% endrecursetree %}
-                </ul>
-                {% endcomment %}
-
-                {% comment %}
+{% comment %}
                 <ul>
                     {% recursetree category %}
                     <li>
@@ -48,7 +46,7 @@
                     </li>
                     {% endrecursetree %}
                 </ul>
-                {% endcomment %}
+{% endcomment %}
 
                 <ul class="submenu">
                     {% recursetree category %}
@@ -58,9 +56,9 @@
                                 <span>{{ node.title }}</span>
                                 <span class="fa fa-angle-right"></span>
 
-                                {% for key, value in category_count.items %}
-                                {% if key == node %}
-                                ( {{ value }} )
+                                {% for item in category %}
+                                {% if item == node %}
+                                ( {{ item.cnt }} )
                                 {% endif %}
                                 {% endfor %}
                             </h6>
@@ -87,17 +85,18 @@
         <div class="collapse show" id="widget-body-5">
             <div class="widget-body">
                 <ul class="cat-list">
-                    {% for key, value in brands.items %}
+                    {% for brand in brands %}
                     <li>
-                        <a href="{{ key.get_absolute_url }}">
-                            <span>{{ key.title }}</span>
-                            <span>({{ value }})</span>
+                        <a href="{{ brand.get_absolute_url }}">
+                            <span>{{ brand }}</span>
+                            <span>({{ brand.cnt }})</span>
                         </a>
                     </li>
                     {% endfor %}
                 </ul>
             </div><!-- End .widget-body -->
         </div><!-- End .collapse -->
+
     </div><!-- End .widget -->
 
     <div class="widget widget-featured">
@@ -106,71 +105,46 @@
         <div class="widget-body">
             <div class="owl-carousel widget-featured-products">
 
-                {% for good in goods %}
+                {% for key, value in data_goods.items %}
                 {% if forloop.counter == 1 %}
                 <div class="featured-col">{% endif %}
                     {% if forloop.counter == 4 %}
                     <div class="featured-col">{% endif %}
-
-
                         <div class="product-default left-details product-widget">
-                            {% for key, value in show_photo.items %}
-                            {% if key == good %}
                             <figure>
-
-                                {% if value %}
-                                <a href="{{ key.get_absolute_url }}">
-                                    <img src="{{ value.photo.url }}" alt="product">
+                                {% if value.photo %}
+                                <a href="{{ value.product.get_absolute_url }}">
+                                    <img src="{{ value.photo.photo.url }}" alt="product">
                                 </a>
                                 {% else %}
-                                <a href="{{ key.get_absolute_url }}">
+                                <a href="{{ good.get_absolute_url }}">
                                     <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">
                                 </a>
                                 {% endif %}
-
-                                {% for key, value in promo_list.items %}
-                                {% if key == good %}
-                                <div class="label-group">
-                                    {% if value != 0 %}
-                                    <span class="product-label label-sale">-{{ value }}%</span>
-                                    {% endif %}
-                                </div><!-- End .price-box -->
+                                {% if value.promo %}
+                                    <div class="label-group">
+                                        <span class="product-label label-sale">-{{ value.promo }}</span>
+                                    </div>
                                 {% endif %}
-                                {% endfor %}
-
-
                             </figure>
-                            {% endif %}
-                            {% endfor %}
-
                             <div class="product-details">
                                 <h2 class="product-title">
-                                    <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
+                                    <a href="{{ value.product.get_absolute_url }}">{{ value.product }}</a>
                                 </h2>
                                 <div class="ratings-container">
                                     <div class="product-ratings">
-                                        {% for key, value in show_rating.items %}
-                                        {% if key == good %}
-                                        <span class="ratings" style="width:{{ value }}%"></span><!-- End .ratings -->
-                                        <span class="tooltiptext tooltip-top"></span>
-                                        {% endif %}
-                                        {% endfor %}
-                                        <!-- End .ratings -->
+                                        <span class="ratings" style="width:{{ value.rating }}%"></span><!-- End .ratings -->
                                         <span class="tooltiptext tooltip-top"></span>
                                     </div><!-- End .product-ratings -->
                                 </div><!-- End .product-container -->
-                                {% for key, value in show_new_price.items %}
-                                {% if key == good %}
                                 <div class="price-box">
-                                    {% if value == good.price %}
-                                    <p class="product-price">{{ value }} у.е.</p>
+                                    {% if value.promo %}
+                                    <span class="old-price">{{ value.product.price }} y.e.</span>
+                                    <span class="product-price">{{ value.new_price }} у.е.</span>
                                     {% else %}
-                                    <p class="old-price">{{ good.price }} y.e.</p>
-                                    <p class="product-price">{{ value }} у.е.</p>
+                                    <span class="product-price">{{ value.product.price }} у.е.</span>
                                     {% endif %}
                                 </div><!-- End .price-box -->
-                                {% endif %}
-                                {% endfor %}
                             </div><!-- End .product-details -->
                         </div>
                         {% if forloop.counter == 3 %}
@@ -180,10 +154,6 @@
                 </div>
                 {% endif %}
                 {% endfor %}
-
-                {% comment %}
-
-                {% endcomment %}
 
             </div><!-- End .widget-featured-slider -->
         </div><!-- End .widget-body -->

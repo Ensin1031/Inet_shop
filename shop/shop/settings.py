@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django_filters',
-    'bootstrapform',
+    'widget_tweaks',
     'bootstrap4',
     'phonenumber_field',
     'main_app.apps.MainAppConfig',
