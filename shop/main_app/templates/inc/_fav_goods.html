@@ -2,110 +2,67 @@
 
 <section class="section-2 product-collection container">
     <div class="row m-0">
-
         {% for good in goods %}
-
         <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
              data-animation-delay="400">
             <div class="product-default inner-quickview inner-icon">
-
-                {% for key, value in show_photo.items %}
-                {% if key == good %}
-
+            {% for key, value in goods_dict.items %}
+            {% if good == value.product %}
                 <figure>
-
-                    {% if value %}
-
-                    <a href="{{ key.get_absolute_url }}">
-                        <img src="{{ value.photo.url }}" alt="product" width="400" height="400"/></a>
-
-                    {% else %}
-
-                    <a href="{{ key.get_absolute_url }}">
-                        <img src="{% static 'assets/images/photo_net.jpg' %}"></a>
-
-                    {% endif %}
-
-                    {% comment %}
-                    {# добавить в корзину? {% url 'orders:cart_add' good.id %} #}
-                    <div class="btn-icon-group">
-                        <form action="{% url 'orders:cart_add' key.id %}" method="post">
-                            {% csrf_token %}
-
-                            <input type="submit" class="btn-icon btn-add-cart" value="+">
-
-                        </form>
-                    </div>
-                    {% endcomment %}
-
-                    {% for key, value in promo_list.items %}
-                    {% if key == good %}
-
-                    <div class="label-group">
-
-                        {% if value != 0 %}
-
-                        <span class="product-label label-sale">-{{ value }}%</span>
-
-                        {% endif %}
-                    </div>
-
+                    {% if good.images_for_goods.all %}
+                    {% for photo in good.images_for_goods.all %}
+                    {% if forloop.counter == 1 %}
+                    <a href="{{ good.get_absolute_url }}">
+                        <img src="{{ photo.photo.url }}" alt="product" width="400" height="400">
+                    </a>
                     {% endif %}
                     {% endfor %}
 
-                </figure>
+                    {% else %}
+                    <a href="{{ good.get_absolute_url }}">
+                        <img src="{% static 'assets/images/photo_net.jpg' %}">
+                    </a>
+                    {% endif %}
 
-                {% endif %}
-                {% endfor %}
+                    {% if value.promo %}
+                    <div class="label-group">
+                        <span class="product-label label-sale">-{{ value.promo }}</span>
+                    </div>
+                    {% endif %}
+                </figure>
 
                 <div class="product-details">
                     <div class="category-wrap">
                         <div class="category-list">
-                            <a href="{{ good.category.get_absolute_url }}" class="product-category">Категория: {{ good.category }}</a>
+                            <a href="{{ good.category.get_absolute_url }}" class="product-category">
+                                Категория: {{ good.category }}
+                            </a>
                         </div>
                     </div>
 
                     <h2 class="product-title">
-                        <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
+                        <a href="{{ good.get_absolute_url }}">{{ good }}</a>
                     </h2>
 
                     <div class="ratings-container">
                         <div class="product-ratings">
-
-                            {% for key, value in show_rating.items %}
-                            {% if key == good %}
-
-                            <span class="ratings" style="width:{{ value }}%"></span>
+                            <span class="ratings" style="width:{{ value.rating }}%"></span>
                             <span class="tooltiptext tooltip-top"></span>
-
-                            {% endif %}
-                            {% endfor %}
-
                         </div>
                     </div>
-
-
                     <div class="price-box">
-
-                        {% for key, value in show_new_price.items %}
-                        {% if key == good %}
-
-                            {% if value == good.price %}
-                            <span class="product-price">{{ value }} у.е.</span>
-                            {% else %}
-                            <span class="old-price">{{ good.price }} y.e.</span>
-                            <span class="product-price">{{ value }} у.е.</span>
-                            {% endif %}
-
+                        {% if value.promo %}
+                        <span class="old-price">{{ good.price }}</span>
+                        <span class="product-price">{{ value.new_price }}</span>
+                        {% else %}
+                        <span class="product-price">{{ good.price }}</span>
                         {% endif %}
-                        {% endfor %}
-
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% endfor %}
         </div>
-
         {% endfor %}
-
     </div>
 </section>

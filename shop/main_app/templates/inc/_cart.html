@@ -16,38 +16,38 @@
             </div>
 
             {% for item in cart %}
-
+            {% with good=item.product %}
             <div class="dropdown-cart-products">
                 <div class="product">
                     <div class="product-details">
                         <h4 class="product-title">
-                            <a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a>
+                            <a href="{{ item.product.get_absolute_url }}">{{ good }}</a>
                         </h4>
-
                         <span class="cart-product-info"><span class="cart-product-qty">{{ item.quantity }} х {{ item.price }}</span></span>
                     </div>
 
-                    {% if item.photos != None %}
                     <figure class="product-image-container">
-                        <a href="{{ item.product.get_absolute_url }}">
-                            <img src="{{ item.photos.photo.url }}" width="150">
+                        {% if good.images_for_goods.all %}
+                        {% for photo in good.images_for_goods.all %}
+                        {% if forloop.counter == 1 %}
+                        <a href="{{ good.get_absolute_url }}">
+                            <img src="{{ photo.photo.url }}" width="150">
                         </a>
+                        {% endif %}
+                        {% endfor %}
 
-                        <a href="{% url 'orders:cart_remove' item.product.id %}" class="btn-remove icon-cancel"
-                           title="Удалить из корзины"></a>
-                    </figure>
-                    {% else %}
-                    <figure class="product-image-container">
+                        {% else %}
                         <a href="{{ item.product.get_absolute_url }}">
                             <img src="{% static 'assets/images/photo_net.jpg' %}" width="150">
                         </a>
-
-                        <a href="{% url 'orders:cart_remove' item.product.id %}" class="btn-remove icon-cancel"
+                        {% endif %}
+                        <a href="{% url 'orders:cart_remove' good.id %}" class="btn-remove icon-cancel"
                            title="Удалить из корзины"></a>
                     </figure>
-                    {% endif %}
+
                 </div>
             </div>
+            {% endwith %}
             {% endfor %}
 
             <div class="dropdown-cart-total">

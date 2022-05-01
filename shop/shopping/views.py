@@ -30,6 +30,7 @@ class ShowGood(CreateView, DetailView):
     template_name = 'shopping/show_good.html'
     context_object_name = 'good_item'
     form_class = AddReviewForm
+    # data_good = ...
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
@@ -41,17 +42,19 @@ class ShowGood(CreateView, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # context['data_good'] = self.data_good.show_goods_all
+        context['cart_product_form'] = CartAddProductForm()
         by_reviews = ShowObjects.rating_and_reviews_for_one_good(self.object)
         context['reviews'] = by_reviews['reviews_list']
         context['discount'] = self.by_promo[self.object]['discount']
         context['new_price'] = round(self.object.price * self.by_promo[self.object]['discount_index'], 2)
         context['finish_rating'] = by_reviews['int_rating']
-        context['cart_product_form'] = CartAddProductForm()
         return context
 
     def get_queryset(self):
         good_object = GoodsDB.objects.filter(slug=self.kwargs.get('slug'))\
             .select_related('category', 'brand').prefetch_related('images_for_goods')
+        # self.data_good = ShowObjects(good_object)
         self.by_promo = ShowObjects.promo_dict(good_object)
         return good_object
 
@@ -127,8 +130,8 @@ class ShowAllGoods(ListView):
         else:
             return queryset
 
-
-def show_image(request, slug):
-    """тестовая функция просмотра картинки"""
-    return render(request, 'shopping/show_image.html', {'hello': f'Hello, image {slug}!'})
-
+#
+# def show_image(request, slug):
+#     """тестовая функция просмотра картинки"""
+#     return render(request, 'shopping/show_image.html', {'hello': f'Hello, image {slug}!'})
+#

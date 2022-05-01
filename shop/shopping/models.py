@@ -119,8 +119,8 @@ class GalleryDB(models.Model):
         self.slug = uuslug(str(self.photo), instance=self)
         super(GalleryDB, self).save(*args, **kwargs)
 
-    def get_absolute_url(self):
-        return reverse('show_image', kwargs={'slug': self.slug})
+    # def get_absolute_url(self):
+    #     return reverse('show_image', kwargs={'slug': self.slug})
 
     def __str__(self):
         return str(self.photo)
@@ -128,7 +128,6 @@ class GalleryDB(models.Model):
     class Meta:
         verbose_name = 'Картинка(у)'
         verbose_name_plural = 'Картинки(ок)'
-        # ordering = ('photo',)
 
 
 class GoodsDB(models.Model):

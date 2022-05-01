@@ -17,24 +17,25 @@ class Cart(object):
             # сохраняем ПУСТУЮ корзину в сессии
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
+        if self.cart:
+            self.products = GoodsDB.objects.filter(id__in=self.cart.keys()).prefetch_related('images_for_goods')
 
     def __iter__(self):
         """
         Перебираем товары в корзине и получаем товары из базы данных.
         """
-        product_ids = self.cart.keys()
-        # получаем товары и добавляем их в корзину
-        products = GoodsDB.objects.filter(id__in=product_ids)   # .prefetch_related('images_for_goods')
+        # product_ids = self.cart.keys()
+        # # получаем товары и добавляем их в корзину
+        # products = GoodsDB.objects.filter(id__in=product_ids).prefetch_related('images_for_goods')
+        if self.cart:
+            cart = self.cart.copy()
+            for product in self.products:
+                cart[str(product.id)]['product'] = product
 
-        cart = self.cart.copy()
-        for product in products:
-            cart[str(product.id)]['product'] = product
-            cart[str(product.id)]['photos'] = product.images_for_goods.first()
-
-        for item in cart.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
-            yield item
+            for item in cart.values():
+                item['price'] = Decimal(item['price'])
+                item['total_price'] = item['price'] * item['quantity']
+                yield item
 
     def __len__(self):
         """

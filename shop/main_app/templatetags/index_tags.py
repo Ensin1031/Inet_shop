@@ -36,27 +36,21 @@ def show_promo():
     count = {
         'promotions': promotions,
         'cat_promo': cat_promo,
-        'brand_promo': brand_promo
+        'brand_promo': brand_promo,
     }
 
     return count
 
 
 @register.inclusion_tag('inc/_fav_goods.html')
-def show_fav_goods(category=None):
+def show_fav_goods():
     """"""
-    if category is None:
-        goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:9].select_related('category', 'brand')
-    else:
-        goods = GoodsDB.objects.filter(presence=True).filter(
-            category=category).order_by('-n_views')[:9].select_related('category', 'brand')
-
+    goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:9]\
+        .select_related('category', 'brand')\
+        .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+    data_goods = ShowObjects(goods)
     count = {
         'goods': goods,
-        'show_photo': photo_list(goods),
-        'show_new_price': new_price_list(goods),
-        'show_rating': rating_list(goods),
-        'promo_list': promo_list(goods)
+        'goods_dict': data_goods.show_goods_all,
     }
-
     return count

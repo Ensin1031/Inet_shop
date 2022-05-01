@@ -43,12 +43,15 @@ Basket: Корзина  :: {{ block.super }}
                             {% with good=item.product %}
                             <tr class="product-row">
                                 <td class="product-col">
-                                    {% if item.photos != None %}
+                                    {% if good.images_for_goods.all %}
                                     <figure class="product-image-container">
-
+                                        {% for photo in good.images_for_goods.all %}
+                                        {% if forloop.counter == 1 %}
                                         <a href="{{ good.get_absolute_url }}">
-                                            <img src="{{ item.photos.photo.url }}" width="150">
+                                            <img src="{{ photo.photo.url }}" width="150">
                                         </a>
+                                        {% endif %}
+                                        {% endfor %}
                                     </figure>
                                     {% else %}
                                     <figure class="product-image-container">
