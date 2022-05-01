@@ -33,7 +33,7 @@
         <div class="collapse show" id="widget-body-2">
             <div class="widget-body">
 
-{% comment %}
+                {% comment %}
                 <ul>
                     {% recursetree category %}
                     <li>
@@ -46,7 +46,7 @@
                     </li>
                     {% endrecursetree %}
                 </ul>
-{% endcomment %}
+                {% endcomment %}
 
                 <ul class="submenu">
                     {% recursetree category %}
@@ -96,35 +96,42 @@
                 </ul>
             </div><!-- End .widget-body -->
         </div><!-- End .collapse -->
-
     </div><!-- End .widget -->
+
 
     <div class="widget widget-featured">
         <h3 class="widget-title">Лучшее</h3>
 
         <div class="widget-body">
             <div class="owl-carousel widget-featured-products">
-
-                {% for key, value in data_goods.items %}
+                {% for good in goods %}
                 {% if forloop.counter == 1 %}
                 <div class="featured-col">{% endif %}
                     {% if forloop.counter == 4 %}
                     <div class="featured-col">{% endif %}
+
                         <div class="product-default left-details product-widget">
+                            {% for key, value in goods_dict.items %}
+                            {% if good == value.product %}
                             <figure>
-                                {% if value.photo %}
-                                <a href="{{ value.product.get_absolute_url }}">
-                                    <img src="{{ value.photo.photo.url }}" alt="product">
+                                {% if good.images_for_goods.all %}
+                                {% for photo in good.images_for_goods.all %}
+                                {% if forloop.counter == 1 %}
+
+                                <a href="{{ good.get_absolute_url }}">
+                                    <img src="{{ photo.photo.url }}" alt="product">
                                 </a>
+                                {% endif %}
+                                {% endfor %}
                                 {% else %}
                                 <a href="{{ good.get_absolute_url }}">
                                     <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">
                                 </a>
                                 {% endif %}
                                 {% if value.promo %}
-                                    <div class="label-group">
-                                        <span class="product-label label-sale">-{{ value.promo }}</span>
-                                    </div>
+                                <div class="label-group">
+                                    <span class="product-label label-sale">-{{ value.promo }}</span>
+                                </div>
                                 {% endif %}
                             </figure>
                             <div class="product-details">
@@ -133,7 +140,8 @@
                                 </h2>
                                 <div class="ratings-container">
                                     <div class="product-ratings">
-                                        <span class="ratings" style="width:{{ value.rating }}%"></span><!-- End .ratings -->
+                                        <span class="ratings" style="width:{{ value.rating }}%"></span>
+                                        <!-- End .ratings -->
                                         <span class="tooltiptext tooltip-top"></span>
                                     </div><!-- End .product-ratings -->
                                 </div><!-- End .product-container -->
@@ -146,20 +154,22 @@
                                     {% endif %}
                                 </div><!-- End .price-box -->
                             </div><!-- End .product-details -->
+                            {% endif %}
+                            {% endfor %}
                         </div>
+
                         {% if forloop.counter == 3 %}
                     </div>
                     {% endif %}
                     {% if forloop.counter == 6 %}
                 </div>
                 {% endif %}
-                {% endfor %}
-
+                {% endfor %}<!-- End .featured-col -->
             </div><!-- End .widget-featured-slider -->
         </div><!-- End .widget-body -->
     </div><!-- End .widget -->
 
-    <!--TODO текстовая панелька-->
+<!--TODO текстовая панелька-->
     <div class="widget widget-block">
         <h3 class="widget-title">Мы работаем ради вас</h3>
         <h5>Немного о нас.</h5>

@@ -42,21 +42,18 @@ class ShowGood(CreateView, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         by_reviews = ShowObjects.rating_and_reviews_for_one_good(self.object)
-        by_promo = ShowObjects.promo(self.object)
-        context['photos'] = self.object.images_for_goods.all()
         context['reviews'] = by_reviews['reviews_list']
-        context['discount'] = by_promo['discount']
-        context['new_price'] = round(self.object.price * by_promo['discount_index'])
+        context['discount'] = self.by_promo[self.object]['discount']
+        context['new_price'] = round(self.object.price * self.by_promo[self.object]['discount_index'], 2)
         context['finish_rating'] = by_reviews['int_rating']
         context['cart_product_form'] = CartAddProductForm()
         return context
 
     def get_queryset(self):
-        good_object = GoodsDB.objects.filter(slug=self.kwargs.get('slug')).select_related('category', 'brand')
+        good_object = GoodsDB.objects.filter(slug=self.kwargs.get('slug'))\
+            .select_related('category', 'brand').prefetch_related('images_for_goods')
+        self.by_promo = ShowObjects.promo_dict(good_object)
         return good_object
-
-        # .prefetch_related(Prefetch('category', queryset=CategoryDB.objects.filter(from_category__is_active=True).filter(from_category__category=good_object[0].category)))
-        # .prefetch_related(Prefetch('brand', queryset=BrandNameDB.objects.filter(from_brand__is_active=True).filter(from_brand__brand=good_object[0].brand)))
 
 
 class ShowAllGoods(ListView):
@@ -89,31 +86,36 @@ class ShowAllGoods(ListView):
     def get_queryset(self):
         if 'slug_cat' in self.kwargs.keys():    # если пришел запрос на показ по категориям
             queryset = GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat'])\
-                .select_related('category', 'brand')
+                .select_related('category', 'brand')\
+                .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
         elif 'slug_brand' in self.kwargs.keys():    # если пришел запрос на показ по брендам
             queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand'])\
-                .select_related('category', 'brand')
+                .select_related('category', 'brand')\
+                .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
         elif 'search_result' in self.kwargs.keys():     # если проводился поиск
             query = self.kwargs['search_result']
             queryset = GoodsDB.objects.filter(presence=True)\
                 .filter(Q(title__icontains=query) | Q(description__icontains=query))\
-                .select_related('category', 'brand')
-        else:
+                .select_related('category', 'brand')\
+                .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+        else:   # дефолтный запрос "Все товары"
             queryset = GoodsDB.objects.filter(presence=True)\
-                .select_related('category', 'brand')    # дефолтный запрос "Все товары"
+                .select_related('category', 'brand')\
+                .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
 
         if self.request.GET.get('show_on_page'):
             self.paginate_by = self.request.GET.get('show_on_page')
 
-        self.data_goods = ShowObjects(queryset) # подключаем класс обработки в get_func
+        self.data_goods = ShowObjects(queryset)     # подключаем класс обработки в get_func
 
         if self.request.GET.get('sort_on'):     # инициализируем сортировку
             queryset = self.get_queryset_by_sort(queryset)
 
-        self.filters = GoodsFilter(self.request.GET, queryset=None) # инициализируем фильтр
+        self.filters = GoodsFilter(self.request.GET, queryset=None)     # инициализируем фильтр
         return queryset
 
     def get_queryset_by_sort(self, queryset):
+
         if self.request.GET.get('sort_on') == 'popularity':
             return queryset.order_by('-n_views')
         elif self.request.GET.get('sort_on') == 'rating':

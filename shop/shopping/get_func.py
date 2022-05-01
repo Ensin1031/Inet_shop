@@ -11,18 +11,16 @@ promo_all = PromotionDB.objects.all()   # \
 
 
 class ShowObjects:
-
-    full_promo = PromotionDB.objects.all()  # .prefetch_related('category', 'brand')
-    full_photo = GalleryDB.objects.all()    # .prefetch_related('product')
+    """
+    Request objects processing class.
+    """
 
     def __init__(self, obj_list):
-        # obj_list.prefetch_related('images_for_goods')
         self.obj_list = obj_list
-        # self.obj_list.prefetch_related('images_for_goods')
+
         self.rating_dict_all = self.rating_dict(self.obj_list)
         self.promo_dict_all = self.promo_dict(self.obj_list)
         self.new_price_dict_all = self.new_price_dict(self.obj_list)
-        self.photo_dict_all = self.photo_dict(self.obj_list)
         self.sort_by_rating = self.sort_on_rating()
         self.sort_by_price = self.sort_on_price()
         self.sort_by_price_desc = self.sort_on_price_desc()
@@ -35,7 +33,6 @@ class ShowObjects:
             for good in object_list:
                 result[str(good.id)] = {
                     'product': good,
-                    'photo': self.photo_dict_all[good],
                     'new_price': self.new_price_dict_all[good],
                     'rating': self.rating_dict_all[good],
                     'promo': self.promo_dict_all[good]['discount'],
@@ -46,6 +43,16 @@ class ShowObjects:
 
     @staticmethod
     def rating_and_reviews_for_one_good(good):
+        """
+        The function of processing data from the ReviewsDB database for one product.
+
+        получает: 1 объект GoodsDB
+
+        возвращает: словарь вида {'int_rating': <int(0-100)_процентов>, 'reviews_list': <queryset>}
+                где:
+            'int_rating' - рейтинг товара в процентах, с учетом всех отзывов, если отзывы отсутствуют = 0
+            'reviews_list' - список объектов отзывов, относящихся к данному товару, если он отсутствует = None
+        """
         queryset_rating_for_good = good.review_for_good.prefetch_related('user_name')
         if queryset_rating_for_good:
             len_queryset = queryset_rating_for_good.count()
@@ -58,34 +65,67 @@ class ShowObjects:
         return result
 
     @staticmethod
-    def rating(good):
-        queryset_rating_for_good = good.review_for_good.values('review_rating').prefetch_related('user_name')
-        if queryset_rating_for_good:
-            len_queryset = queryset_rating_for_good.count()
-            sum_rating = 0
-            for value in queryset_rating_for_good:
-                sum_rating += int(value['review_rating'])
-            result = int(sum_rating / len_queryset)
-        else:
-            result = 0
-        return result
+    def rating_dict(good_list):
+        """
+        The function calculates the average value of ratings for a list of products.
 
-    def photo_dict(self, good_list):
-        photo = {}
-        for item in good_list:
-            photo[item] = item.images_for_goods.first()
-        return photo
+        функция высчитывает среднее значение рейтингов для списка товаров
 
-    def rating_dict(self, good_list):
+        принимает: список объектов из GoodsDB
+
+        возвращает: словарь вида
+        {<объект_GoodsDB_№1>: <int(1-100)_процентов_для_GoodsDB_№1>,
+        <объект_GoodsDB_№2>: <int(1-100)_процентов_для_GoodsDB_№2>,... }
+        """
         rating = {}
         for item in good_list:
-            rating[item] = self.rating(item)
+            rating_for_good = item.review_for_good.all()
+            if rating_for_good:
+                len_rating = len(rating_for_good)
+                sum_rating = 0
+                for value in rating_for_good:
+                    sum_rating += int(value.review_rating)
+                result = int(sum_rating / len_rating)
+            else:
+                result = 0
+            rating[item] = result
         return rating
 
-    def promo_dict(self, good_list):
+    @staticmethod
+    def promo_dict(good_list):
+        """
+        Функция высчитывает данные по скидкам для списка товаров из GoodsDB
+
+        принимает: список объектов из GoodsDB
+
+        возвращает: словарь вида
+        {
+        <объект_GoodsDB_№1>: {'discount_index': <floar_значение(0.01-1)>, 'discount': <int(1-100)>}
+        <объект_GoodsDB_№2>: {'discount_index': <floar_значение(0.01-1)>, 'discount': <int(1-100)>}
+        }
+                где:
+            'discount_index' - индекс от 0.01 до 1 для высчитывания новой цены, если скидки отсутствуют = 1
+            'discount' - в процентах, значение скидки для товара, максимальное из найденных, если отсутствует = None
+        """
         promo = {}
         for item in good_list:
-            promo[item] = self.promo(item)
+            queryset_for_good_by_category = item.category.from_category.all()
+            queryset_for_good_by_brand = item.brand.from_brand.all()
+            discount_list = []
+            if queryset_for_good_by_category:
+                for value in queryset_for_good_by_category:
+                    discount_list.append(abs(value.discount))
+
+            if queryset_for_good_by_brand:
+                for value in queryset_for_good_by_brand:
+                    discount_list.append(abs(value.discount))
+            if discount_list:
+                discount_index = 1 - max(discount_list)
+                discount = int(max(discount_list) * 100)
+                result = {'discount_index': discount_index, 'discount': discount}
+            else:
+                result = {'discount_index': 1, 'discount': None}
+            promo[item] = result
         return promo
 
     def new_price_dict(self, good_list):
@@ -96,48 +136,26 @@ class ShowObjects:
 
     # @staticmethod
     # def promo(good):
-    #     queryset_for_good_by_category = good.category.from_category.filter(is_active=True).values('discount')
-    #     queryset_for_good_by_brand = good.brand.from_brand.filter(is_active=True).values('discount')
+    #     queryset_promo = ShowObjects.full_promo.filter(is_active=True).filter(Q(category=good.category) | Q(brand=good.brand)).values('discount')
     #     discount_list = []
-    #     if queryset_for_good_by_category:
-    #         for value in queryset_for_good_by_category:
-    #             discount_list.append(abs(value['discount']))
-    #
-    #     if queryset_for_good_by_brand:
-    #         for value in queryset_for_good_by_brand:
-    #             discount_list.append(abs(value['discount']))
+    #     for value in queryset_promo:
+    #         discount_list.append(abs(value['discount']))
     #
     #     if discount_list:
     #         discount_index = 1 - max(discount_list)
     #         discount = int(max(discount_list) * 100)
-    #         result = {'discount_index': discount_index, 'discount': discount,}
+    #         result = {'discount_index': discount_index, 'discount': discount, }
     #     else:
-    #         result = {'discount_index': 0, 'discount': None,}
+    #         result = {'discount_index': 1, 'discount': None, }
     #     return result
 
     @staticmethod
-    def promo(good):
-        queryset_promo = ShowObjects.full_promo.filter(is_active=True).filter(Q(category=good.category) | Q(brand=good.brand)).values('discount')
-        discount_list = []
-        # if queryset_promo:
-        for value in queryset_promo:
-            discount_list.append(abs(value['discount']))
-
-        if discount_list:
-            discount_index = 1 - max(discount_list)
-            discount = int(max(discount_list) * 100)
-            result = {'discount_index': discount_index, 'discount': discount, }
-        else:
-            result = {'discount_index': 1, 'discount': None, }
-        return result
-
-    @staticmethod
-    def sort_base_funk(goods_dict, rev=True):
+    def __sort_base_funk(goods_dict, rev=True):
         """
         Базовая функция сортировки
 
         получает: словарь типа
-        {<объект_GoodsDB_№1>: <int(1-100)_значение_для_GoodsDB_№1>, <объект_GoodsDB_№2>: <int(1-100)_значение_для_GoodsDB_№2>,... }
+        {<объект_GoodsDB_№1>: <int(0-100)_для_GoodsDB_№1>, <объект_GoodsDB_№2>: <int(0-100)_для_GoodsDB_№2>,... }
         вторым аргументом - булевое значение реверса сортировки, по умолчанию =True
 
         возвращает: <QuerySet[отсортированный список]>
@@ -145,7 +163,8 @@ class ShowObjects:
         result = list(dict(sorted(goods_dict.items(), key=lambda x: x[1], reverse=rev)).keys())
         pk_list = [x.pk for x in result]
         preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
-        queryset = GoodsDB.objects.filter(pk__in=pk_list).order_by(preserved).select_related('category', 'brand')
+        queryset = GoodsDB.objects.filter(pk__in=pk_list).order_by(preserved)\
+            .select_related('category', 'brand').prefetch_related('images_for_goods')
         return queryset
 
     def sort_on_rating(self):
@@ -157,7 +176,7 @@ class ShowObjects:
         возвращает: отсортированный список товаров
         """
         rating_dict = self.rating_dict_all
-        return self.sort_base_funk(rating_dict)
+        return self.__sort_base_funk(rating_dict)
 
     def sort_on_price(self):
         """
@@ -169,7 +188,7 @@ class ShowObjects:
         возвращает: отсортированный список товаров по цене по возрастанию
         """
         price_dict = self.new_price_dict_all
-        return self.sort_base_funk(price_dict, False)
+        return self.__sort_base_funk(price_dict, False)
 
     def sort_on_price_desc(self):
         """
@@ -181,7 +200,7 @@ class ShowObjects:
         возвращает: отсортированный список товаров по цене по убыванию
         """
         price_dict = self.new_price_dict_all
-        return self.sort_base_funk(price_dict)
+        return self.__sort_base_funk(price_dict)
 
 
 # .prefetch_related(Prefetch('category', queryset=CategoryDB.objects.filter(from_category__is_active=True).filter(from_category__category=good_object[0].category)))

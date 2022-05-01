@@ -7,20 +7,25 @@
         {% if good == value.product %}
         <div class="product-default inner-quickview inner-icon">
             <figure>
-            {% if value.photo %}
+                {% if good.images_for_goods.all %}
+                {% for photo in good.images_for_goods.all %}
+                {% if forloop.counter == 1 %}
                 <a href="{{ good.get_absolute_url }}">
-                    <img src="{{ value.photo.photo.url }}" alt="product">
+                    <img src="{{ photo.photo.url }}" alt="product">
                 </a>
+                {% endif %}
+                {% endfor %}
+
                 {% else %}
                 <a href="{{ good.get_absolute_url }}">
                     <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">
                 </a>
-            {% endif %}
-            {% if value.promo %}
+                {% endif %}
+                {% if value.promo %}
                 <div class="label-group">
                     <span class="product-label label-sale">-{{ value.promo }}</span>
                 </div>
-            {% endif %}
+                {% endif %}
             </figure>
             <div class="product-details">
                 <div class="category-wrap">

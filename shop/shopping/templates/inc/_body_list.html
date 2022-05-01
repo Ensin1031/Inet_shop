@@ -6,10 +6,15 @@
         {% for key, value in data_goods.items %}
         {% if good == value.product %}
         <figure>
-            {% if value.photo %}
+            {% if good.images_for_goods.all %}
+            {% for photo in good.images_for_goods.all %}
+            {% if forloop.counter == 1 %}
             <a href="{{ good.get_absolute_url }}">
-                <img src="{{ value.photo.photo.url }}" alt="product">
+                <img src="{{ photo.photo.url }}" alt="product">
             </a>
+            {% endif %}
+            {% endfor %}
+
             {% else %}
             <a href="{{ good.get_absolute_url }}">
                 <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}}
 {% load static %}
 {% load shopping_tags %}
+{% load widget_tweaks %}
 
 
 {% block title %}
@@ -26,12 +27,12 @@
         <div class="product-single-container product-single-default">
             <div class="row">
 
-                {% if photos %}
+                {% if good_item.images_for_goods.all %}
                 <div class="col-md-5 product-single-gallery">
                     <div class="product-slider-container">
                         <div class="product-single-carousel owl-carousel owl-theme">
 
-                            {% for photo in photos %}
+                            {% for photo in good_item.images_for_goods.all %}
                             <div class="product-item">
                                 <img class="product-single-image" src="{{ photo.photo.url }}"
                                      data-zoom-image="{{ photo.photo.url }}"/>
@@ -45,10 +46,10 @@
 								</span>
                     </div>
 
-                    {% if photos.count > 1 %}
+                    {% if good_item.images_for_goods.count > 1 %}
                     <div class="prod-thumbnail owl-dots" id='carousel-custom-dots'>
 
-                        {% for photo in photos %}
+                        {% for photo in good_item.images_for_goods.all %}
                         <div class="owl-dot">
                             <img src="{{ photo.photo.url }}"/>
                         </div>
@@ -62,7 +63,7 @@
                 <div class="col-md-5 product-single-gallery">
                     <div class="product-slider-container">
                         <div class="product-single-carousel owl-carousel owl-theme">
-                            <a href="{{ key.get_absolute_url }}">
+                            <a href="{{ good_item.get_absolute_url }}">
                                 <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">
                             </a>
                         </div>
@@ -84,11 +85,11 @@
                     <hr class="short-divider">
 
                     <div class="price-box">
-                        {% if good_item.price == new_price %}
-                        <span class="product-price">{{ new_price }} у.е.</span>
-                        {% else %}
+                        {% if discount %}
                         <span class="old-price">{{ good_item.price }} у.е.</span>
                         <span class="product-price">{{ new_price }} у.е.</span>
+                        {% else %}
+                        <span class="product-price">{{ good_item.price }} у.е.</span>
                         {% endif %}
                     </div><!-- End .price-box -->
 
@@ -101,9 +102,12 @@
                     <hr class="divider">
 
                     <div class="product-action">
-                        <form action="{% url 'orders:cart_add' good_item.id %}?next={{ request.path|urlencode }}" method="post">
+                        <form action="{% url 'orders:cart_add' good_item.id %}?next={{ request.path|urlencode }}"
+                              method="post">
                             {% csrf_token %}
-                            {{ cart_product_form }}
+                            <div class="product-single-qty">
+                                {% render_field cart_product_form.quantity class="form-control" %}
+                            </div><!-- End .product-single-qty -->
                             <input type="submit" class="btn btn-sm btn-primary" value="В корзину">
                         </form>
                     </div><!-- End .product-action -->
@@ -195,7 +199,8 @@
                                     {% else %}
                                     <p>Вы не авторизованны.</p>
                                     <p>Если Вы хотите оставить свой отзыв на товар:</p>
-                                    <a href="{% url 'register' %}">Зарегистрируйтесь</a> | <a href="{% url 'login' %}?next={{ request.path|urlencode }}">Авторизуйтесь</a>
+                                    <a href="{% url 'register' %}">Зарегистрируйтесь</a> | <a
+                                        href="{% url 'login' %}?next={{ request.path|urlencode }}">Авторизуйтесь</a>
 
                                     {% endif %}
                                 </div><!-- End .add-product-review -->

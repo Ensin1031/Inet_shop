@@ -11,15 +11,20 @@
             {% for key, value in goods_dict.items %}
             {% if good == value.product %}
             <figure>
-                {% if value.photo %}
+                {% if good.images_for_goods.all %}
+                {% for photo in good.images_for_goods.all %}
+                {% if forloop.counter == 1 %}
                 <a href="{{ good.get_absolute_url }}">
-                    <img src="{{ value.photo.photo.url }}">
+                    <img src="{{ photo.photo.url }}">
                 </a>
+                {% endif %}
+                {% endfor %}
                 {% else %}
                 <a href="{{ good.get_absolute_url }}">
                     <img src="{% static 'assets/images/photo_net.jpg' %}">
                 </a>
                 {% endif %}
+
                 {% if value.promo %}
                 <div class="label-group">
                     <span class="product-label label-sale">-{{ value.promo }}</span>
@@ -43,10 +48,10 @@
                 </div><!-- End .ratings-container -->
                 <div class="price-box">
                     {% if value.promo %}
-                    <span class="old-price">{{ value.price }}</span>
+                    <span class="old-price">{{ good.price }}</span>
                     <span class="product-price">{{ value.new_price }}</span>
                     {% else %}
-                    <span class="product-price">{{ value.price }}</span>
+                    <span class="product-price">{{ good.price }}</span>
                     {% endif %}
                 </div><!-- End .price-box -->
             </div><!-- End .product-details -->
