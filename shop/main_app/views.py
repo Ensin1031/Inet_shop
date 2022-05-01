@@ -34,13 +34,14 @@ class CartShowView(TemplateView):
 
 class PromotionView(ShowAllGoods):
     """doc string"""
+    model = GoodsDB
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         active_promo = PromotionDB.objects.filter(slug=self.kwargs.get('slug_promo'))
         for promo in active_promo:
             good_filter = Q(category__in=[cat.id for cat in promo.category.all()]) \
                           | Q(brand__in=[brand.id for brand in promo.brand.all()])
             queryset = GoodsDB.objects.filter(presence=True).filter(good_filter)
 
-        result = GoodsFilter(self.request.GET, queryset).qs
-        return result
+        return queryset

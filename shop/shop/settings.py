@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+
+import django_redis.cache
 from decouple import config
 
 import django.core.mail.backends.smtp
@@ -90,6 +92,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shop.wsgi.application'
 
+CASHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/0'
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -164,6 +172,10 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 SITE_ID = 1
 
+ADMINS = [('admin', 'admin@gmail.com'), ]
+
+SERVER_EMAIL = 'root@localhost'
+
 AUTH_USER_MODEL = 'accounts.ShopUser' # используемая модель пользователя
 
 LOGIN_URL = '/accounts/login/' # путь авторизации
@@ -181,3 +193,18 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025 # номер TCP-порта (в cmd запустить: python -m smtpd -n -c DebuggingServer localhost:1025,
                   # для активации пользователя запустить ссылку из терминала http://localhost:8000/accounts/register/activate/username:...)
 
+# celery -A shop worker -l INFO -P eventlet
+
+BROKER_URL = 'redis://localhost:6379/0'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_RESULT_SERIALIZER = 'json'

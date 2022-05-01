@@ -2,7 +2,7 @@ from django.contrib import admin
 import datetime
 
 from .models import ShopUser
-from .utilities import send_activation_notification
+from .tasks import send_activation_mail
 from shopping.models import ReviewsDB
 from orders.models import OrderDB, OrderItemDB
 
@@ -10,8 +10,7 @@ from orders.models import OrderDB, OrderItemDB
 def send_activation_notifications(modeladmin, request, queryset):
     for rec in queryset:
         if not rec.is_activated:
-            # TODO tasks
-            send_activation_notification(rec)
+            send_activation_mail.delay(rec.id)
     modeladmin.message_user(request, 'Письма для активации отправлены')
 
 
@@ -45,20 +44,15 @@ class NonactivatedFilter(admin.SimpleListFilter):
                                    date_joined__date__lt=date_not_activated)
 
 
-# TODO inline orders?
 class ReviewInline(admin.TabularInline):
     fk_name = 'user_name'
     model = ReviewsDB
 
 
+# TODO inline orders?
 class OrdersInline(admin.TabularInline):
     fk_name = 'for_user'
     model = OrderDB
-
-    # def get_queryset(self, request):
-    #     queryset = super().get_queryset(request)
-    #     queryset = OrderDB.objects.prefetch_related('items')
-    #     return queryset
 
 
 @admin.register(ShopUser)
@@ -69,22 +63,11 @@ class ShopUserAdmin(admin.ModelAdmin):
     list_filter = (NonactivatedFilter,)
     readonly_fields = ('last_login', 'date_joined',)
     actions = (send_activation_notifications,)
-    fieldsets = (
-        ('Основная информация', {
-            'fields': (
+    fields = (
                 ('username', 'email'),
                 ('first_name', 'middle_name', 'last_name'),
                 ('is_active', 'is_activated'),
                 ('is_staff', 'is_superuser'),
                 ('last_login', 'date_joined'),
-            )
-        }),
-        ('Дополнительная информация', {
-            'fields': (
-                'phone_number', ('postcode', 'country'), 'region', 'city',
-                'address'
-            )
-        })
     )
-
-
+    save_on_top = True

@@ -9,7 +9,7 @@ from django.views.generic.base import TemplateView
 from django.core.signing import BadSignature
 from django.contrib.auth.views import PasswordResetView
 
-from .forms import ChangeUserAddressForm, RegisterUserForm, ChangeUserInfoForm
+from .forms import RegisterUserForm, ChangeUserInfoForm
 from .models import ShopUser
 from .utilities import signer
 from shopping.models import ReviewsDB
@@ -55,13 +55,9 @@ class ShopPasswordResetView(PasswordResetView):
     extra_email_context = {'domain': 'localhost:8000'}
 
 
-class MyAccountView(LoginRequiredMixin, ListView):
+class MyAccountView(LoginRequiredMixin, TemplateView):
     """"""
     template_name = 'accounts/account.html'
-    model = ShopUser
-
-    def get_queryset(self):
-        pass
 
 
 class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
@@ -71,24 +67,6 @@ class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     form_class = ChangeUserInfoForm
     success_url = reverse_lazy('profile')
     success_message = 'Ваши личные данные изменены'
-
-    def setup(self, request, *args, **kwargs):
-        self.user_id = request.user.pk
-        return super().setup(request, *args, **kwargs)
-
-    def get_object(self, queryset=None):
-        if not queryset:
-            queryset = self.get_queryset()
-        return get_object_or_404(queryset, pk=self.user_id)
-
-
-class ChangeUserAddressView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
-    """"""
-    model = ShopUser
-    template_name = 'accounts/address.html'
-    form_class = ChangeUserAddressForm
-    success_url = reverse_lazy('address')
-    success_message = 'Ваши изменения адреса сохранены'
 
     def setup(self, request, *args, **kwargs):
         self.user_id = request.user.pk

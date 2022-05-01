@@ -4,13 +4,46 @@
 
 
 {% block title %}
-Успешная регистрация заявки  :: {{ block.super }}
+Заказ оформлен  :: {{ block.super }}
 {% endblock %}
 
 {% block content %}
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active" aria-current="page">Заказ оформлен</li>
+            </ol>
+        </div>
+    </nav>
 
-    <h1>Thank you</h1>
-    <p>Your order has been successfully completed. Your order number is
-        <strong>{{ order.id }}</strong>.</p>
+    <div class="page-wrapper">
+        <div class="container mb-6">
+
+            <h2>Ваш заказ успешно оформлен.</h2>
+            <p>Номер Вашего заказа - <strong>{{ orders.pk }}</strong>.</p>
+
+            <p>Дата заказа: {{ orders.date_at | date:"d E Y  H:i" }}</p>
+            <p>Статус заказа: {{ orders.get_status_display }}</p>
+            <p>Заказанные товары:</p>
+
+            {% for item in order_items %}
+            <div class="dropdown-cart-products">
+                <div class="product">
+                    <div class="product-details">
+                        <h4 class="product-title">
+                            <a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a>
+                        </h4>
+
+                        <span class="cart-product-info"><span class="cart-product-qty">{{ item.quantity }} х {{ item.price }} = {{ item.get_cost }}</span></span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main><!-- End .main -->
+
 
 {% endblock %}

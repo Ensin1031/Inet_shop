@@ -23,8 +23,6 @@ urlpatterns = [
             template_name='registration/pass_reset_confirm.html'
     ), name='password_reset_confirm'),
     path('my_account/profile/', ChangeUserInfoView.as_view(), name='profile'),
-    path('my_account/address/', ChangeUserAddressView.as_view(),
-         name='address'),
     path('my_account/reviews/', ReviewUserView.as_view(),
          name='reviews'),
     path('my_account/orders/', OrderUserView.as_view(), name='orders'),

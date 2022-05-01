@@ -1,5 +1,6 @@
 from django import forms
 
+from accounts.models import ShopUser
 from .models import OrderDB
 
 
@@ -24,10 +25,18 @@ class ToBuyForm(forms.Form):
     select_to_buy = forms.BooleanField(initial=True)
 
 
+# class OrderCreateForm(forms.ModelForm):
+#     """Form for creating an order record in the model OrderDB"""
+#     class Meta:
+#         model = OrderDB
+#         fields = ('first_name', 'last_name', 'postal_code', 'country',
+#                   'region', 'city', 'address', 'phone_number', 'delivery_type',)
+
+
 class OrderCreateForm(forms.ModelForm):
     """Form for creating an order record in the model OrderDB"""
     class Meta:
         model = OrderDB
-        fields = ('first_name', 'last_name', 'postal_code', 'country',
+        fields = ('postal_code', 'country',
                   'region', 'city', 'address', 'phone_number', 'delivery_type',)
 

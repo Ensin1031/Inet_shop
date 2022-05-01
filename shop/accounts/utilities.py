@@ -3,7 +3,6 @@ from django.core.signing import Signer
 
 from shop.settings import ALLOWED_HOSTS
 
-
 signer = Signer()
 
 

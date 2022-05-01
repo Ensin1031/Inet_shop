@@ -38,10 +38,12 @@
                     <div class="header-search header-search-popup header-search-category d-block header-icon text-dark">
                         <a href="#" class="search-toggle btn p-0 icon-search-3" role="button"></a>
                         {# search #}
-                        <form action="{% url 'search' %}" method="get">
+                        <form action="{% url 'pre_search' %}" method="get">
+                            {% csrf_token %}
                             <div class="header-search-wrapper">
-                                <input type="search" class="form-control bg-white" name="q" id="q" placeholder="Поиск..."
+                                <input type="search" class="form-control bg-white" name="search_shop" placeholder="Поиск..."
                                        required="">
+                                <input type="text" name="next" value="{{ request.path|urlencode }}" style="display: none;">
                                 <button class="btn fas fa-search bg-transparent p-0 border-0" type="submit"></button>
                             </div>
                         </form>
