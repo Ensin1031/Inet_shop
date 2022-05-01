@@ -5,7 +5,6 @@ from .views import *
 
 urlpatterns = [
     path('', MainPageView.as_view(), name='index'),
-    path('search/', SearchGoodView.as_view(), name='search'),
     path('about/', views.flatpage, {'url': '/about/'}, name='about'),
     path('contact/', views.flatpage, {'url': '/contact/'}, name='contact'),
     path('payments/', views.flatpage, {'url': '/payments/'}, name='payments'),

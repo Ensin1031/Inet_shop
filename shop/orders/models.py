@@ -3,18 +3,17 @@ from django.conf import settings
 from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 
+from accounts.models import ShopUser
 from shopping.models import GoodsDB
 
 
 class OrderDB(models.Model):
     """Checkout Model"""
     ACCEPTED = 'NR'
-    PAID = 'PD'
     SENT = 'SE'
     STATUS_CHOICES = (
-        (ACCEPTED, 'Заказ на рассмотрении, Вам отправлено письмо на оплату'),
-        (PAID, 'Ваш заказ оплачен, ожидайте отправления'),
-        (SENT, 'Ваш заказ отправлен'),
+        (ACCEPTED, 'На рассмотрении'),
+        (SENT, 'Отправлен'),
     )
 
     POST_RUSSIA = 'PR'
@@ -26,10 +25,8 @@ class OrderDB(models.Model):
         (EXPRESS_COURIER_DELIVERY, 'Ваш товар доставят Вам домой курьером'),
     )
 
-    for_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True,
+    for_user = models.ForeignKey(ShopUser, on_delete=models.CASCADE, null=True,
                                  related_name='order_user_name', verbose_name='Покупатель')
-    first_name = models.CharField(max_length=150, verbose_name='Имя')
-    last_name = models.CharField(max_length=150, verbose_name='Фамилия')
     postal_code = models.PositiveBigIntegerField(verbose_name='Почтовый индекс')
     country = models.CharField(default='Российская Федерация', max_length=100, verbose_name='Страна')
     region = models.CharField(max_length=100, default='Хабаровский край', verbose_name='Регион')
@@ -50,7 +47,7 @@ class OrderDB(models.Model):
         return sum(item.get_cost() for item in self.items.all())
 
     def get_absolute_url(self):
-        return reverse('orders:payment', kwargs={'pk': self.pk})
+        return reverse('orders:order_created', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ('-date_up',)

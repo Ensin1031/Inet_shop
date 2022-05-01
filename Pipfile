@@ -19,6 +19,9 @@ django-bootstrap4 = "==22.1"
 celery = "==5.2.5"
 django-filter = "==21.1"
 django-widget-tweaks = "==1.4.12"
+django-redis = "==5.2.0"
+eventlet = "==0.33.0"
+
 
 [dev-packages]
 

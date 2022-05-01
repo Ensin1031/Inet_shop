@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from phonenumber_field.modelfields import PhoneNumberField
 
 
 class ShopUser(AbstractUser):
@@ -16,54 +15,17 @@ class ShopUser(AbstractUser):
             db_index=True,
             verbose_name='Активирован?'
     )
-    phone_number = PhoneNumberField(
-            unique=True,
-            blank=True,
-            null=True,
-            verbose_name='Номер телефона'
-    )
-    postcode = models.PositiveIntegerField(
-            blank=True,
-            null=True,
-            verbose_name='Почтовый индекс'
-    )
-    country = models.CharField(
-            default='Российская Федерация',
-            max_length=100,
-            blank=True,
-            null=True,
-            verbose_name='Страна'
-    )
-    region = models.CharField(
-            max_length=100,
-            blank=True,
-            null=True,
-            verbose_name='Регион'
-    )
-    city = models.CharField(
-            max_length=100,
-            blank=True,
-            null=True,
-            verbose_name='Населенный пункт'
-    )
-    address = models.CharField(
-            max_length=150,
-            blank=True,
-            null=True,
-            verbose_name='Адрес'
-    )
 
     def get_full_name(self):
-        full_name = "%s %s %s" % (
-            self.first_name, self.middle_name, self.last_name
-        )
+        if self.middle_name:
+            full_name = "%s %s %s" % (
+                self.last_name, self.first_name, self.middle_name
+            )
+        else:
+            full_name = "%s %s " % (
+                self.last_name, self.first_name
+            )
         return full_name.strip()
-
-    def get_full_address(self):
-        full_address = "%s, %s, %s, %s, %s" % (
-            self.postcode, self.country, self.region, self.city, self.address
-        )
-        return full_address.strip()
 
     class Meta(AbstractUser.Meta):
         pass

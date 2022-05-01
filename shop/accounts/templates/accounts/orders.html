@@ -33,7 +33,7 @@
 
                         <div class="comment-info mb-1">
                             <h4 class="avatar-name">Дата заказа: {{ order.date_at | date:"d E Y  H:i" }}</h4> - <span
-                                class="comment-date">Статус: {{ order.status }}</span>
+                                class="comment-date">Статус: {{ order.get_status_display }}</span>
                         </div>
 
 <!--                        <div class="comment-info mb-1">-->

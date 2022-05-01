@@ -3,7 +3,7 @@ from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 
 from .models import ShopUser
-from .apps import user_registered
+from .tasks import send_activation_mail
 
 
 class RegisterUserForm(forms.ModelForm):
@@ -23,10 +23,20 @@ class RegisterUserForm(forms.ModelForm):
             widget=forms.PasswordInput,
             help_text='Введите тот же самый пароль еще раз для проверки'
     )
+    first_name = forms.CharField(
+            required=True,
+            label='Имя',
+            help_text='Обязательное поле'
+    )
     middle_name = forms.CharField(
             required=False,
             label='Отчество',
             help_text='При наличии'
+    )
+    last_name = forms.CharField(
+            required=True,
+            label='Фамилия',
+            help_text='Обязательное поле'
     )
 
     def clean(self):
@@ -49,7 +59,7 @@ class RegisterUserForm(forms.ModelForm):
         user.is_activated = False
         if commit:
             user.save()
-        user_registered.send(RegisterUserForm, instance=user)
+        send_activation_mail.delay(user.id)
         return user
 
     class Meta:
@@ -61,16 +71,18 @@ class RegisterUserForm(forms.ModelForm):
 class ChangeUserInfoForm(forms.ModelForm):
     """"""
     email = forms.EmailField(required=True, label='Электронная почта')
+    first_name = forms.CharField(
+            required=True,
+            label='Имя',
+            help_text='Обязательное поле'
+    )
+    last_name = forms.CharField(
+            required=True,
+            label='Фамилия',
+            help_text='Обязательное поле'
+    )
 
     class Meta:
         model = ShopUser
-        fields = ('username', 'email', 'phone_number',
-                  'first_name', 'middle_name', 'last_name')
+        fields = ('username', 'email', 'first_name', 'middle_name', 'last_name')
 
-
-class ChangeUserAddressForm(forms.ModelForm):
-    """"""
-
-    class Meta:
-        model = ShopUser
-        fields = ('postcode', 'country', 'region', 'city', 'address')
