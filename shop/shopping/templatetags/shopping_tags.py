@@ -13,7 +13,11 @@ def show_band(good):
     '''show the best products band'''
     goods = good.category.category_good.filter(presence=True)\
         .filter(category=good.category).order_by('-n_views')[:8].select_related('category', 'brand')\
-        .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+        .prefetch_related('images_for_goods',
+                          'review_for_good',
+                          Prefetch('category__from_category', queryset=PromotionDB.objects.filter(is_active=True)),
+                          Prefetch('brand__from_brand', queryset=PromotionDB.objects.filter(is_active=True)),
+                          )
     show_goods = ShowObjects(goods)
     count = {
         'goods': goods,
@@ -27,7 +31,11 @@ def show_sidebar(request):
     '''show sidebar on the shopping app'''
     goods = GoodsDB.objects.filter(presence=True)\
         .order_by('-n_views')[:6].select_related('category', 'brand')\
-        .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+        .prefetch_related('images_for_goods',
+                          'review_for_good',
+                          Prefetch('category__from_category', queryset=PromotionDB.objects.filter(is_active=True)),
+                          Prefetch('brand__from_brand', queryset=PromotionDB.objects.filter(is_active=True)),
+                          )
     data_goods = ShowObjects(goods)
     count = {
         'goods': goods,

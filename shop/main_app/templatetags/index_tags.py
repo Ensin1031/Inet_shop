@@ -44,10 +44,13 @@ def show_promo():
 
 @register.inclusion_tag('inc/_fav_goods.html')
 def show_fav_goods():
-    """"""
     goods = GoodsDB.objects.filter(presence=True).order_by('-n_views')[:9]\
         .select_related('category', 'brand')\
-        .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+        .prefetch_related('images_for_goods',
+                          'review_for_good',
+                          Prefetch('category__from_category', queryset=PromotionDB.objects.filter(is_active=True)),
+                          Prefetch('brand__from_brand', queryset=PromotionDB.objects.filter(is_active=True)),
+                          )
     data_goods = ShowObjects(goods)
     count = {
         'goods': goods,

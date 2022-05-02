@@ -1,10 +1,8 @@
-from django.contrib import messages
 from django.db.models import Prefetch
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView
-from django_filters.views import FilterView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from orders.forms import CartAddProductForm
@@ -30,7 +28,7 @@ class ShowGood(CreateView, DetailView):
     template_name = 'shopping/show_good.html'
     context_object_name = 'good_item'
     form_class = AddReviewForm
-    # data_good = ...
+    data_good = ...
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
@@ -42,20 +40,20 @@ class ShowGood(CreateView, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['data_good'] = self.data_good.show_goods_all
+
+        self.data_good = ShowOneObject(self.object)
+        context['data_good'] = self.data_good.data_good
         context['cart_product_form'] = CartAddProductForm()
-        by_reviews = ShowObjects.rating_and_reviews_for_one_good(self.object)
-        context['reviews'] = by_reviews['reviews_list']
-        context['discount'] = self.by_promo[self.object]['discount']
-        context['new_price'] = round(self.object.price * self.by_promo[self.object]['discount_index'], 2)
-        context['finish_rating'] = by_reviews['int_rating']
         return context
 
     def get_queryset(self):
         good_object = GoodsDB.objects.filter(slug=self.kwargs.get('slug'))\
-            .select_related('category', 'brand').prefetch_related('images_for_goods')
-        # self.data_good = ShowObjects(good_object)
-        self.by_promo = ShowObjects.promo_dict(good_object)
+            .select_related('category', 'brand')\
+            .prefetch_related('images_for_goods',
+                              Prefetch('review_for_good', queryset=ReviewsDB.objects.prefetch_related('user_name')),
+                              Prefetch('category__from_category', queryset=PromotionDB.objects.filter(is_active=True)),
+                              Prefetch('brand__from_brand', queryset=PromotionDB.objects.filter(is_active=True)),
+                              )
         return good_object
 
 
@@ -90,21 +88,41 @@ class ShowAllGoods(ListView):
         if 'slug_cat' in self.kwargs.keys():    # если пришел запрос на показ по категориям
             queryset = GoodsDB.objects.filter(presence=True, category__slug=self.kwargs['slug_cat'])\
                 .select_related('category', 'brand')\
-                .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+                .prefetch_related('images_for_goods',
+                                  'review_for_good',
+                                  Prefetch('category__from_category',
+                                           queryset=PromotionDB.objects.filter(is_active=True)),
+                                  Prefetch('brand__from_brand', queryset=PromotionDB.objects.filter(is_active=True)),
+                                  )
         elif 'slug_brand' in self.kwargs.keys():    # если пришел запрос на показ по брендам
             queryset = GoodsDB.objects.filter(presence=True, brand__slug=self.kwargs['slug_brand'])\
                 .select_related('category', 'brand')\
-                .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+                .prefetch_related('images_for_goods',
+                                  'review_for_good',
+                                  Prefetch('category__from_category',
+                                           queryset=PromotionDB.objects.filter(is_active=True)),
+                                  Prefetch('brand__from_brand', queryset=PromotionDB.objects.filter(is_active=True)),
+                                  )
         elif 'search_result' in self.kwargs.keys():     # если проводился поиск
             query = self.kwargs['search_result']
             queryset = GoodsDB.objects.filter(presence=True)\
                 .filter(Q(title__icontains=query) | Q(description__icontains=query))\
                 .select_related('category', 'brand')\
-                .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+                .prefetch_related('images_for_goods',
+                                  'review_for_good',
+                                  Prefetch('category__from_category',
+                                           queryset=PromotionDB.objects.filter(is_active=True)),
+                                  Prefetch('brand__from_brand', queryset=PromotionDB.objects.filter(is_active=True)),
+                                  )
         else:   # дефолтный запрос "Все товары"
             queryset = GoodsDB.objects.filter(presence=True)\
                 .select_related('category', 'brand')\
-                .prefetch_related('images_for_goods', 'review_for_good', 'category__from_category', 'brand__from_brand')
+                .prefetch_related('images_for_goods',
+                                  'review_for_good',
+                                  Prefetch('category__from_category',
+                                           queryset=PromotionDB.objects.filter(is_active=True)),
+                                  Prefetch('brand__from_brand', queryset=PromotionDB.objects.filter(is_active=True)),
+                                  )
 
         if self.request.GET.get('show_on_page'):
             self.paginate_by = self.request.GET.get('show_on_page')
@@ -133,5 +151,5 @@ class ShowAllGoods(ListView):
 #
 # def show_image(request, slug):
 #     """тестовая функция просмотра картинки"""
-#     return render(request, 'shopping/show_image.html', {'hello': f'Hello, image {slug}!'})
+#     return render(request, 'shopping/del_show_image.html', {'hello': f'Hello, image {slug}!'})
 #

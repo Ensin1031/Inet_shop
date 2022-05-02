@@ -72,22 +72,22 @@
                 {% endif %}
 
                 <div class="col-md-7 product-single-details">
-                    <h1 class="product-title">{{ good_item.title }}</h1>
+                    <h1 class="product-title">{{ good_item }}</h1>
 
                     <div class="ratings-container">
                         <div class="product-ratings">
-                            <span class="ratings" style="width:{{ finish_rating }}%"></span><!-- End .ratings -->
+                            <span class="ratings" style="width:{{ data_good.rating }}%"></span><!-- End .ratings -->
                         </div><!-- End .product-ratings -->
 
-                        <a href="#rev" class="rating-link">( Отзывы: {{ reviews | length }} )</a>
+                        <a href="#rev" class="rating-link">( Отзывы: {{ data_good.review_list | length }} )</a>
                     </div><!-- End .ratings-container -->
 
                     <hr class="short-divider">
 
                     <div class="price-box">
-                        {% if discount %}
+                        {% if data_good.promo %}
                         <span class="old-price">{{ good_item.price }} у.е.</span>
-                        <span class="product-price">{{ new_price }} у.е.</span>
+                        <span class="product-price">{{ data_good.new_price }} у.е.</span>
                         {% else %}
                         <span class="product-price">{{ good_item.price }} у.е.</span>
                         {% endif %}
@@ -127,7 +127,7 @@
                 <li class="nav-item">
                     <a class="nav-link" id="product-tab-reviews" data-toggle="tab" href="#product-reviews-content"
                        role="tab" aria-controls="product-reviews-content" aria-selected="false" name="rev">
-                        Отзывы: ({{ reviews | length }})
+                        Отзывы: ({{ data_good.review_list | length }})
                     </a>
                 </li>
             </ul>
@@ -147,10 +147,9 @@
                         <div class="row">
                             <div class="col-xl-7">
                                 <h2 class="reviews-title">Отзывы на {{ good_item }}:</h2>
-
+                                {% if data_good.review_list %}
                                 <ol class="comment-list">
-
-                                    {% for item in reviews %}
+                                    {% for item in data_good.review_list %}
                                     <li class="comment-container">
                                         <div class="comment-box">
                                             <div class="ratings-container">
@@ -180,8 +179,15 @@
                                         </div><!-- End .comment-box -->
                                     </li><!-- comment-container -->
                                     {% endfor %}
-
                                 </ol><!-- End .comment-list -->
+                                {% else %}
+                                <br>
+                                <div>
+                                    <h2 class="reviews-title">
+                                        На данный товар пока нет отзывов, стань первым, оцени... :)
+                                    </h2>
+                                </div>
+                                {% endif %}
                             </div>
 
                             <div class="col-xl-5">
