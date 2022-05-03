@@ -26,10 +26,11 @@
                 <h2>Мои данные</h2>
 
                 <form action="{% url 'profile' %}" method="post">
+
                     {% csrf_token %}
+
                     {% bootstrap_messages %}
                     {% bootstrap_form form layout='inline' %}
-
 
                     <div class="form-footer-right">
                         <button type="submit" class="btn btn-primary">Сохранить</button>

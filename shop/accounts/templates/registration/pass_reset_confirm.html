@@ -26,7 +26,9 @@
                 <div class="heading">
                     <h2 class="title">Сброс пароля</h2>
                     <p>Введите новый пароль для Вашего аккаунта:</p>
+
                     <form action="#" method="post">
+
                         {% csrf_token %}
 
                         {% bootstrap_form_errors form type='fields' %}
@@ -35,10 +37,12 @@
                         <div class="form-footer">
                             <button type="submit" class="btn btn-primary">Сохранить</button>
                         </div>
+
                     </form>
                 </div>
             </div>
         </div>
+    </div>
 </main>
 
 {% endblock %}

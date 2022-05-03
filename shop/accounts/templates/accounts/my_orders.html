@@ -27,30 +27,21 @@
                 {% for order in orders %}
 
                 <li class="comment-container">
-
                     <div class="comment-box">
-                        <a href="{{ order.get_absolute_url }}">№ {{ order.id }}</a><br>
-
+                        <a href="{{ order.get_absolute_url }}"><h4>Заказ № {{ order.id }}</h4></a>
                         <div class="comment-info mb-1">
-                            <h4 class="avatar-name">Дата заказа: {{ order.date_at | date:"d E Y  H:i" }}</h4> - <span
-                                class="comment-date">Статус: {{ order.get_status_display }}</span>
+                            <p class="avatar-name">Дата оформления: {{ order.date_at | date:"d E Y H:i" }}</p>|
+                            <p class="avatar-name">Статус: {{ order.get_status_display }}</p>|
+                            <p class="avatar-name">Стоимость заказа: {{ order.get_total_price }} руб.</p>
                         </div>
-
-<!--                        <div class="comment-info mb-1">-->
-<!--                            <h3 class="avatar-name">Заголовок: {{ review.review_title }}</h3>-->
-<!--                        </div>-->
-
-<!--                        <div class="comment-text">-->
-<!--                            <p>-->
-<!--                                {{ review.review_text | truncatewords_html:25 | safe }}-->
-<!--                            </p>-->
-<!--                        </div>-->
                     </div>
                 </li>
 
                 {% empty %}
-                <p>Вы еще сделали ни один заказ!</p>
+
+                <p>Вы еще не сделали ни один заказ!</p>
                 <p><a href="{% url 'shopping' %}"><strong>Перейти в магазин</strong></a></p>
+
                 {% endfor %}
 
             </div>

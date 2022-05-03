@@ -3,8 +3,8 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 
 
-from .models import PromotionDB
 from .forms import PromotionForm
+from .models import PromotionDB
 
 
 class FlatPageAdmin(FlatPageAdmin):
@@ -25,14 +25,15 @@ admin.site.register(FlatPage, FlatPageAdmin)
 @admin.register(PromotionDB)
 class PromotionAdmin(admin.ModelAdmin):
     form = PromotionForm
-
-    list_display = ('promo_title', 'is_active', 'get_category', 'get_brand',
+    list_display = ('__str__', 'is_active', 'get_category', 'get_brand',
                     'discount', 'photo', 'slug',)
     list_filter = ('is_active', 'discount', 'category', 'brand',)
     list_editable = ('is_active',)
     search_fields = ('promo_title', 'category', 'brand',)
-    fields = (('promo_title', 'is_active'), 'discount', 'category', 'brand', 'photo',)
+    fields = (('promo_title', 'is_active'), 'discount',
+              'category', 'brand', 'photo',)
     filter_horizontal = ('category', 'brand',)
+    save_on_top = True
 
     def get_category(self, obj):
         return obj.get_category()
@@ -44,5 +45,4 @@ class PromotionAdmin(admin.ModelAdmin):
 
     get_brand.short_description = 'Производитель'
 
-    save_on_top = True
-    save_as = True
+

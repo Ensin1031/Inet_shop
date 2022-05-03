@@ -5,16 +5,25 @@
     <div class="menu-title mb-1">
         <a href="{% url 'shopping' %}">Категории</a>
     </div>
+
     <ul class="submenu">
+
         {% recursetree categories %}
+
         <li><a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+
             {% if not node.is_leaf_node %}
+
             <ul class="submenu">
                 <a href="{{ children.get_absolute_url }}">{{ children }}</a>
             </ul>
+
             {% endif %}
+
         </li>
+
         {% endrecursetree %}
+
     </ul>
 </div>
 
@@ -22,9 +31,13 @@
     <div class="menu-title mb-1">
         <a href="{% url 'shopping' %}">Бренды</a>
     </div>
+
     <ul class="submenu">
         {% for brand in brands %}
+
         <li><a href="{{ brand.get_absolute_url }}">{{ brand.title }}</a></li>
+
         {% endfor %}
     </ul>
+
 </div>

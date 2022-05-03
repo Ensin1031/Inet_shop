@@ -2,12 +2,14 @@
 {% load static %}
 {% load bootstrap4 %}
 
-
 {% block title %}
+
 Заказ оформлен  :: {{ block.super }}
+
 {% endblock %}
 
 {% block content %}
+
 <main class="main">
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
@@ -22,28 +24,65 @@
         <div class="container mb-6">
 
             <h2>Ваш заказ успешно оформлен.</h2>
-            <p>Номер Вашего заказа - <strong>{{ orders.pk }}</strong>.</p>
+            <p>Номер заказа: <strong>{{ order.pk }}</strong> |
+                Дата: <strong>{{ order.date_at | date:"d E Y" }}</strong> |
+                <strong>{{ order.get_status_display }}</strong> |
+                Стоимость: <strong>{{ order.get_total_price }}</strong> руб. |
+                {{ order.get_delivery_type_display }}</p>
 
-            <p>Дата заказа: {{ orders.date_at | date:"d E Y  H:i" }}</p>
-            <p>Статус заказа: {{ orders.get_status_display }}</p>
-            <p>Заказанные товары:</p>
+            <p><strong>Заказанные товары:</strong></p>
 
-            {% for item in order_items %}
-            <div class="dropdown-cart-products">
-                <div class="product">
-                    <div class="product-details">
-                        <h4 class="product-title">
-                            <a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a>
-                        </h4>
+            <section class="section-2 product-collection container">
+                <div class="row m-0">
 
-                        <span class="cart-product-info"><span class="cart-product-qty">{{ item.quantity }} х {{ item.price }} = {{ item.get_cost }}</span></span>
+                    {% for item in order_items %}
+                    {% with good=item.product %}
+
+                    <div class="product-row">
+                        <div class="product-col">
+
+                            {% if good.images_for_goods.all %}
+
+                            <figure class="product-image-container">
+
+                                {% for photo in good.images_for_goods.all %}
+                                {% if forloop.counter == 1 %}
+
+                                <a href="{{ good.get_absolute_url }}"><img src="{{ photo.photo.url }}" width="150"></a>
+
+                                {% endif %}
+                                {% endfor %}
+
+                            </figure>
+
+                            {% else %}
+
+                            <figure class="product-image-container">
+                                <a href="{{ good.get_absolute_url }}">
+                                    <img src="{% static 'assets/images/photo_net.jpg' %}" width="150">
+                                </a>
+                            </figure>
+
+                            {% endif %}
+
+                            <div>
+
+                                <a href="{{ good.get_absolute_url }}"><strong>{{ good.title }}</strong></a>
+
+                            </div>
+                        </div>
+
+                        <div>{{ item.quantity }} х {{ item.price }} руб.<br> Всего: {{ item.get_cost }} руб.</div>
+
                     </div>
+
+                    {% endwith %}
+                    {% endfor %}
+
                 </div>
-            </div>
-            {% endfor %}
+            </section>
         </div>
     </div>
-</main><!-- End .main -->
-
+</main>
 
 {% endblock %}

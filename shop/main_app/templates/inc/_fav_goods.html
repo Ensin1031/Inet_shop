@@ -2,33 +2,45 @@
 
 <section class="section-2 product-collection container">
     <div class="row m-0">
+
         {% for good in goods %}
+
         <div class="col-md-4 col-6 appear-animate" data-animation-name="fadeInRightShorter"
              data-animation-delay="400">
             <div class="product-default inner-quickview inner-icon">
-            {% for key, value in goods_dict.items %}
-            {% if good == value.product %}
+
+                {% for key, value in goods_dict.items %}
+                {% if good == value.product %}
+
                 <figure>
+
                     {% if good.images_for_goods.all %}
                     {% for photo in good.images_for_goods.all %}
                     {% if forloop.counter == 1 %}
+
                     <a href="{{ good.get_absolute_url }}">
                         <img src="{{ photo.photo.url }}" alt="product" width="400" height="400">
                     </a>
+
                     {% endif %}
                     {% endfor %}
 
                     {% else %}
+
                     <a href="{{ good.get_absolute_url }}">
                         <img src="{% static 'assets/images/photo_net.jpg' %}">
                     </a>
+
                     {% endif %}
 
                     {% if value.promo %}
+
                     <div class="label-group">
-                        <span class="product-label label-sale">-{{ value.promo }}</span>
+                        <span class="product-label label-sale">-{{ value.promo }}%</span>
                     </div>
+
                     {% endif %}
+
                 </figure>
 
                 <div class="product-details">
@@ -50,19 +62,29 @@
                             <span class="tooltiptext tooltip-top"></span>
                         </div>
                     </div>
+
                     <div class="price-box">
+
                         {% if value.promo %}
+
                         <span class="old-price">{{ good.price }}</span>
                         <span class="product-price">{{ value.new_price }}</span>
+
                         {% else %}
+
                         <span class="product-price">{{ good.price }}</span>
+
                         {% endif %}
                     </div>
                 </div>
             </div>
+
             {% endif %}
             {% endfor %}
+
         </div>
+
         {% endfor %}
+
     </div>
 </section>

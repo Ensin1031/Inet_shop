@@ -7,7 +7,9 @@ from .tasks import send_activation_mail
 
 
 class RegisterUserForm(forms.ModelForm):
-    """"""
+
+    """User registration form class"""
+
     email = forms.EmailField(
             required=True,
             label='Электронная почта',
@@ -46,10 +48,10 @@ class RegisterUserForm(forms.ModelForm):
         password2 = self.cleaned_data['password2']
 
         if password1 and password2 and password1 != password2:
-            errors = {'password2': ValidationError(
-                    'Введенные пароли не совпадают',
-                    code='password_mismatch'
-            )}
+            errors = {
+                'password2': ValidationError('Введенные пароли не совпадают',
+                                             code='password_mismatch')
+            }
             raise ValidationError(errors)
 
     def save(self, commit=True):
@@ -69,8 +71,13 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class ChangeUserInfoForm(forms.ModelForm):
-    """"""
-    email = forms.EmailField(required=True, label='Электронная почта')
+
+    """Form class for updating user personal data"""
+
+    email = forms.EmailField(
+            required=True,
+            label='Электронная почта'
+    )
     first_name = forms.CharField(
             required=True,
             label='Имя',
@@ -84,5 +91,6 @@ class ChangeUserInfoForm(forms.ModelForm):
 
     class Meta:
         model = ShopUser
-        fields = ('username', 'email', 'first_name', 'middle_name', 'last_name')
+        fields = ('username', 'email', 'first_name',
+                  'middle_name', 'last_name')
 

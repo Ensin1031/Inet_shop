@@ -1,20 +1,22 @@
 from django.contrib import admin
 
-from accounts.models import ShopUser
 from .models import OrderDB, OrderItemDB
-from .tasks import send_order_sent
+from .tasks import send_order_mail
 
 
-def send_order_notifications(modeladmin, request, queryset):
+def send_order_mails(modeladmin, request, queryset):
+
+    """The function of sending mails about sending orders to users"""
+
     for rec in queryset:
         if rec.status != OrderDB.SENT:
-            send_order_sent.delay(rec.for_user.id)
+            send_order_mail.delay(rec.id, rec.for_user.id)
             rec.status = OrderDB.SENT
             rec.save()
     modeladmin.message_user(request, 'Письма об отправке заказа направлены')
 
 
-send_order_notifications.short_description = 'Заказ отправлен'
+send_order_mails.short_description = 'Заказ отправлен'
 
 
 class OrderItemInline(admin.TabularInline):
@@ -30,7 +32,8 @@ class OrderAdmin(admin.ModelAdmin):
     list_editable = ('status',)
     readonly_fields = ('id', 'date_at', 'date_up', 'get_full_name')
     inlines = (OrderItemInline,)
-    actions = (send_order_notifications,)
+    actions = (send_order_mails,)
+    save_on_top = True
     fieldsets = (
         ('О заказе', {
             'fields': ('id', 'status', 'date_at', 'date_up', 'delivery_type')
@@ -39,11 +42,11 @@ class OrderAdmin(admin.ModelAdmin):
             'fields': ('for_user', 'get_full_name')
         }),
         ('Адрес доставки', {
-            'fields': ('postal_code', 'country', 'region', 'city', 'address', 'phone_number',)
+            'fields': ('postal_code', 'country', 'region', 'city', 'address',
+                       'phone_number',)
         }),
     )
     # paginator = 10
-    save_on_top = True
 
     def get_full_name(self, obj):
         return obj.for_user.get_full_name()

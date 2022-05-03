@@ -17,41 +17,50 @@
 
             {% for item in cart %}
             {% with good=item.product %}
+
             <div class="dropdown-cart-products">
                 <div class="product">
                     <div class="product-details">
                         <h4 class="product-title">
                             <a href="{{ item.product.get_absolute_url }}">{{ good }}</a>
                         </h4>
-                        <span class="cart-product-info"><span class="cart-product-qty">{{ item.quantity }} х {{ item.price }}</span></span>
+                        <span class="cart-product-info"><span class="cart-product-qty">{{ item.quantity }} х
+                            {{ item.price }} руб. </span></span>
                     </div>
 
                     <figure class="product-image-container">
+
                         {% if good.images_for_goods.all %}
                         {% for photo in good.images_for_goods.all %}
                         {% if forloop.counter == 1 %}
+
                         <a href="{{ good.get_absolute_url }}">
                             <img src="{{ photo.photo.url }}" width="150">
                         </a>
+
                         {% endif %}
                         {% endfor %}
 
                         {% else %}
+
                         <a href="{{ item.product.get_absolute_url }}">
                             <img src="{% static 'assets/images/photo_net.jpg' %}" width="150">
                         </a>
+
                         {% endif %}
+
                         <a href="{% url 'orders:cart_remove' good.id %}" class="btn-remove icon-cancel"
                            title="Удалить из корзины"></a>
-                    </figure>
 
+                    </figure>
                 </div>
             </div>
+
             {% endwith %}
             {% endfor %}
 
             <div class="dropdown-cart-total">
-                <span>Всего</span><span class="cart-total-price float-right">{{ cart.get_total_price }}</span>
+                <span>Всего</span><span class="cart-total-price float-right">{{ cart.get_total_price }} руб.</span>
             </div>
 
             <div class="dropdown-cart-action">

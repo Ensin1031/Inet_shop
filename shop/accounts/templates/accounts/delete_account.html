@@ -27,6 +27,7 @@
                 <p>Удалив аккаунт в нашем магазине, Вы потеряете все личные данные и информацию о заказах.</p>
 
                 <form action="{% url 'delete' %}" method="post">
+
                     {% csrf_token %}
 
                     <div class="form-footer-right">
