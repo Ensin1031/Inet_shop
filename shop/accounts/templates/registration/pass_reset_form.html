@@ -26,7 +26,9 @@
                 <div class="heading">
                     <h2 class="title">Сброс пароля</h2>
                     <p>Введите адрес электронной почты, с которым Вы регистрировались в нашем магазине.</p>
+
                     <form action="{% url 'password_reset' %}" method="post">
+
                         {% csrf_token %}
 
                         {% bootstrap_form_errors form type='fields' %}
@@ -35,6 +37,7 @@
                         <div class="form-footer">
                             <button type="submit" class="btn btn-primary">Сбросить пароль</button>
                         </div>
+
                     </form>
                 </div>
             </div>

@@ -1,8 +1,8 @@
+from autoslug import AutoSlugField
+from django.core import validators
 from django.db import models
 from django.urls import reverse
 from uuslug import uuslug
-from autoslug import AutoSlugField
-from django.core import validators
 
 from shopping.models import BrandNameDB, CategoryDB
 
@@ -16,7 +16,9 @@ def slugify_value(value):
 
 
 class PromotionDB(models.Model):
-    """doc string"""
+
+    """Model class PromotionDB to save new promotions to database"""
+
     promo_title = models.CharField(
             max_length=30,
             verbose_name='Название акции'

@@ -1,6 +1,6 @@
-from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView, \
     PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.urls import path
 
 from .views import *
 
@@ -23,9 +23,8 @@ urlpatterns = [
             template_name='registration/pass_reset_confirm.html'
     ), name='password_reset_confirm'),
     path('my_account/profile/', ChangeUserInfoView.as_view(), name='profile'),
-    path('my_account/reviews/', ReviewUserView.as_view(),
-         name='reviews'),
     path('my_account/orders/', OrderUserView.as_view(), name='orders'),
+    path('my_account/reviews/', ReviewUserView.as_view(), name='reviews'),
     path('my_account/delete/', DeleteUserView.as_view(), name='delete'),
     path('my_account/', MyAccountView.as_view(), name='my_account'),
 ]

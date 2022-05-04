@@ -9,13 +9,9 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import os
-from pathlib import Path
-
-import django_redis.cache
 from decouple import config
-
-import django.core.mail.backends.smtp
+from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,7 +28,6 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -102,11 +97,8 @@ CASHES = {
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('NAME'),
         'USER': config('USER'),
@@ -115,7 +107,6 @@ DATABASES = {
         'PORT': config('PORT', default=5432)
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -135,11 +126,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Authorization settings
+
+AUTH_USER_MODEL = 'accounts.ShopUser' # используемая модель пользователя
+
+LOGIN_URL = '/accounts/login/' # путь авторизации
+
+LOGIN_REDIRECT_URL = '/' # путь редиректа при входе в аккаунт
+
+LOGOUT_REDIRECT_URL = '/' # путь редиректа при выходе из аккаунта
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'ru'    # 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -164,6 +164,8 @@ STATICFILES_DIRS = [                           # переменная со сп�
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Media files (photos)
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')    # указываем корневой каталог для медиа файлов
 
 MEDIA_URL = '/media/'   # нужен для построения пути при загрузке файлов
@@ -172,17 +174,12 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 SITE_ID = 1
 
+
+# Email settings
+
 ADMINS = [('admin', 'admin@gmail.com'), ]
 
 SERVER_EMAIL = 'root@localhost'
-
-AUTH_USER_MODEL = 'accounts.ShopUser' # используемая модель пользователя
-
-LOGIN_URL = '/accounts/login/' # путь авторизации
-
-LOGIN_REDIRECT_URL = '/' # путь редиректа при входе в аккаунт
-
-LOGOUT_REDIRECT_URL = '/' # путь редиректа при выходе из аккаунта
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # класс-отправитель писем по протоколу SMTP
 
@@ -190,10 +187,13 @@ DEFAULT_FROM_EMAIL = 'webmaster@localhost' # email отправителя (по 
 
 EMAIL_HOST = 'localhost'
 #TODO --> 1025
-EMAIL_PORT = 1025 # номер TCP-порта (в cmd запустить: python -m smtpd -n -c DebuggingServer localhost:1025,
-                  # для активации пользователя запустить ссылку из терминала http://localhost:8000/accounts/register/activate/username:...)
+EMAIL_PORT = 1025
+# номер TCP-порта (в cmd запустить: python -m smtpd -n -c DebuggingServer localhost:1025,
+# для активации пользователя запустить ссылку из терминала http://localhost:8000/accounts/register/activate/username:...)
+
 
 # celery -A shop worker -l INFO -P eventlet
+# Celery settings
 
 BROKER_URL = 'redis://localhost:6379/0'
 

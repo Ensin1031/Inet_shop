@@ -27,17 +27,12 @@
                 {% for review in reviews %}
 
                 <li class="comment-container">
-
                     <div class="comment-box">
-                        <a href="{{ review.get_absolute_url }}">{{ review.good.title }}</a><br>
+                        <a href="{{ review.get_absolute_url }}"><h4>{{ review.good.title }}</h4></a>
                         <div class="ratings-container">
-                            <div class="product-ratings"><span class="ratings" style="width:{{ review.review_rating }}%"></span>
+                            <div class="product-ratings"><span class="ratings"
+                                                               style="width:{{ review.review_rating }}%"></span>
                             </div>
-                        </div>
-
-                        <div class="comment-info mb-1">
-                            <h4 class="avatar-name">Автор: {{ review.user_name }}</h4> - <span
-                                class="comment-date">{{ review.date_at_review | date:"d E Y  H:i" }}</span>
                         </div>
 
                         <div class="comment-info mb-1">
@@ -45,16 +40,21 @@
                         </div>
 
                         <div class="comment-text">
-                            <p>
-                                {{ review.review_text | truncatechars:120 }}
-                            </p>
+                            <p>{{ review.review_text | truncatechars:120 }}</p>
+                        </div>
+
+                        <div class="comment-info mb-1">
+                            <p class="avatar-name">{{ review.user_name }}</p> - <span
+                                class="comment-date">{{ review.date_at_review | date:"d E Y  H:i" }}</span>
                         </div>
                     </div>
                 </li>
 
                 {% empty %}
+
                 <p>Вы еще не оставили отзывы к товарам.</p>
                 <p><a href="{% url 'shopping' %}"><strong>Перейти в магазин</strong></a></p>
+
                 {% endfor %}
 
             </div>

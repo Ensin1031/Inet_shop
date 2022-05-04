@@ -1,9 +1,11 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class ShopUser(AbstractUser):
-    """"""
+
+    """Model class ShopUser to save new users to database"""
+
     middle_name = models.CharField(
             max_length=150,
             blank=True,
@@ -28,4 +30,6 @@ class ShopUser(AbstractUser):
         return full_name.strip()
 
     class Meta(AbstractUser.Meta):
-        pass
+        verbose_name = 'Пользователь(я)'
+        verbose_name_plural = 'Пользователи(ей)'
+        ordering = ('-date_joined',)

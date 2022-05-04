@@ -1,16 +1,15 @@
-from django.db.models import F
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import F, Prefetch
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.http import require_POST
-from django.views.generic import DetailView, CreateView, \
-    TemplateView
+from django.views.generic import DetailView, CreateView, TemplateView
 
 from .cart import Cart
 from .forms import CartAddProductForm, OrderCreateForm
 from .models import OrderDB, OrderItemDB
-from shopping.models import GoodsDB
 from .tasks import send_admin_mail
+from shopping.models import GalleryDB, GoodsDB
 
 
 @require_POST
@@ -63,7 +62,7 @@ class OrderCreate(LoginRequiredMixin, CreateView):
         if len(cart) > 0:
             form.instance.for_user = self.request.user
             order = form.save()
-            send_admin_mail.delay(order.id)
+            send_admin_mail.delay(order.id, order.for_user.id)
             for item in cart:
                 OrderItemDB.objects.create(order=order,
                                            product=item['product'],
@@ -84,17 +83,23 @@ class OrderCreate(LoginRequiredMixin, CreateView):
 
 
 class OrderCreated(LoginRequiredMixin, DetailView):
-    """"""
+
+    """Class View to created order information"""
+
     model = OrderDB
     template_name = 'orders/order_created.html'
-    context_object_name = 'orders'
+    context_object_name = 'order'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['order_items'] = OrderItemDB.objects.filter(order__pk=self.kwargs.get('pk'))
+        context['order_items'] = OrderItemDB.objects.filter(
+                order__pk=self.kwargs.get('pk')
+        ).select_related('order', 'product').prefetch_related(
+                Prefetch('product__images_for_goods',
+                         queryset=GalleryDB.objects.all())
+        )
         return context
 
     def get_queryset(self):
         queryset = OrderDB.objects.filter(pk=self.kwargs.get('pk'))
         return queryset
-
