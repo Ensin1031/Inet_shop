@@ -10,7 +10,7 @@
 
         {% recursetree categories %}
 
-        <li><a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+        <li><a href="{{ node.get_absolute_url }}"><strong>{{ node.title }}</strong></a>
 
             {% if not node.is_leaf_node %}
 
@@ -35,7 +35,7 @@
     <ul class="submenu">
         {% for brand in brands %}
 
-        <li><a href="{{ brand.get_absolute_url }}">{{ brand.title }}</a></li>
+        <li><a href="{{ brand.get_absolute_url }}"><strong>{{ brand.title }}</strong></a></li>
 
         {% endfor %}
     </ul>
