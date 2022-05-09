@@ -91,14 +91,14 @@ class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         return get_object_or_404(queryset, pk=self.user_id)
 
 
-# TODO пагинатор
 class OrderUserView(LoginRequiredMixin, ListView):
 
     """Class View to user orders"""
 
-    model = ShopUser
+    model = OrderDB
     template_name = 'accounts/my_orders.html'
-    # paginate_by = 6
+    context_object_name = 'orders'
+    paginate_by = 6
 
     def setup(self, request, *args, **kwargs):
         self.user_id = request.user.pk
@@ -109,19 +109,20 @@ class OrderUserView(LoginRequiredMixin, ListView):
             queryset = self.get_queryset()
         return get_object_or_404(queryset, pk=self.user_id)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['orders'] = OrderDB.objects.filter(for_user__pk=self.user_id)
-        return context
+    def get_queryset(self):
+        queryset = OrderDB.objects.filter(for_user__pk=self.user_id
+                                          ).prefetch_related('items')
+        return queryset
 
 
-# TODO пагинатор
 class ReviewUserView(LoginRequiredMixin, ListView):
 
     """Class View to user reviews"""
 
-    model = ShopUser
+    model = ReviewsDB
     template_name = 'accounts/my_reviews.html'
+    context_object_name = 'reviews'
+    paginate_by = 4
 
     def setup(self, request, *args, **kwargs):
         self.user_id = request.user.pk
@@ -132,11 +133,10 @@ class ReviewUserView(LoginRequiredMixin, ListView):
             queryset = self.get_queryset()
         return get_object_or_404(queryset, pk=self.user_id)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['reviews'] = ReviewsDB.objects.filter(
+    def get_queryset(self):
+        queryset = ReviewsDB.objects.filter(
                 user_name__pk=self.user_id).select_related('user_name', 'good')
-        return context
+        return queryset
 
 
 class DeleteUserView(LoginRequiredMixin, DeleteView):
