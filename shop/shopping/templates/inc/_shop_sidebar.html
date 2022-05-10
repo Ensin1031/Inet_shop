@@ -1,6 +1,7 @@
 {% load static %}
 {% load static mptt_tags %}
 {% load shopping_tags %}
+{% load index_tags %}
 
 <div class="sidebar-wrapper">
     <div class="widget">
@@ -29,48 +30,42 @@
             <a data-toggle="collapse" href="#widget-body-2" role="button" aria-expanded="true"
                aria-controls="widget-body-2">Категории</a>
         </h3>
-
         <div class="collapse show" id="widget-body-2">
+
             <div class="widget-body">
 
-                {% comment %}
-                <ul>
-                    {% recursetree category %}
-                    <li>
-                        <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                {% recursetree category %}
+
+                <ul class="menu">
+                    <li class="active">
+                        {% if node.level == 0 %}
+                        <a>{{ node.title }}</a>
+                        <div class="megamenu" style="border-top:None; width:300px;">
+                            {% for item in category %}
+                            {% if item.parent_id == node.id %}
+                            <br>
+                            <h5>
+                                <a href="{{item.get_absolute_url }}">
+                                    <span>{{ item.title }}  :</span>
+                                    <span>( {{ item.cnt }} )</span>
+                                </a>
+
+                            </h5>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
                         {% if not node.is_leaf_node %}
-                        <ul class="children">
+                        <ul class="submenu">
                             {{ children }}
                         </ul>
                         {% endif %}
-                    </li>
-                    {% endrecursetree %}
-                </ul>
-                {% endcomment %}
 
-                <ul class="submenu">
-                    {% recursetree category %}
-                    <li>
-                        <a href="{{ node.get_absolute_url }}">
-                            <h6>
-                                <span>{{ node.title }}</span>
-                                <span class="fa fa-angle-right"></span>
 
-                                {% for item in category %}
-                                {% if item == node %}
-                                ( {{ item.cnt }} )
-                                {% endif %}
-                                {% endfor %}
-                            </h6>
-                        </a>
-                        {% if not node.is_leaf_node %}
-                        <ul class="children">
-                            {{ children }}
-                        </ul>
-                        {% endif %}
                     </li>
-                    {% endrecursetree %}
                 </ul>
+                {% endrecursetree %}
 
             </div><!-- End .widget-body -->
         </div><!-- End .collapse -->
@@ -169,7 +164,7 @@
         </div><!-- End .widget-body -->
     </div><!-- End .widget -->
 
-<!--TODO текстовая панелька-->
+    <!--TODO текстовая панелька-->
     <div class="widget widget-block">
         <h3 class="widget-title">Мы работаем ради вас</h3>
         <h5>Немного о нас.</h5>
