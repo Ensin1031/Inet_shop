@@ -186,7 +186,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # класс-от�
 DEFAULT_FROM_EMAIL = 'webmaster@localhost' # email отправителя (по умолчанию)
 
 EMAIL_HOST = 'localhost'
-#TODO --> 1025
+
 EMAIL_PORT = 1025
 # номер TCP-порта (в cmd запустить: python -m smtpd -n -c DebuggingServer localhost:1025,
 # для активации пользователя запустить ссылку из терминала http://localhost:8000/accounts/register/activate/username:...)

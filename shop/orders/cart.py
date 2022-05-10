@@ -2,7 +2,7 @@ from decimal import Decimal
 from django.conf import settings
 
 from shopping.models import GoodsDB, GalleryDB
-from shopping.get_func import new_price, get_promo
+from shopping.get_func import get_promo
 
 
 class Cart(object):
@@ -57,7 +57,7 @@ class Cart(object):
         if product_id not in self.cart:     # делаем преобразование в JSON
             self.cart[product_id] = {
                 'quantity': 0,
-                'price': str(new_price(good.price, get_promo(good))),
+                'price': str(round(good.price * get_promo(good), 2)),
             }
         if update_quantity:     # преобразуем количество единиц товара в корзине
             self.cart[product_id]['quantity'] = quantity

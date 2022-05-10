@@ -17,7 +17,7 @@ def slugify_value(value):
 
 
 class BrandNameDB(models.Model):
-    '''list of manufacturers of goods'''
+    """list of manufacturers of goods"""
     title = models.CharField(max_length=250, verbose_name='Производитель')
     slug = AutoSlugField(max_length=250, db_index=True, unique=True, verbose_name='URL Производителя',
                          populate_from=instance_slug, slugify=slugify_value)
@@ -39,7 +39,7 @@ class BrandNameDB(models.Model):
 
 
 class CategoryDB(MPTTModel):
-    '''The model of category.'''
+    """The model of category."""
     title = models.CharField(max_length=100, unique=True, verbose_name='Категория', )
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='child_category',
                             verbose_name='Назначьте родительскую категорию', )
@@ -64,11 +64,10 @@ class CategoryDB(MPTTModel):
         verbose_name = 'Категория(ю)'
         verbose_name_plural = 'Категории(ий)'
         ordering = ('title',)
-        # index_together = ('pk', 'slug',)
 
 
 class ReviewsDB(models.Model):
-    '''Model of Reviews for godds'''
+    """Model of Reviews for goods"""
     UGLI = '20'
     NO_GOOD = '40'
     NORMAL = '60'
@@ -119,9 +118,6 @@ class GalleryDB(models.Model):
         self.slug = uuslug(str(self.photo), instance=self)
         super(GalleryDB, self).save(*args, **kwargs)
 
-    # def get_absolute_url(self):
-    #     return reverse('show_image', kwargs={'slug': self.slug})
-
     def __str__(self):
         return str(self.photo)
 
@@ -131,7 +127,7 @@ class GalleryDB(models.Model):
 
 
 class GoodsDB(models.Model):
-    '''Model of goods'''
+    """Model of goods"""
     title = models.CharField(max_length=255, verbose_name='Наименование товара')
     brand = models.ForeignKey(BrandNameDB, on_delete=models.PROTECT, related_name='brand_good',
                               verbose_name='Производитель')

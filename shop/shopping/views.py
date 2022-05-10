@@ -147,9 +147,3 @@ class ShowAllGoods(ListView):
             return self.data_goods.sort_by_price_desc
         else:
             return queryset
-
-#
-# def show_image(request, slug):
-#     """тестовая функция просмотра картинки"""
-#     return render(request, 'shopping/del_show_image.html', {'hello': f'Hello, image {slug}!'})
-#
