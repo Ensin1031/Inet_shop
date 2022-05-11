@@ -4,25 +4,16 @@
 
 
 {% block title %}
-Basket: Корзина  :: {{ block.super }}
+
+Оформление заказа  :: {{ block.super }}
+
 {% endblock %}
 
 {% block content %}
 
 
-{% comment %}
-{{ request.path|urlencode }}
-
-{% for item in cart %}
-<p>
-    {{ item }}
-</p>
-{% endfor %}
-{% endcomment %}
-
 <div class="page-wrapper">
     <main class="main">
-<!--TODO доналадить бредкрамп-->
         <nav aria-label="breadcrumb" class="breadcrumb-nav">
             <div class="container">
                 <ol class="breadcrumb">
@@ -42,19 +33,19 @@ Basket: Корзина  :: {{ block.super }}
                         <li>
                             <h2 class="step-title">Адрес доставки заказа</h2>
 
-
                             <form action="." method="post">
+
                                 {% csrf_token %}
+
                                 {% bootstrap_form_errors form type='fields' %}
                                 {% bootstrap_form form layout='inline' %}
+
                                 <button type="submit" class="btn btn-primary btn-block">Оформить заказ</button>
                             </form>
 
-
                         </li>
-
                     </ul>
-                </div><!-- End .col-lg-8 -->
+                </div>
 
                 <div class="col-lg-4">
                     <div class="order-summary">
@@ -62,7 +53,8 @@ Basket: Корзина  :: {{ block.super }}
 
                         <h4>
                             <a data-toggle="collapse" href="#order-cart-section" class="collapsed" role="button"
-                               aria-expanded="false" aria-controls="order-cart-section">{{ cart|length }} продукта(ов) в корзине</a>
+                               aria-expanded="false" aria-controls="order-cart-section">
+                                {{ cart|length }} товара(ов) в корзине</a>
                         </h4>
 
                         <div class="collapse" id="order-cart-section">
@@ -71,37 +63,50 @@ Basket: Корзина  :: {{ block.super }}
 
                                 {% for item in cart %}
                                 {% with good=item.product %}
+
                                 <tr>
                                     <td class="product-col">
                                         <figure class="product-image-container">
+
                                             {% if good.images_for_goods.all %}
+
                                             <figure class="product-image-container">
+
                                                 {% for photo in good.images_for_goods.all %}
                                                 {% if forloop.counter == 1 %}
+
                                                 <a href="{{ good.get_absolute_url }}">
                                                     <img src="{{ photo.photo.url }}" width="150">
                                                 </a>
+
                                                 {% endif %}
                                                 {% endfor %}
+
                                             </figure>
+
                                             {% else %}
+
                                             <figure class="product-image-container">
                                                 <a href="{% url 'orders:orders_index' %}">
                                                     <img src="{% static 'assets/images/photo_net.jpg' %}" width="150">
                                                 </a>
                                             </figure>
+
                                             {% endif %}
+
                                         </figure>
+
                                         <div>
                                             <h2 class="product-title">
                                                 <a href="{% url 'orders:orders_index' %}">{{ good.title }}</a>
                                             </h2>
-
                                             <span class="product-qty">Количество: {{ item.quantity }}</span>
                                         </div>
+
                                     </td>
-                                    <td class="price-col">{{ item.total_price }} y.e.</td>
+                                    <td class="price-col">{{ item.total_price }} руб.</td>
                                 </tr>
+
                                 {% endwith %}
                                 {% endfor %}
 
@@ -113,18 +118,18 @@ Basket: Корзина  :: {{ block.super }}
                                             </h1>
                                         </div>
                                     </td>
-                                    <td class="price-col">{{ cart.get_total_price }} y.e.</td>
+                                    <td class="price-col">{{ cart.get_total_price }} руб.</td>
                                 </tr>
                                 </tbody>
-
                             </table>
 							<div class="checkout-methods">
-								<a href="{% url 'orders:orders_index' %}" class="btn btn-block btn-sm btn-primary">Редактировать заказ</a>
-							</div><!-- End .checkout-methods -->
-                        </div><!-- End #order-cart-section -->
-                    </div><!-- End .order-summary -->
-                </div><!-- End .col-lg-4 -->
-            </div><!-- End .row -->
+								<a href="{% url 'orders:orders_index' %}" class="btn btn-block btn-sm btn-primary">
+                                    Редактировать заказ</a>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </div>

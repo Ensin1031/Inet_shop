@@ -5,14 +5,14 @@
 {% load widget_tweaks %}
 
 {% block title %}
+
 Магазин :: {{ block.super }}
+
 {% endblock %}
 
 {% block content %}
 
 <main class="main">
-
-
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
@@ -27,12 +27,8 @@
         </div>
     </nav>
 
-
     <div class="container mb-3">
         <div class="row">
-
-
-
             <div class="col-lg-9 main-content">
 
                 {% include 'inc/_nav_toolbox.html' %}
@@ -45,19 +41,14 @@
                     {% include 'inc/_body_grid.html' %}
                 {% endif %}
 
-
                 <nav class="toolbox toolbox-pagination">
-
                     <div class="toolbox-left">
-                        {# include 'inc/_nav_toolbox.html' #}
-                    </div><!-- End .toolbox-left -->
+                    </div>
 
                     {% include 'inc/_shop_pag.html' %}
 
                 </nav>
-
-
-            </div><!-- End .col-lg-9 -->
+            </div>
 
             <div class="sidebar-overlay"></div>
             <div class="sidebar-toggle"><i class="fas fa-sliders-h"></i></div>
@@ -65,9 +56,9 @@
 
                 {% show_sidebar request %}
 
-            </aside><!-- End .col-lg-3 -->
-        </div><!-- End .row -->
-    </div><!-- End .container -->
-</main><!-- End .main -->
+            </aside>
+        </div>
+    </div>
+</main>
 
 {% endblock %}

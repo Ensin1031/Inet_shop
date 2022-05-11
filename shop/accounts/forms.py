@@ -7,8 +7,9 @@ from .tasks import send_activation_mail
 
 
 class RegisterUserForm(forms.ModelForm):
-
-    """User registration form class"""
+    """
+    User registration form
+    """
 
     email = forms.EmailField(
             required=True,
@@ -71,8 +72,9 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class ChangeUserInfoForm(forms.ModelForm):
-
-    """Form class for updating user personal data"""
+    """
+    Form for updating user personal data
+    """
 
     email = forms.EmailField(
             required=True,
@@ -93,4 +95,3 @@ class ChangeUserInfoForm(forms.ModelForm):
         model = ShopUser
         fields = ('username', 'email', 'first_name',
                   'middle_name', 'last_name')
-

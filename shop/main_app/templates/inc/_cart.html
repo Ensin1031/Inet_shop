@@ -22,10 +22,11 @@
                 <div class="product">
                     <div class="product-details">
                         <h4 class="product-title">
-                            <a href="{{ item.product.get_absolute_url }}">{{ good }}</a>
+                            <a href="{{ good.get_absolute_url }}">{{ good }}</a>
                         </h4>
-                        <span class="cart-product-info"><span class="cart-product-qty">{{ item.quantity }} х
-                            {{ item.price }} руб. </span></span>
+                        <span class="cart-product-info"><span class="cart-product-qty">
+                            {{ item.quantity }} х {{ item.price }} руб.
+                        </span></span>
                     </div>
 
                     <figure class="product-image-container">
@@ -43,7 +44,7 @@
 
                         {% else %}
 
-                        <a href="{{ item.product.get_absolute_url }}">
+                        <a href="{{ good.get_absolute_url }}">
                             <img src="{% static 'assets/images/photo_net.jpg' %}" width="150">
                         </a>
 

@@ -5,8 +5,9 @@ from .models import PromotionDB
 
 
 class PromotionForm(forms.ModelForm):
-
-    """Form class for validating model fields"""
+    """
+    Form for validating model fields
+    """
 
     class Meta:
         model = PromotionDB
@@ -18,6 +19,7 @@ class PromotionForm(forms.ModelForm):
         errors = {}
         category = self.cleaned_data.get('category')
         brand = self.cleaned_data.get('brand')
+
         if not category and not brand:
             errors[NON_FIELD_ERRORS] = ValidationError(
                     'В акции должна быть указана хотя бы одна '

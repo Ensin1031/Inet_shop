@@ -17,8 +17,9 @@ from shopping.models import ReviewsDB
 
 
 class RegisterUserView(CreateView):
-
-    """Class View for registration new user"""
+    """
+    Class for registration of new users
+    """
 
     model = ShopUser
     template_name = 'registration/register.html'
@@ -27,22 +28,26 @@ class RegisterUserView(CreateView):
 
 
 class RegisterDoneView(TemplateView):
-
-    """Class View for registered users"""
+    """
+    Class for notification of registered users
+    """
 
     template_name = 'registration/register_done.html'
 
 
 def user_activate(request, sign):
-
-    """Function to determine the result of user activation
-    and user status change"""
+    """
+    The function to determine the result of user activation
+    and user status change
+    """
 
     try:
         username = signer.unsign(sign)
     except BadSignature:
         return render(request, 'registration/bad_signature.html')
+
     user = get_object_or_404(ShopUser, username=username)
+
     if user.is_activated:
         template = 'registration/user_is_activated.html'
     else:
@@ -54,8 +59,9 @@ def user_activate(request, sign):
 
 
 class ShopPasswordResetView(PasswordResetView):
-
-    """Class View to reset user password"""
+    """
+    Class to reset user password
+    """
 
     template_name = 'registration/pass_reset_form.html'
     subject_template_name = 'email/pass_reset_subject.txt'
@@ -65,15 +71,17 @@ class ShopPasswordResetView(PasswordResetView):
 
 
 class MyAccountView(LoginRequiredMixin, TemplateView):
-
-    """Class View to user account"""
+    """
+    Class to display user account
+    """
 
     template_name = 'accounts/account.html'
 
 
 class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
-
-    """Class View to update user personal data"""
+    """
+    Class to update user personal data
+    """
 
     model = ShopUser
     template_name = 'accounts/profile.html'
@@ -92,8 +100,9 @@ class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
 
 class OrderUserView(LoginRequiredMixin, ListView):
-
-    """Class View to user orders"""
+    """
+    Class to display user's orders
+    """
 
     model = OrderDB
     template_name = 'accounts/my_orders.html'
@@ -110,14 +119,15 @@ class OrderUserView(LoginRequiredMixin, ListView):
         return get_object_or_404(queryset, pk=self.user_id)
 
     def get_queryset(self):
-        queryset = OrderDB.objects.filter(for_user__pk=self.user_id
-                                          ).prefetch_related('items')
+        queryset = OrderDB.objects.filter(for_user__pk=self.user_id)\
+            .prefetch_related('items')
         return queryset
 
 
 class ReviewUserView(LoginRequiredMixin, ListView):
-
-    """Class View to user reviews"""
+    """
+    Class to display user's reviews
+    """
 
     model = ReviewsDB
     template_name = 'accounts/my_reviews.html'
@@ -134,14 +144,15 @@ class ReviewUserView(LoginRequiredMixin, ListView):
         return get_object_or_404(queryset, pk=self.user_id)
 
     def get_queryset(self):
-        queryset = ReviewsDB.objects.filter(
-                user_name__pk=self.user_id).select_related('user_name', 'good')
+        queryset = ReviewsDB.objects.filter(user_name__pk=self.user_id)\
+            .select_related('user_name', 'good')
         return queryset
 
 
 class DeleteUserView(LoginRequiredMixin, DeleteView):
-
-    """Class View to delete user"""
+    """
+    Class to delete user
+    """
 
     model = ShopUser
     template_name = 'accounts/delete_account.html'

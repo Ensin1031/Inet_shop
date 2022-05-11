@@ -3,8 +3,9 @@ from django.db import models
 
 
 class ShopUser(AbstractUser):
-
-    """Model class ShopUser to save new users to database"""
+    """
+    Model ShopUser to save new users to database
+    """
 
     middle_name = models.CharField(
             max_length=150,

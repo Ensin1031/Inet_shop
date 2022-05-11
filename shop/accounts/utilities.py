@@ -7,8 +7,9 @@ signer = Signer()
 
 
 def send_activation_notification(user):
-
-    """The function of forming and sending mails to activate the user"""
+    """
+    The function of creation and sending of activation mails to the user
+    """
 
     if ALLOWED_HOSTS:
         host = 'http://' + ALLOWED_HOSTS[0]

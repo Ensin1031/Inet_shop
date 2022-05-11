@@ -1,5 +1,6 @@
-from celery import Celery
 from django.conf import settings
+
+from celery import Celery
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'shop.settings')

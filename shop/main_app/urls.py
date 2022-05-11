@@ -3,7 +3,6 @@ from django.urls import path
 
 from .views import MainPageView, PromotionView
 
-
 urlpatterns = [
     path('', MainPageView.as_view(), name='index'),
     path('about/', views.flatpage, {'url': '/about/'}, name='about'),

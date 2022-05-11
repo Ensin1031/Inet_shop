@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 
-
 from .forms import PromotionForm
 from .models import PromotionDB
 
@@ -44,5 +43,3 @@ class PromotionAdmin(admin.ModelAdmin):
         return obj.get_brand()
 
     get_brand.short_description = 'Производитель'
-
-

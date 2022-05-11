@@ -1,7 +1,6 @@
 from django.urls import path
 
-from .views import *
-
+from .views import ShowAllGoods, ShowGood, shopping_search
 
 urlpatterns = [
     path('', ShowAllGoods.as_view(), name='shopping'),
@@ -9,5 +8,6 @@ urlpatterns = [
     path('category/<str:slug_cat>/', ShowAllGoods.as_view(), name='category'),
     path('brand/<str:slug_brand>/', ShowAllGoods.as_view(), name='brand'),
     path('search/', shopping_search, name='pre_search'),
-    path('search_"<str:search_result>"/', ShowAllGoods.as_view(), name='search_result'),
+    path('search_"<str:search_result>"/', ShowAllGoods.as_view(),
+         name='search_result'),
 ]

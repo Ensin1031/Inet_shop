@@ -1,13 +1,16 @@
+from django.db.models import Q
 from django.views.generic import TemplateView
 
+from main_app.models import PromotionDB
 from orders.cart import Cart
-from shopping.get_func import *
+from shopping.models import GoodsDB
 from shopping.views import ShowAllGoods
 
 
 class MainPageView(TemplateView):
-
-    """Class View for displaying the main page"""
+    """
+    Class to display the main page
+    """
 
     model = GoodsDB
     template_name = 'main_app/index.html'
@@ -23,8 +26,9 @@ class SearchGoodView(ShowAllGoods):
 
 
 class CartShowView(TemplateView):
-
-    """Class View for displaying the cart"""
+    """
+    Class to display the cart
+    """
 
     template_name = 'inc/_cart.html'
 
@@ -36,8 +40,9 @@ class CartShowView(TemplateView):
 
 
 class PromotionView(ShowAllGoods):
-
-    """Class View for viewing promotion goods"""
+    """
+    Class to display promotion goods
+    """
 
     model = GoodsDB
 

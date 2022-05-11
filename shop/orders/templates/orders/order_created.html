@@ -67,7 +67,7 @@
 
                             <div>
 
-                                <a href="{{ good.get_absolute_url }}"><strong>{{ good.title }}</strong></a>
+                                <a href="{{ good.get_absolute_url }}"><strong>{{ good.title | truncatechars:10 }}</strong></a>
 
                             </div>
                         </div>
