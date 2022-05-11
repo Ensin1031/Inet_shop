@@ -9,8 +9,9 @@ from shopping.models import ReviewsDB
 
 
 def send_activation_mails(modeladmin, request, queryset):
-
-    """The function of sending mails for activation to non-activated users"""
+    """
+    The function for sending of activation mails to non-activated users
+    """
 
     for rec in queryset:
         if not rec.is_activated:
@@ -22,8 +23,7 @@ send_activation_mails.short_description = 'Отправка писем для а
 
 
 class NonactivatedFilter(admin.SimpleListFilter):
-
-    """Class of user filter by status (activated, non-activated)"""
+    """Class of user filter by status (activated or non-activated)"""
 
     title = 'Прошли активацию?'
     parameter_name = 'actstate'
@@ -76,10 +76,10 @@ class ShopUserAdmin(admin.ModelAdmin):
     list_filter = (NonactivatedFilter,)
     actions = (send_activation_mails,)
     fields = (
-                ('username', 'email'),
-                ('first_name', 'middle_name', 'last_name'),
-                ('is_active', 'is_activated'),
-                ('is_staff', 'is_superuser'),
-                ('last_login', 'date_joined'),
+        ('username', 'email'),
+        ('first_name', 'middle_name', 'last_name'),
+        ('is_active', 'is_activated'),
+        ('is_staff', 'is_superuser'),
+        ('last_login', 'date_joined'),
     )
     save_on_top = True

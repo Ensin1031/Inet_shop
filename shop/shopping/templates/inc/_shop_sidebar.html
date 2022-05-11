@@ -14,16 +14,16 @@
 
             <div class="widget-body">
                 <form action="{% url 'pre_search' %}" method="get">
+
                     {% csrf_token %}
+
                     <input type="text" name="search_shop" placeholder="Поиск...">
                     <input type="text" name="next" value="{{ request.path|urlencode }}" style="display: none;">
                     <input type="submit" value="Поиск">
                 </form>
-            </div><!-- End .widget-body -->
-
-        </div><!-- End .collapse -->
-
-    </div><!-- End .widget -->
+            </div>
+        </div>
+    </div>
 
     <div class="widget">
         <h3 class="widget-title">
@@ -38,22 +38,29 @@
 
                 <ul class="menu">
                     <li class="active">
+
                         {% if node.level == 0 %}
+
                         <a>{{ node.title }}</a>
                         <div class="megamenu" style="border-top:None; width:300px;">
+
                             {% for item in category %}
                             {% if item.parent_id == node.id %}
+
                             <br>
-                            <h5>
-                                <a href="{{item.get_absolute_url }}">
+                            <h6>
+                                <a href="{{ item.get_absolute_url }}">
                                     <span>{{ item.title }}  :</span>
                                     <span>( {{ item.cnt }} )</span>
                                 </a>
 
-                            </h5>
+                            </h6>
+
                             {% endif %}
                             {% endfor %}
+
                         </div>
+
                         {% endif %}
 
                         {% if not node.is_leaf_node %}
@@ -62,53 +69,61 @@
                         </ul>
                         {% endif %}
 
-
                     </li>
                 </ul>
+
                 {% endrecursetree %}
 
-            </div><!-- End .widget-body -->
-        </div><!-- End .collapse -->
-    </div><!-- End .widget -->
+            </div>
+        </div>
+    </div>
 
     <div class="widget">
         <h3 class="widget-title">
             <a data-toggle="collapse" href="#widget-body-5" role="button" aria-expanded="true"
-               aria-controls="widget-body-5">Производители</a>
+               aria-controls="widget-body-5">Бренды</a>
         </h3>
 
         <div class="collapse show" id="widget-body-5">
             <div class="widget-body">
                 <ul class="cat-list">
+
                     {% for brand in brands %}
+
                     <li>
                         <a href="{{ brand.get_absolute_url }}">
                             <span>{{ brand }}</span>
                             <span>({{ brand.cnt }})</span>
                         </a>
                     </li>
-                    {% endfor %}
-                </ul>
-            </div><!-- End .widget-body -->
-        </div><!-- End .collapse -->
-    </div><!-- End .widget -->
 
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <div class="widget widget-featured">
         <h3 class="widget-title">Лучшее</h3>
 
         <div class="widget-body">
             <div class="owl-carousel widget-featured-products">
+
                 {% for good in goods %}
                 {% if forloop.counter == 1 %}
+
                 <div class="featured-col">{% endif %}
                     {% if forloop.counter == 4 %}
                     <div class="featured-col">{% endif %}
 
                         <div class="product-default left-details product-widget">
+
                             {% for key, value in goods_dict.items %}
                             {% if good == value.product %}
+
                             <figure>
+
                                 {% if good.images_for_goods.all %}
                                 {% for photo in good.images_for_goods.all %}
                                 {% if forloop.counter == 1 %}
@@ -116,19 +131,28 @@
                                 <a href="{{ good.get_absolute_url }}">
                                     <img src="{{ photo.photo.url }}" alt="product">
                                 </a>
+
                                 {% endif %}
                                 {% endfor %}
+
                                 {% else %}
+
                                 <a href="{{ good.get_absolute_url }}">
                                     <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">
                                 </a>
+
                                 {% endif %}
+
                                 {% if value.promo %}
+
                                 <div class="label-group">
                                     <span class="product-label label-sale">-{{ value.promo }}</span>
                                 </div>
+
                                 {% endif %}
+
                             </figure>
+
                             <div class="product-details">
                                 <h2 class="product-title">
                                     <a href="{{ value.product.get_absolute_url }}">{{ value.product }}</a>
@@ -136,41 +160,51 @@
                                 <div class="ratings-container">
                                     <div class="product-ratings">
                                         <span class="ratings" style="width:{{ value.rating }}%"></span>
-                                        <!-- End .ratings -->
                                         <span class="tooltiptext tooltip-top"></span>
-                                    </div><!-- End .product-ratings -->
-                                </div><!-- End .product-container -->
+                                    </div>
+                                </div>
                                 <div class="price-box">
+
                                     {% if value.promo %}
-                                    <span class="old-price">{{ value.product.price }} y.e.</span>
-                                    <span class="product-price">{{ value.new_price }} у.е.</span>
+
+                                    <span class="old-price">{{ value.product.price }} руб.</span>
+                                    <span class="product-price">{{ value.new_price }} руб.</span>
+
                                     {% else %}
-                                    <span class="product-price">{{ value.product.price }} у.е.</span>
+
+                                    <span class="product-price">{{ value.product.price }} руб.</span>
+
                                     {% endif %}
-                                </div><!-- End .price-box -->
-                            </div><!-- End .product-details -->
+
+                                </div>
+                            </div>
+
                             {% endif %}
                             {% endfor %}
+
                         </div>
 
                         {% if forloop.counter == 3 %}
+
                     </div>
+
                     {% endif %}
                     {% if forloop.counter == 6 %}
-                </div>
-                {% endif %}
-                {% endfor %}<!-- End .featured-col -->
-            </div><!-- End .widget-featured-slider -->
-        </div><!-- End .widget-body -->
-    </div><!-- End .widget -->
 
-    <!--TODO текстовая панелька-->
+                </div>
+
+                {% endif %}
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
     <div class="widget widget-block">
         <h3 class="widget-title">Мы работаем ради вас</h3>
         <h5>Немного о нас.</h5>
         <p>Наш интернет магазин - самый лучший интернет магазин из всех интернет магазинов, и никакие другие интернет
             магазины не переинтернетмагазинят наш интернет магазин по интернетмагазиности. </p>
         <p>И вообще, мы Главный конкурент АлиЭкспресса!.</p>
-    </div><!-- End .widget -->
-
-</div><!-- End .sidebar-wrapper -->
+    </div>
+</div>

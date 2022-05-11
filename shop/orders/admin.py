@@ -5,8 +5,9 @@ from .tasks import send_order_mail
 
 
 def send_order_mails(modeladmin, request, queryset):
-
-    """The function of sending mails about sending orders to users"""
+    """
+    The function for sending mails to users about orders dispatchment
+    """
 
     for rec in queryset:
         if rec.status != OrderDB.SENT:
@@ -46,7 +47,6 @@ class OrderAdmin(admin.ModelAdmin):
                        'phone_number',)
         }),
     )
-    # paginator = 10
 
     def get_full_name(self, obj):
         return obj.for_user.get_full_name()

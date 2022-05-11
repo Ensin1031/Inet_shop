@@ -5,7 +5,9 @@
 
 
 {% block title %}
+
 {{ good_item.title }} :: {{ block.super }}
+
 {% endblock %}
 
 {% block content %}
@@ -28,38 +30,46 @@
             <div class="row">
 
                 {% if good_item.images_for_goods.all %}
+
                 <div class="col-md-5 product-single-gallery">
                     <div class="product-slider-container">
                         <div class="product-single-carousel owl-carousel owl-theme">
 
                             {% for photo in good_item.images_for_goods.all %}
+
                             <div class="product-item">
                                 <img class="product-single-image" src="{{ photo.photo.url }}"
                                      data-zoom-image="{{ photo.photo.url }}"/>
                             </div>
+
                             {% endfor %}
 
                         </div>
-                        <!-- End .product-single-carousel -->
                         <span class="prod-full-screen">
 									<i class="icon-plus"></i>
 								</span>
                     </div>
 
                     {% if good_item.images_for_goods.count > 1 %}
+
                     <div class="prod-thumbnail owl-dots" id='carousel-custom-dots'>
 
                         {% for photo in good_item.images_for_goods.all %}
+
                         <div class="owl-dot">
                             <img src="{{ photo.photo.url }}"/>
                         </div>
+
                         {% endfor %}
 
                     </div>
+
                     {% endif %}
 
-                </div><!-- End .product-single-gallery -->
+                </div>
+
                 {% else %}
+
                 <div class="col-md-5 product-single-gallery">
                     <div class="product-slider-container">
                         <div class="product-single-carousel owl-carousel owl-theme">
@@ -68,7 +78,8 @@
                             </a>
                         </div>
                     </div>
-                </div><!-- End .product-single-gallery -->
+                </div>
+
                 {% endif %}
 
                 <div class="col-md-7 product-single-details">
@@ -76,46 +87,56 @@
 
                     <div class="ratings-container">
                         <div class="product-ratings">
-                            <span class="ratings" style="width:{{ data_good.rating }}%"></span><!-- End .ratings -->
-                        </div><!-- End .product-ratings -->
+                            <span class="ratings" style="width:{{ data_good.rating }}%"></span>
+                        </div>
 
                         <a href="#rev" class="rating-link">( Отзывы: {{ data_good.review_list | length }} )</a>
-                    </div><!-- End .ratings-container -->
+                    </div>
 
                     <hr class="short-divider">
 
                     <div class="price-box">
+
                         {% if data_good.promo %}
-                        <span class="old-price">{{ good_item.price }} у.е.</span>
-                        <span class="product-price">{{ data_good.new_price }} у.е.</span>
+
+                        <span class="old-price">{{ good_item.price }} руб.</span>
+                        <span class="product-price">{{ data_good.new_price }} руб.</span>
+
                         {% else %}
-                        <span class="product-price">{{ good_item.price }} у.е.</span>
+
+                        <span class="product-price">{{ good_item.price }} руб.</span>
+
                         {% endif %}
-                    </div><!-- End .price-box -->
+
+                    </div>
 
                     <div class="product-desc">
                         <p>
                             {{ good_item.description | truncatechars:200 | safe }}
                         </p>
-                    </div><!-- End .product-desc -->
+                    </div>
 
                     <hr class="divider">
 
                     <div class="product-action">
                         <form action="{% url 'orders:cart_add' good_item.id %}?next={{ request.path|urlencode }}"
                               method="post">
+
                             {% csrf_token %}
+
                             <div class="product-single-qty">
+
                                 {% render_field cart_product_form.quantity class="form-control" %}
-                            </div><!-- End .product-single-qty -->
+
+                            </div>
                             <input type="submit" class="btn btn-sm btn-primary" value="В корзину">
                         </form>
-                    </div><!-- End .product-action -->
+                    </div>
 
                     <hr class="divider mb-1">
-                </div><!-- End .product-single-details -->
-            </div><!-- End .row -->
-        </div><!-- End .product-single-container -->
+                </div>
+            </div>
+        </div>
 
         <div class="product-single-tabs">
             <ul class="nav nav-tabs" role="tablist">
@@ -138,8 +159,8 @@
                         <p>
                             {{ good_item.description }}
                         </p>
-                    </div><!-- End .product-desc-content -->
-                </div><!-- End .tab-pane -->
+                    </div>
+                </div>
 
                 <div class="tab-pane fade" id="product-reviews-content" role="tabpanel"
                      aria-labelledby="product-tab-reviews">
@@ -147,47 +168,59 @@
                         <div class="row">
                             <div class="col-xl-7">
                                 <h2 class="reviews-title">Отзывы на {{ good_item }}:</h2>
+
                                 {% if data_good.review_list %}
+
                                 <ol class="comment-list">
+
                                     {% for item in data_good.review_list %}
+
                                     <li class="comment-container">
                                         <div class="comment-box">
                                             <div class="ratings-container">
                                                 <div class="product-ratings">
                                                     <span class="ratings"
                                                           style="width:{{ item.review_rating }}%"></span>
-                                                    <!-- End .ratings -->
-                                                </div><!-- End .product-ratings -->
-                                            </div><!-- End .ratings-container -->
+                                                </div>
+                                            </div>
 
                                             <div class="comment-info mb-1">
                                                 <h4 class="avatar-name">
+
                                                     Автор: {{ item.user_name }}
+
                                                 </h4> - <span class="comment-date">
+
                                                 {{ item.date_at_review | date:"d E Y  H:i" }}</span>
-                                            </div><!-- End .comment-info -->
+                                            </div>
 
                                             <div class="comment-info mb-1">
-                                                <h3 class="avatar-name">Заголовок: {{ item.review_title }}</h3>
-                                            </div><!-- End .comment-info -->
+                                                <h3 class="avatar-name">"{{ item.review_title }}"</h3>
+                                            </div><
 
                                             <div class="comment-text">
                                                 <p>
                                                     {{ item.review_text | truncatewords_html:25 | safe }}
                                                 </p>
-                                            </div><!-- End .comment-text -->
-                                        </div><!-- End .comment-box -->
-                                    </li><!-- comment-container -->
+                                            </div>
+                                        </div>
+                                    </li>
+
                                     {% endfor %}
-                                </ol><!-- End .comment-list -->
+
+                                </ol>
+
                                 {% else %}
+
                                 <br>
                                 <div>
                                     <h2 class="reviews-title">
                                         На данный товар пока нет отзывов, стань первым, оцени... :)
                                     </h2>
                                 </div>
+
                                 {% endif %}
+
                             </div>
 
                             <div class="col-xl-5">
@@ -195,35 +228,36 @@
                                     <h3 class="review-title">Добавьте свой отзыв:</h3>
 
                                     {% if request.user.is_authenticated %}
+
                                     <form action="{{ good_item.get_absolute_url }}" class="comment-form m-0"
                                           method="post">
+
                                         {% csrf_token %}
+
                                         {{ form.as_p }}
+
                                         <input type="submit" class="btn btn-dark ls-n-15" value="Отправить">
                                     </form>
 
                                     {% else %}
-                                    <p>Вы не авторизованны.</p>
+
+                                    <p>Вы не авторизованы.</p>
                                     <p>Если Вы хотите оставить свой отзыв на товар:</p>
                                     <a href="{% url 'register' %}">Зарегистрируйтесь</a> | <a
                                         href="{% url 'login' %}?next={{ request.path|urlencode }}">Авторизуйтесь</a>
 
                                     {% endif %}
-                                </div><!-- End .add-product-review -->
+                                </div>
                             </div>
                         </div>
-                    </div><!-- End .product-reviews-content -->
-                </div><!-- End .tab-pane -->
-            </div><!-- End .tab-content -->
-        </div><!-- End .product-single-tabs -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {% show_band good_item %}
 
-        {% comment %}
-
-        {% endcomment %}
-
-    </div><!-- End .container -->
-</main><!-- End .main -->
+    </div>
+</main>
 
 {% endblock %}

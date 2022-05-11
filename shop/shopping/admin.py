@@ -17,7 +17,6 @@ class GalleryInLine(admin.TabularInline):
 
 @admin.register(CategoryDB)
 class CategoryAdmin(DraggableMPTTAdmin):
-    '''Show categories model in admins'''
     list_display = ('tree_actions', 'indented_title', 'slug', 'get_photo')
     list_display_links = ('indented_title',)
     readonly_fields = ('get_photo', 'slug',)
@@ -33,7 +32,6 @@ class CategoryAdmin(DraggableMPTTAdmin):
 
 @admin.register(GalleryDB)
 class GalleryAdmin(admin.ModelAdmin):
-    '''Show images model in admins'''
     list_display = ('photo', 'get_photo', 'slug', 'product')
     list_display_links = ('photo', 'slug',)
     readonly_fields = ('get_photo', 'slug',)
@@ -49,8 +47,8 @@ class GalleryAdmin(admin.ModelAdmin):
 
 @admin.register(ReviewsDB)
 class ReviewsAdmin(admin.ModelAdmin):
-    '''Show the reviews in admins'''
-    list_display = ('review_title', 'good', 'review_rating', 'slug', 'date_at_review', 'user_name',)
+    list_display = ('review_title', 'good', 'review_rating', 'slug',
+                    'date_at_review', 'user_name',)
     list_display_links = ('review_title', 'slug', 'date_at_review',)
     readonly_fields = ('date_at_review', 'slug',)
     list_editable = ('review_rating', 'user_name',)
@@ -59,7 +57,6 @@ class ReviewsAdmin(admin.ModelAdmin):
 
 @admin.register(BrandNameDB)
 class BrandNameAdmin(admin.ModelAdmin):
-    '''Show manufacturers model in admins'''
     list_display = ('title', 'slug')
     list_display_links = ('title', 'slug',)
     list_per_page = 10
@@ -67,23 +64,23 @@ class BrandNameAdmin(admin.ModelAdmin):
 
 @admin.register(GoodsDB)
 class GoodsAdmin(admin.ModelAdmin):
-    '''Show goods model in admins'''
     inlines = (GalleryInLine, ReviewInLine)
-    list_display = ('title', 'brand', 'price', 'presence', 'category', 'date_at', 'n_views', 'slug', )
-    list_display_links = ('title',)    # поля ссылки
-    search_fields = ('title', 'price')      # поля под поиск
-    list_editable = ('presence', 'category',)   # поля, редактируемые из основного списка
-    list_filter = ('brand', 'price', 'presence', 'category',)   # поля под поиск
-    readonly_fields = ('date_at', 'n_views', 'slug',)   # поля только под чтение
-    list_per_page = 10  # пагинация, записей на странице
+    list_display = ('title', 'brand', 'price', 'presence', 'category',
+                    'date_at', 'n_views', 'slug',)
+    list_display_links = ('title',)
+    search_fields = ('title', 'price')
+    list_editable = ('presence', 'category',)
+    list_filter = ('brand', 'price', 'presence', 'category',)
+    readonly_fields = ('date_at', 'n_views', 'slug',)
+    list_per_page = 10
     fieldsets = (
         ('О товаре', {
-            'fields': ('title', 'brand', 'description', )
+            'fields': ('title', 'brand', 'description',)
         }),
         ('Иная информация', {
-            'fields': ('price', 'slug', 'category', 'presence', 'date_at', 'n_views',)
+            'fields': (
+            'price', 'slug', 'category', 'presence', 'date_at', 'n_views',)
         }),
     )
     save_on_top = True
     save_as = True
-

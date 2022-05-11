@@ -4,7 +4,9 @@
 
 
 {% block title %}
-Basket: Корзина  :: {{ block.super }}
+
+Корзина  :: {{ block.super }}
+
 {% endblock %}
 
 {% block content %}
@@ -12,7 +14,6 @@ Basket: Корзина  :: {{ block.super }}
 <div class="page-wrapper">
     <main class="main">
 
-        <!--TODO доналадить бредкрамп-->
         <nav aria-label="breadcrumb" class="breadcrumb-nav">
             <div class="container">
                 <ol class="breadcrumb">
@@ -39,92 +40,87 @@ Basket: Корзина  :: {{ block.super }}
                             </thead>
 
                             <tbody>
+
                             {% for item in cart %}
                             {% with good=item.product %}
+
                             <tr class="product-row">
                                 <td class="product-col">
+
                                     {% if good.images_for_goods.all %}
+
                                     <figure class="product-image-container">
+
                                         {% for photo in good.images_for_goods.all %}
                                         {% if forloop.counter == 1 %}
+
                                         <a href="{{ good.get_absolute_url }}">
                                             <img src="{{ photo.photo.url }}" width="150">
                                         </a>
+
                                         {% endif %}
                                         {% endfor %}
+
                                     </figure>
+
                                     {% else %}
+
                                     <figure class="product-image-container">
                                         <a href="{{ good.get_absolute_url }}">
                                             <img src="{% static 'assets/images/photo_net.jpg' %}" width="150">
                                         </a>
                                     </figure>
+
                                     {% endif %}
 
                                     <h2 class="product-title">
                                         <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
                                     </h2>
+
                                 </td>
-                                <td>{{ item.price }} y.e.</td>
+
+                                <td>{{ item.price }} руб.</td>
+
                                 <td>
                                     <br>
                                     <br>
                                     <form action="{% url 'orders:cart_add' good.id %}" method="post">
+
                                         {% csrf_token %}
+
                                         {{ item.update_quantity_form.quantity }}
                                         {{ item.update_quantity_form.update }}
+
                                         <input type="submit" class="btn btn-sm btn-primary" value="Обновить">
                                     </form>
                                 </td>
-                                <td>{{ item.total_price }} y.e.</td>
+
+                                <td>{{ item.total_price }} руб.</td>
+
                             </tr>
+
                             <tr class="product-action-row">
                                 <td colspan="4" class="clearfix">
                                     <div class="float-left">
                                         <a href="{% url 'orders:cart_remove' good.id %}" class="btn-move">Удалить из
                                             корзины</a>
-                                    </div><!-- End .float-left -->
+                                    </div>
 
                                     <div class="float-right">
                                         <a href="{% url 'shopping' %}" title="Вернуться к покупкам"
                                            class="fa fa-shopping-cart"></a>
-                                    </div><!-- End .float-right -->
+                                    </div>
+
                                 </td>
                             </tr>
+
                             {% endwith %}
                             {% endfor %}
 
                             </tbody>
-
-
-                            <!--TODO панель с кнопками под списком товаров НУЖНА????-->
-                            <tfoot>
-
-                            <tr>
-
-                                <td colspan="4" class="clearfix">
-                                    {% comment %}
-                                    <div class="float-left">
-                                        <a href="category.html" class="btn btn-outline-secondary">Continue Shopping</a>
-                                    </div><!-- End .float-left -->
-
-                                    <div class="float-right">
-                                        <a href="#" class="btn btn-outline-secondary btn-clear-cart">Clear Shopping
-                                            Cart</a>
-                                        <a href="#" class="btn btn-outline-secondary btn-update-cart">Update Shopping
-                                            Cart</a>
-                                    </div><!-- End .float-right -->
-                                    {% endcomment %}
-                                </td>
-
-                            </tr>
-                            </tfoot>
                         </table>
-
-                    </div><!-- End .cart-table-container -->
-
-                </div><!-- End .col-lg-8 -->
-
+                    </div>
+                </div>
 
                 <div class="col-lg-4">
                     <div class="cart-summary">
@@ -133,7 +129,7 @@ Basket: Корзина  :: {{ block.super }}
                         <table class="table table-totals">
                             <tbody>
                             <tr>
-                                <td>{{ cart.get_total_price }} y.e.</td>
+                                <td>{{ cart.get_total_price }} руб.</td>
                             </tr>
                             </tbody>
                             <tfoot>
@@ -142,34 +138,33 @@ Basket: Корзина  :: {{ block.super }}
                             </tr>
                             </tfoot>
                         </table>
+
                         {% if request.user.is_authenticated %}
+
                         <form action="{% url 'orders:order_add' %}" method="get">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="lk_date">
-                                <label class="custom-control-label" for="lk_date">
-                                    Использовать данные личного кабинета
-                                </label>
-                            </div><!-- End .custom-checkbox -->
 
                             <div class="checkout-methods">
                                 <input type="submit" class="btn btn-block btn-sm btn-primary" value="Перейти к покупке">
-                            </div><!-- End .checkout-methods -->
+                            </div>
 
                         </form>
+
                         {% else %}
 
                         <div class="checkout-methods">
                             <p>Чтобы перейти к покупке</p>
                             <p>выбранных Вами товаров:</p>
-                            <a href="{% url 'login' %}?next={{ request.path|urlencode }}">
-                                Войти
-                            </a> | <a href="{% url 'register' %}">Зарегистрироваться</a>
-                        </div><!-- End .checkout-methods -->
+                            <a href="{% url 'login' %}?next={{ request.path|urlencode }}">Войти</a> |
+                            <a href="{% url 'register' %}">Зарегистрироваться</a>
+                        </div>
+
                         {% endif %}
-                    </div><!-- End .cart-summary -->
-                </div><!-- End .col-lg-4 -->
-            </div><!-- End .row -->
-        </div><!-- End .container -->
-    </main><!-- End .main -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
+
 {% endblock %}

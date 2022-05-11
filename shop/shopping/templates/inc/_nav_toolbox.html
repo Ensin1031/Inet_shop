@@ -2,37 +2,45 @@
 {% load widget_tweaks %}
 
 <form method="GET" class="toolbox-item">
+
     {% csrf_token %}
+
     <nav class="toolbox">
         <div class="toolbox-left">
             <div class="toolbox-item toolbox-sort">
                 <label>{{ filter.form.sort_on.label }}</label>
                 <div class="select-custom">
+
                     {% render_field filter.form.sort_on class="form-control" %}
-                </div><!-- End .select-custom -->
-            </div><!-- End .toolbox-item -->
+
+                </div>
+            </div>
 
             <div class="toolbox-item toolbox-show">
                 <label>{{ filter.form.show_on_page.label }}</label>
                 <div class="select-custom">
+
                     {% render_field filter.form.show_on_page class="form-control" %}
-                </div><!-- End .select-custom -->
-            </div><!-- End .toolbox-item -->
+
+                </div>
+            </div>
 
             <div class="toolbox-item toolbox-show">
                 <label>{{ filter.form.show_as.label }}</label>
                 <div class="select-custom">
+
                     {% render_field filter.form.show_as class="form-control" %}
-                </div><!-- End .select-custom -->
-            </div><!-- End .toolbox-item -->
-        </div><!-- End .toolbox-left -->
+
+                </div>
+            </div>
+        </div>
 
         <div class="toolbox-right">
-            <div class="toolbox-item layout-modes" >
+            <div class="toolbox-item layout-modes">
                 <input type="text" name="review_object" value="{{ request.GET.urlencode }}" style="display: none;">
-                <label>       </label>
+                <label> </label>
                 <input type="submit" class="page-link" value="Показать">
-            </div><!-- End .toolbox-item -->
-        </div><!-- End .toolbox-right -->
+            </div>
+        </div>
     </nav>
 </form>

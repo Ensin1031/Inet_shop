@@ -6,10 +6,11 @@ from shop.celery import app
 
 @app.task
 def send_admin_mail(order_id, user_id):
-
-    """The function of determining the order object of
-        the model OrderDB, the user object of the model ShopUser
-        by id and sending mails to admin about new orders"""
+    """
+    The function of determining the order object of
+    the model OrderDB, the user object of the model ShopUser
+    by id and sending mails to admin about new orders
+    """
 
     order = OrderDB.objects.get(pk=order_id)
     user = ShopUser.objects.get(pk=user_id)
@@ -18,10 +19,11 @@ def send_admin_mail(order_id, user_id):
 
 @app.task
 def send_order_mail(order_id, user_id):
-
-    """The function of determining the order object of
+    """
+    The function of determining the order object of
     the model OrderDB, the user object of the model ShopUser
-    by id and sending mails to users about sending orders"""
+    by id and sending mails to users about orders dispatchment
+    """
 
     order = OrderDB.objects.get(pk=order_id)
     user = ShopUser.objects.get(pk=user_id)

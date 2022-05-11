@@ -1,13 +1,12 @@
-from django.urls import reverse, resolve
 from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse, resolve
 
-from accounts.views import RegisterUserView, RegisterDoneView, ShopPasswordResetView, MyAccountView
-from accounts.views import ChangeUserInfoView, OrderUserView, ReviewUserView, DeleteUserView, user_activate
 from main_app.tests.test_settings import SettingsTestCases
 
 
 class AccountsUrlsTests(SettingsTestCases):
-    """test urls for accounts app"""
+    """Test urls for accounts app"""
+
     def test_login_url_response(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(200, response.status_code)

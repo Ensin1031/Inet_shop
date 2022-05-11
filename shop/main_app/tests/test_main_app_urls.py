@@ -1,11 +1,12 @@
 from django.urls import reverse, resolve
 
-from main_app.views import MainPageView, SearchGoodView, CartShowView
 from main_app.tests.test_settings import SettingsTestCases
+from main_app.views import MainPageView
 
 
 class MainAppUrlsTests(SettingsTestCases):
-    """test urls for main_app app"""
+    """Test urls for main_app app"""
+
     def test_home_url_response(self):
         response = self.client.get(reverse('index'))
         self.assertEqual(200, response.status_code)

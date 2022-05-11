@@ -52,12 +52,14 @@
 
                 {% empty %}
 
-                <p>Вы еще не оставили отзывы к товарам.</p>
+                <p>Вы еще не оставили отзывы к товарам!</p>
                 <p><a href="{% url 'shopping' %}"><strong>Перейти в магазин</strong></a></p>
 
                 {% endfor %}
 
                 <nav class="toolbox toolbox-pagination">
+                    <div class="toolbox-left">
+                    </div>
 
                     {% include 'inc/_shop_pag.html' %}
 

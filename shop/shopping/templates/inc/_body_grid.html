@@ -1,32 +1,46 @@
 {% load static %}
 
 <div class="row">
+
     {% for good in goods %}
+
     <div class="col-6 col-sm-4">
+
         {% for key, value in data_goods.items %}
         {% if good == value.product %}
+
         <div class="product-default inner-quickview inner-icon">
             <figure>
+
                 {% if good.images_for_goods.all %}
                 {% for photo in good.images_for_goods.all %}
                 {% if forloop.counter == 1 %}
+
                 <a href="{{ good.get_absolute_url }}">
                     <img src="{{ photo.photo.url }}" alt="product">
                 </a>
+
                 {% endif %}
                 {% endfor %}
 
                 {% else %}
+
                 <a href="{{ good.get_absolute_url }}">
                     <img src="{% static 'assets/images/photo_net.jpg' %}" alt="product">
                 </a>
+
                 {% endif %}
+
                 {% if value.promo %}
+
                 <div class="label-group">
-                    <span class="product-label label-sale">-{{ value.promo }}</span>
+                    <span class="product-label label-sale">-{{ value.promo }}%</span>
                 </div>
+
                 {% endif %}
+
             </figure>
+
             <div class="product-details">
                 <div class="category-wrap">
                     <div class="category-list">
@@ -35,27 +49,40 @@
                         </a>
                     </div>
                 </div>
+
                 <h2 class="product-title">
                     <a href="{{ good.get_absolute_url }}">{{ good.title }}</a>
                 </h2>
+
                 <div class="ratings-container">
                     <div class="product-ratings">
-                        <span class="ratings" style="width:{{ value.rating }}%"></span><!-- End .ratings -->
+                        <span class="ratings" style="width:{{ value.rating }}%"></span>
                         <span class="tooltiptext tooltip-top"></span>
-                    </div><!-- End .product-ratings -->
-                </div><!-- End .product-container -->
+                    </div>
+                </div>
+
                 <div class="price-box">
+
                     {% if value.promo %}
-                    <span class="old-price">{{ good.price }} y.e.</span>
-                    <span class="product-price">{{ value.new_price }} у.е.</span>
+
+                    <span class="old-price">{{ good.price }} руб.</span>
+                    <span class="product-price">{{ value.new_price }} руб.</span>
+
                     {% else %}
-                    <span class="product-price">{{ good.price }} у.е.</span>
+
+                    <span class="product-price">{{ good.price }} руб.</span>
+
                     {% endif %}
-                </div><!-- End .price-box -->
-            </div><!-- End .product-details -->
+
+                </div>
+            </div>
         </div>
+
         {% endif %}
         {% endfor %}
-    </div><!-- End .col-sm-4 -->
+
+    </div>
+
     {% endfor %}
-</div><!-- End .row -->
+
+</div>

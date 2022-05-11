@@ -5,8 +5,9 @@ from shop.settings import ALLOWED_HOSTS
 
 
 def send_admin_neworder(order, user):
-
-    """The function of forming and sending mails to admin about new orders"""
+    """
+    The function of creation and sending mails to admin about new orders
+    """
 
     if ALLOWED_HOSTS:
         host = 'http://' + ALLOWED_HOSTS[0]
@@ -20,9 +21,10 @@ def send_admin_neworder(order, user):
 
 
 def send_order_notification(order, user):
-
-    """The function of forming and sending mails
-    to users about sending orders"""
+    """
+    The function of creation and ssending mails
+    to users about orders dispatchment
+    """
 
     if ALLOWED_HOSTS:
         host = 'http://' + ALLOWED_HOSTS[0]

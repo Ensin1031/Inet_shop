@@ -4,7 +4,10 @@ from .get_func import *
 
 
 class GoodsFilter(django_filters.FilterSet):
-    """Implementation of sorting fields on the main page of the store"""
+    """
+    Class implementing the sorting fields on the main page of the shop
+    """
+
     CHOICES_SORT = (
         ('popularity', 'популярность'),
         ('rating', 'рейтинг'),
@@ -24,37 +27,22 @@ class GoodsFilter(django_filters.FilterSet):
     )
 
     sort_on = django_filters.ChoiceFilter(
-        label='Сортировать по:',
-        choices=CHOICES_SORT,
+            label='Сортировать по:',
+            choices=CHOICES_SORT,
     )
     show_on_page = django_filters.ChoiceFilter(
-        label='Товаров на странице:',
-        choices=CHOICES_SHOW_ON,
+            label='Товаров на странице:',
+            choices=CHOICES_SHOW_ON,
     )
     show_as = django_filters.ChoiceFilter(
-        label='Показать в виде:',
-        choices=CHOICES_SHOW_AS,
+            label='Показать в виде:',
+            choices=CHOICES_SHOW_AS,
     )
 
     class Meta:
         model = GoodsDB
         fields = ()
 
-
     @staticmethod
     def show_sort_list(queryset, name, value):
         pass
-
-    # @staticmethod
-    # def show_sort_list(queryset, name, value):
-    #     if value == 'popularity':
-    #         result = queryset
-    #     elif value == 'rating':
-    #         result = sort_on_rating(queryset)
-    #     elif value == 'price':
-    #         result = sort_on_price(queryset)
-    #     elif value == 'price-desc':
-    #         result = sort_on_price_desc(queryset)
-    #     else:
-    #         result = queryset
-    #     return result
