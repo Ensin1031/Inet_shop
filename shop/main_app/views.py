@@ -55,5 +55,6 @@ class PromotionView(ShowAllGoods):
             goods = Q(category__in=[cat.id for cat in promo.category.all()]) \
                     | Q(brand__in=[brand.id for brand in promo.brand.all()])
             queryset = GoodsDB.objects.filter(presence=True).filter(goods)
-
+        if self.request.GET.get('sort_on'):
+            queryset = self.get_queryset_by_sort(queryset)
         return queryset

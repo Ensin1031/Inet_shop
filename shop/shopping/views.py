@@ -166,12 +166,10 @@ class ShowAllGoods(ListView):
         if self.request.GET.get('sort_on'):
             queryset = self.get_queryset_by_sort(queryset)
         # инициализируем фильтр
-        self.filters = GoodsFilter(self.request.GET,
-                                   queryset=None)
+        self.filters = GoodsFilter(self.request.GET, queryset=None)
         return queryset
 
     def get_queryset_by_sort(self, queryset):
-
         if self.request.GET.get('sort_on') == 'popularity':
             return queryset.order_by('-n_views')
         elif self.request.GET.get('sort_on') == 'rating':
